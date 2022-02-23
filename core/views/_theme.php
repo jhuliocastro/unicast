@@ -17,6 +17,23 @@ $this->data["empresa"] = EMPRESA;
     <script>
         window.on_page_functions = [];
     </script>
+
+    <style>
+        #carrega{
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background-color: white;
+        }
+
+        #loader{
+            margin: 0 auto;
+            top: 48%;
+        }
+    </style>
 </head>
 <body class="m4-cloak h-vh-100">
 <div data-role="navview" data-toggle="#paneToggle" data-expand="xl" data-compact="lg" data-active-state="true">
@@ -25,39 +42,14 @@ $this->data["empresa"] = EMPRESA;
             <button class="pull-button m-0 bg-darkCyan-hover">
                 <span class="mif-menu fg-white"></span>
             </button>
-            <h2 class="text-light m-0 fg-white pl-7" style="line-height: 52px">Pandora</h2>
-        </div>
-
-        <div class="suggest-box">
-            <div class="data-box">
-                <img src="images/jek_vorobey.jpg" class="avatar">
-                <div class="ml-4 avatar-title flex-column">
-                    <a href="#" class="d-block fg-white text-medium no-decor"><span class="reduce-1">Jack Sparrow</span></a>
-                    <p class="m-0"><span class="fg-green mr-2">&#x25cf;</span><span class="text-small">online</span></p>
-                </div>
-            </div>
-            <img src="images/jek_vorobey.jpg" class="avatar holder ml-2">
-        </div>
-
-        <div class="suggest-box">
-            <input type="text" data-role="input" data-clear-button="false" data-search-button="true">
-            <button class="holder">
-                <span class="mif-search fg-white"></span>
-            </button>
+            <h2 class="text-light m-0 fg-white pl-7" style="line-height: 52px">ERP::CASTRO</h2>
         </div>
 
         <ul class="navview-menu mt-4" id="side-menu">
-            <li class="item-header">MAIN NAVIGATION</li>
             <li>
-                <a href="#dashboard">
+                <a href="/dashboard">
                     <span class="icon"><span class="mif-meter"></span></span>
                     <span class="caption">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="#widgets">
-                    <span class="icon"><span class="mif-widgets"></span></span>
-                    <span class="caption">Widgets</span>
                 </a>
             </li>
             <li>
@@ -135,236 +127,11 @@ $this->data["empresa"] = EMPRESA;
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="#" class="dropdown-toggle">
-                    <span class="icon"><span class="mif-devices"></span></span>
-                    <span class="caption">Forms</span>
-                </a>
-                <ul class="navview-menu stay-open" data-role="dropdown" >
-                    <li class="item-header">Forms</li>
-                    <li><a href="#forms-basic">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Basic elements</span>
-                        </a></li>
-                    <li><a href="#forms-extended">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Extended elements</span>
-                        </a></li>
-                    <li><a href="#forms-layouts">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Layouts</span>
-                        </a></li>
-                    <li><a href="#forms-validating">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Validating</span>
-                        </a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#" class="dropdown-toggle">
-                    <span class="icon"><span class="mif-table"></span></span>
-                    <span class="caption">Tables</span>
-                </a>
-                <ul class="navview-menu stay-open" data-role="dropdown" >
-                    <li class="item-header">Tables</li>
-                    <li><a href="#table-classes">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Table classes</span>
-                        </a></li>
-                    <li><a href="#table-component">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Table component</span>
-                        </a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#" class="dropdown-toggle">
-                    <span class="icon"><span class="mif-air"></span></span>
-                    <span class="caption">UI Elements</span>
-                </a>
-                <ul class="navview-menu stay-open" data-role="dropdown">
-                    <li class="item-header">UI Elements</li>
-                    <li>
-                        <a href="#colors">
-                            <span class="icon"><span class="mif-paint"></span></span>
-                            <span class="caption">Colors</span>
-                        </a>
-                    </li>
-                    <li><a href="#typography">
-                            <span class="icon"><span class="mif-bold"></span></span>
-                            <span class="caption">Typography</span>
-                        </a></li>
-                    <li><a href="#buttons">
-                            <span class="icon"><span class="mif-apps"></span></span>
-                            <span class="caption">Buttons</span>
-                        </a></li>
-                    <li><a href="#tabs">
-                            <span class="icon"><span class="mif-open-book"></span></span>
-                            <span class="caption">Accordion &amp; Tabs</span>
-                        </a></li>
-                    <li><a href="#tiles">
-                            <span class="icon"><span class="mif-dashboard"></span></span>
-                            <span class="caption">Tiles</span>
-                        </a></li>
-                    <li><a href="#treeview">
-                            <span class="icon"><span class="mif-tree"></span></span>
-                            <span class="caption">TreeView</span>
-                        </a></li>
-                    <li><a href="#listview">
-                            <span class="icon"><span class="mif-list"></span></span>
-                            <span class="caption">ListView</span>
-                        </a></li>
-                    <li><a href="#progress">
-                            <span class="icon"><span class="mif-spinner5"></span></span>
-                            <span class="caption">Progress & activities</span>
-                        </a></li>
-                    <li><a href="#list">
-                            <span class="icon"><span class="mif-list2"></span></span>
-                            <span class="caption">List component</span>
-                        </a></li>
-                    <li><a href="#splitter">
-                            <span class="icon"><span class="mif-table"></span></span>
-                            <span class="caption">Splitter</span>
-                        </a></li>
-                    <li><a href="#calendar">
-                            <span class="icon"><span class="mif-calendar"></span></span>
-                            <span class="caption">Calendar</span>
-                        </a></li>
-                    <li><a href="#countdown">
-                            <span class="icon"><span class="mif-watch"></span></span>
-                            <span class="caption">Countdown</span>
-                        </a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#" class="dropdown-toggle">
-                    <span class="icon"><span class="mif-play"></span></span>
-                    <span class="caption">Media</span>
-                </a>
-                <ul class="navview-menu stay-open" data-role="dropdown" >
-                    <li class="item-header">Media</li>
-                    <li><a href="#video">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Video player</span>
-                        </a></li>
-                    <li><a href="#audio">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Audio</span>
-                        </a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#" class="dropdown-toggle">
-                    <span class="icon"><span class="mif-comment"></span></span>
-                    <span class="caption">Information</span>
-                </a>
-                <ul class="navview-menu stay-open" data-role="dropdown" >
-                    <li class="item-header">Information</li>
-                    <li><a href="#windows">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Windows</span>
-                        </a></li>
-                    <li><a href="#dialogs">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Dialogs</span>
-                        </a></li>
-                    <li><a href="#info-boxes">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">InfoBox</span>
-                        </a></li>
-                    <li><a href="#hints">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Hints</span>
-                        </a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#" class="dropdown-toggle">
-                    <span class="icon"><span class="mif-envelop"></span></span>
-                    <span class="caption">Mailbox</span>
-                    <span class="badges ml-auto mr-3">
-                        <span class="badge inline bg-cyan fg-white">17</span>
-                        <span class="badge inline bg-red fg-white">7</span>
-                        <span class="badge inline bg-green fg-white">4</span>
-                        <span class="badge inline bg-orange fg-white">3</span>
-                    </span>
-                </a>
-                <ul class="navview-menu stay-open" data-role="dropdown" >
-                    <li class="item-header">Mailbox</li>
-                    <li>
-                        <a href="#inbox">
-                            <span class="icon"><span class="mif-mail"></span></span>
-                            <span class="caption">Inbox</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#inbox2">
-                            <span class="icon"><span class="mif-mail"></span></span>
-                            <span class="caption">Inbox2</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#compose">
-                            <span class="icon"><span class="mif-mail-read"></span></span>
-                            <span class="caption">Compose</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#read-email">
-                            <span class="icon"><span class="mif-mail-read"></span></span>
-                            <span class="caption">Read email</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="#chat">
-                    <span class="icon"><span class="mif-bubbles"></span></span>
-                    <span class="caption">Chat</span>
-                    <span class="badges ml-auto mr-3">
-                        <span class="badge inline bg-red fg-white">7</span>
-                        <span class="badge inline bg-green fg-white">4</span>
-                        <span class="badge inline bg-orange fg-white">3</span>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" class="dropdown-toggle">
-                    <span class="icon"><span class="mif-magic-wand"></span></span>
-                    <span class="caption">Wizards</span>
-                </a>
-                <ul class="navview-menu stay-open" data-role="dropdown" >
-                    <li class="item-header">Wizards</li>
-                    <li><a href="#master">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Master</span>
-                        </a></li>
-                    <li><a href="#wizard">
-                            <span class="icon"><span class="mif-spinner2"></span></span>
-                            <span class="caption">Wizard</span>
-                        </a></li>
-                </ul>
-            </li>
-
-            <li class="item-header">Documentation</li>
-            <li>
-                <a href="https://metroui.org.ua/intro.html">
-                    <span class="icon"><span class="mif-brightness-auto fg-red"></span></span>
-                    <span class="caption">Metro 4</span>
-                </a>
-            </li>
         </ul>
 
         <div class="w-100 text-center text-small data-box p-2 border-top bd-grayMouse" style="position: absolute; bottom: 0">
-            <div>&copy; 2019 <a href="mailto:sergey@pimenov.com.ua" class="text-muted fg-white-hover no-decor">Sergey Pimenov</a></div>
-            <div>Created with <a href="https://metroui.org.ua" class="text-muted fg-white-hover no-decor">Metro 4</a></div>
+            <div>&copy; 2022 :: ERP-CASTRO</div>
+            <div>Criado por <a href="https://www.instagram.com/jhuliocastro/" class="text-muted fg-white-hover no-decor">Jhúlio Castro</a></div>
         </div>
     </div>
 
@@ -374,18 +141,6 @@ $this->data["empresa"] = EMPRESA;
             <a href="#" class="app-bar-item d-block d-none-lg" id="paneToggle"><span class="mif-menu"></span></a>
 
             <div class="app-bar-container ml-auto">
-                <a href="#" class="app-bar-item">
-                    <span class="mif-envelop"></span>
-                    <span class="badge bg-green fg-white mt-2 mr-1">4</span>
-                </a>
-                <a href="#" class="app-bar-item">
-                    <span class="mif-bell"></span>
-                    <span class="badge bg-orange fg-white mt-2 mr-1">10</span>
-                </a>
-                <a href="#" class="app-bar-item">
-                    <span class="mif-flag"></span>
-                    <span class="badge bg-red fg-white mt-2 mr-1">9</span>
-                </a>
                 <div class="app-bar-container">
                     <a href="#" class="app-bar-item">
                         <img src="images/jek_vorobey.jpg" class="avatar">
@@ -408,9 +163,6 @@ $this->data["empresa"] = EMPRESA;
                         </div>
                     </div>
                 </div>
-                <a href="#" class="app-bar-item">
-                    <span class="mif-cogs"></span>
-                </a>
             </div>
         </div>
 
@@ -418,12 +170,29 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
+<div id="carrega">
+    <div id="loader" data-role="activity" data-type="square" data-style="color"></div>
+</div>
 
 <!-- jQuery first, then Metro UI JS -->
 <script src="/assets/js/jquery-3.4.1.js"></script>
 <script src="/assets/js/metro.min.js"></script>
 <script src="/assets/js/index.js"></script>
+<script>
+    $(window).on("load", function(){
+        desloader();
+    });
 
+    function desloader(){
+        $("#loader").delay(500).fadeOut("slow");
+        $("#carrega").delay(500).fadeOut("slow");
+    }
+
+    function loader(){
+        $("#loader").delay(100).fadeIn("slow");
+        $("#carrega").delay(100).fadeIn("slow");
+    }
+</script>
 <?= $this->section("scripts"); ?>
 
 </body>
