@@ -1,0 +1,14 @@
+{
+  "name": "vendor_name/erpcastro",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "JHULI",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  }
+}
