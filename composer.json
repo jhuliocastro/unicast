@@ -9,6 +9,18 @@
       "email": "email@example.com"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "Models\\": "core/models",
+      "Controller\\": "core/controllers"
+    },
+    "files": [
+      "config.php"
+    ]
+  },
   "require": {
+    "coffeecode/router": "^1.0",
+    "league/plates": "^3.4",
+    "coffeecode/datalayer": "^1.1"
   }
 }
