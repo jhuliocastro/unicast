@@ -41,7 +41,7 @@ $this->data["empresa"] = EMPRESA;
 </div>
 
 
-<script src="/assets/js/jquery-3.6.0.js"></script>
+<script src="/assets/js/jquery-3.4.1.js"></script>
 <script src="/assets/js/metro.min.js"></script>
 <script>
     $(document).ready(function(){

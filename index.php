@@ -10,6 +10,9 @@ $router->namespace("Controller");
 $router->get("/", "Login:home");
 $router->post("/login", "Login:login");
 
+$router->group("dashboard");
+$router->get("/", "Dashboard:home");
+
 $router->dispatch();
 
 if($router->error()){
