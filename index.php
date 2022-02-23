@@ -8,6 +8,7 @@ $router = new Router(URL);
 $router->namespace("Controller");
 
 $router->get("/", "Login:home");
+$router->post("/login", "Login:login");
 
 $router->dispatch();
 
