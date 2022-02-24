@@ -43,7 +43,7 @@ $this->layout("_theme", $this->data);
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Unidade de Medida</label>
-                                <select data-role="select" data-filter="false">
+                                <select id="unidadeMedida" name="unidadeMedida" data-role="select" data-filter="false">
                                     <option>UN</option>
                                     <option>CX</option>
                                     <option>RL</option>
@@ -60,13 +60,13 @@ $this->layout("_theme", $this->data);
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Estoque Mínimo</label>
-                                <input type="text" data-role="input" required name="estoqueMinimo" id="estoqueMinimo">
+                                <input type="number" data-role="input" value="1" required name="estoqueMinimo" id="estoqueMinimo">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Estoque Atual</label>
-                                <input type="text" data-role="input" required value="0" name="estoqueAtual" id="estoqueAtual">
+                                <input type="number" data-role="input" required value="0" name="estoqueAtual" id="estoqueAtual">
                             </div>
                         </div>
                     </div>
