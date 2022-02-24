@@ -12,4 +12,10 @@ class Login_Model extends DataLayer{
     public function confereDados(string $usuario, string $senha) : int{
         return $this->find("usuario=:usuario AND senha=:senha", "usuario=$usuario&senha=$senha")->count();
     }
+
+    public function dadosUsuarioAtivo(){
+        session_start();
+        $usuario = $_SESSION["usuario"];
+        return $this->find("usuario=:usuario", "usuario=$usuario")->fetch();
+    }
 }

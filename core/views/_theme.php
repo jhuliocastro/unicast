@@ -46,8 +46,8 @@ $this->data["empresa"] = EMPRESA;
         </div>
 
         <ul class="navview-menu mt-4" id="side-menu">
-            <li>
-                <a href="/dashboard">
+            <li onclick="window.location.href='/dashboard'">
+                <a href="#">
                     <span class="icon"><span class="mif-meter"></span></span>
                     <span class="caption">Dashboard</span>
                 </a>
@@ -55,11 +55,11 @@ $this->data["empresa"] = EMPRESA;
             <li>
                 <a href="#" class="dropdown-toggle">
                     <span class="icon"><span class="mif-versions"></span></span>
-                    <span class="caption">Sample Pages</span>
+                    <span class="caption">Produtos</span>
                 </a>
                 <ul class="navview-menu stay-open" data-role="dropdown">
                     <li class="item-header">Pages</li>
-                    <li><a href="login.html">
+                    <li><a href="#">
                             <span class="icon"><span class="mif-lock"></span></span>
                             <span class="caption">Login</span>
                         </a></li>
@@ -67,64 +67,6 @@ $this->data["empresa"] = EMPRESA;
                             <span class="icon"><span class="mif-user-plus"></span></span>
                             <span class="caption">Register</span>
                         </a></li>
-                    <li><a href="lockscreen.html">
-                            <span class="icon"><span class="mif-key"></span></span>
-                            <span class="caption">Lock screen</span>
-                        </a></li>
-                    <li><a href="#profile">
-                            <span class="icon"><span class="mif-profile"></span></span>
-                            <span class="caption">Profile</span>
-                        </a></li>
-                    <li><a href="preloader.html">
-                            <span class="icon"><span class="mif-spinner"></span></span>
-                            <span class="caption">Preloader</span>
-                        </a></li>
-                    <li><a href="404.html">
-                            <span class="icon"><span class="mif-cancel"></span></span>
-                            <span class="caption">404 Page</span>
-                        </a></li>
-                    <li><a href="500.html">
-                            <span class="icon"><span class="mif-warning"></span></span>
-                            <span class="caption">500 Page</span>
-                        </a></li>
-                    <li><a href="#product-list">
-                            <span class="icon"><span class="mif-featured-play-list"></span></span>
-                            <span class="caption">Product list</span>
-                        </a></li>
-                    <li><a href="#product">
-                            <span class="icon"><span class="mif-rocket"></span></span>
-                            <span class="caption">Product page</span>
-                        </a></li>
-                    <li><a href="#invoice">
-                            <span class="icon"><span class="mif-open-book"></span></span>
-                            <span class="caption">Invoice</span>
-                        </a></li>
-                    <li><a href="#orders">
-                            <span class="icon"><span class="mif-table"></span></span>
-                            <span class="caption">Orders</span>
-                        </a></li>
-                    <li><a href="#order-details">
-                            <span class="icon"><span class="mif-library"></span></span>
-                            <span class="caption">Order details</span>
-                        </a></li>
-                    <li><a href="#price-table">
-                            <span class="icon"><span class="mif-table"></span></span>
-                            <span class="caption">Price table</span>
-                        </a></li>
-                    <li><a href="maintenance.html">
-                            <span class="icon"><span class="mif-cogs"></span></span>
-                            <span class="caption">Maintenance</span>
-                        </a></li>
-                    <li><a href="coming-soon.html">
-                            <span class="icon"><span class="mif-watch"></span></span>
-                            <span class="caption">Coming soon</span>
-                        </a></li>
-                    <li>
-                        <a href="help-center.html">
-                            <span class="icon"><span class="mif-help"></span></span>
-                            <span class="caption">Help center</span>
-                        </a>
-                    </li>
                 </ul>
             </li>
         </ul>
@@ -143,30 +85,27 @@ $this->data["empresa"] = EMPRESA;
             <div class="app-bar-container ml-auto">
                 <div class="app-bar-container">
                     <a href="#" class="app-bar-item">
-                        <img src="images/jek_vorobey.jpg" class="avatar">
-                        <span class="ml-2 app-bar-name">Jack Sparrow</span>
+                        <img src="/assets/images/a.png" class="avatar">
+                        <span class="ml-2 app-bar-name"><?= $usuario ?></span>
                     </a>
                     <div class="user-block shadow-1" data-role="collapse" data-collapsed="true">
                         <div class="bg-darkCyan fg-white p-2 text-center">
-                            <img src="images/jek_vorobey.jpg" class="avatar">
-                            <div class="h4 mb-0">Jack Sparrow</div>
-                            <div>Pirate captain</div>
-                        </div>
-                        <div class="bg-white d-flex flex-justify-between flex-equal-items p-2">
-                            <button class="button flat-button">Followers</button>
-                            <button class="button flat-button">Sales</button>
-                            <button class="button flat-button">Friends</button>
+                            <img src="/assets/images/a.png" class="avatar">
+                            <div class="h4 mb-0"><?= $usuario ?></div>
+                            <div>Usuário</div>
                         </div>
                         <div class="bg-white d-flex flex-justify-between flex-equal-items p-2 bg-light">
-                            <button class="button mr-1">Profile</button>
-                            <button class="button ml-1">Sign out</button>
+                            <button disabled class="button mr-1">Profile</button>
+                            <button class="button ml-1">Sair</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="content-wrapper" class="content-inner h-100" style="overflow-y: auto"></div>
+        <div style="padding: 10px;" class="content-inner h-100" style="overflow-y: auto">
+            <?= $this->section("content"); ?>
+        </div>
     </div>
 </div>
 

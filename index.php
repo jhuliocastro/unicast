@@ -16,5 +16,5 @@ $router->get("/", "Dashboard:home");
 $router->dispatch();
 
 if($router->error()){
-    var_dump($router->error());
+    //var_dump($router->error());
 }

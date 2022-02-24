@@ -3,6 +3,7 @@ namespace Controller;
 
 use League\Plates\Engine;
 use Model\Log;
+use Model\Login_Model;
 
 class Controller{
     private $caminhoViews = __DIR__."/../views";
@@ -15,6 +16,10 @@ class Controller{
     }
 
     public function render($view, array $dados = []){
+        $usuarios = new Login_Model();
+        $retornoUsuarios = $usuarios->dadosUsuarioAtivo();
+        $dados["usuario"] = $retornoUsuarios->nomeCompleto;
+
         $template = new Engine($this->caminhoViews);
         echo $template->render($view, $dados);
     }
