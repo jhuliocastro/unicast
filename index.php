@@ -14,6 +14,9 @@ $router->get("/sair", "Login:sair");
 $router->group("dashboard");
 $router->get("/", "Dashboard:home");
 
+$router->group("produtos");
+$router->get("/cadastrar", "Produtos:cadastrar");
+
 $router->dispatch();
 
 if($router->error()){
