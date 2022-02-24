@@ -82,6 +82,7 @@ $this->layout("_theme", $this->data);
 <script>
     $(document).ready(function(){
         $("#precoVenda").mask("00,00");
+        $("#precoCompra").mask("00,00");
     });
 </script>
 <?= $this->end("scripts"); ?>
