@@ -9,6 +9,7 @@ $router->namespace("Controller");
 
 $router->get("/", "Login:home");
 $router->post("/login", "Login:login");
+$router->get("/sair", "Login:sair");
 
 $router->group("dashboard");
 $router->get("/", "Dashboard:home");

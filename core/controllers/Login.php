@@ -30,4 +30,12 @@ class Login extends Controller{
             Alert::error("Usuário ou senha incorretos!", "Verifique os dados e tente novamente.", "/");
         }
     }
+
+    public function sair(){
+        session_start();
+        unset($_SESSION["usuario"]);
+        session_destroy();
+        parent::log("DESLOGOU");
+        $this->router->redirect("/");
+    }
 }

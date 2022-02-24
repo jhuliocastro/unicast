@@ -14,7 +14,6 @@ class Login_Model extends DataLayer{
     }
 
     public function dadosUsuarioAtivo(){
-        session_start();
         $usuario = $_SESSION["usuario"];
         return $this->find("usuario=:usuario", "usuario=$usuario")->fetch();
     }

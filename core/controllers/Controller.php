@@ -16,10 +16,11 @@ class Controller{
     }
 
     public function render($view, array $dados = []){
-        $usuarios = new Login_Model();
-        $retornoUsuarios = $usuarios->dadosUsuarioAtivo();
-        $dados["usuario"] = $retornoUsuarios->nomeCompleto;
-
+        if(isset($_SESSION["usuario"])){
+            $usuarios = new Login_Model();
+            $retornoUsuarios = $usuarios->dadosUsuarioAtivo();
+            $dados["usuario"] = $retornoUsuarios->nomeCompleto;
+        }
         $template = new Engine($this->caminhoViews);
         echo $template->render($view, $dados);
     }

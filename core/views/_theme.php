@@ -96,7 +96,7 @@ $this->data["empresa"] = EMPRESA;
                         </div>
                         <div class="bg-white d-flex flex-justify-between flex-equal-items p-2 bg-light">
                             <button disabled class="button mr-1">Profile</button>
-                            <button class="button ml-1">Sair</button>
+                            <button onclick="window.location.href='/sair'" class="button ml-1">Sair</button>
                         </div>
                     </div>
                 </div>
