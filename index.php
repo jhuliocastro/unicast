@@ -16,6 +16,7 @@ $router->get("/", "Dashboard:home");
 
 $router->group("produtos");
 $router->get("/cadastrar", "Produtos:cadastrar");
+$router->post("/cadastrar", "Produtos:cadastrarSender");
 
 $router->dispatch();
 

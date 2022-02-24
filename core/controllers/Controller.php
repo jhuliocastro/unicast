@@ -9,7 +9,9 @@ class Controller{
     private $caminhoViews = __DIR__."/../views";
 
     public function __construct(){
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         if(!isset($_SESSION["usuario"])){
             $this->router->redirect("/");
         }
@@ -27,8 +29,9 @@ class Controller{
 
     public function log(string $evento){
         $ip = $_SERVER["REMOTE_ADDR"];
-
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $usuario = $_SESSION["usuario"];
 
         $log = new Log();
