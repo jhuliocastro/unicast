@@ -27,7 +27,11 @@ class Controller{
 
     public function log(string $evento){
         $ip = $_SERVER["REMOTE_ADDR"];
+
+        session_start();
+        $usuario = $_SESSION["usuario"];
+
         $log = new Log();
-        $log->cadastrar($evento, $ip);
+        $log->cadastrar($evento, $ip, $usuario);
     }
 }

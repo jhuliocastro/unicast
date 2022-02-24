@@ -9,7 +9,7 @@ class Log extends DataLayer{
         parent::__construct("log", [], "id", true);
     }
 
-    public function cadastrar(string $evento, string $ip){
+    public function cadastrar(string $evento, string $ip, string $usuaro){
         $this->evento = $evento;
         $this->ip = $ip;
         $this->save();
