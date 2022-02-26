@@ -18,8 +18,11 @@ $router->group("produtos");
 $router->get("/cadastrar", "Produtos:cadastrar");
 $router->post("/cadastrar", "Produtos:cadastrarSender");
 
+$router->group("log");
+$router->get("/", "Log:relacao");
+
 $router->dispatch();
 
 if($router->error()){
-    //var_dump($router->error());
+    var_dump($router->error());
 }

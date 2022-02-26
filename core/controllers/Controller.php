@@ -2,7 +2,7 @@
 namespace Controller;
 
 use League\Plates\Engine;
-use Model\Log;
+use Model\Log_Model;
 use Model\Login_Model;
 
 class Controller{
@@ -34,7 +34,7 @@ class Controller{
         }
         $usuario = $_SESSION["usuario"];
 
-        $log = new Log();
+        $log = new Log_Model();
         $log->cadastrar($evento, $ip, $usuario);
     }
 }
