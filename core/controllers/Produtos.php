@@ -15,11 +15,24 @@ class Produtos extends Controller{
         parent::render("produtosCadastrar");
     }
 
+    private function verificaProdutoExiste($produto){
+        $produtos = new Produtos_Model();
+        return $produtos->verificaProdutoExiste($produto);
+    }
+
     public function cadastrarSender(){
         $dados = (object)$_POST;
+
+        //VERIFICA SE PRODUTO JÁ EXISTE
+        $existe = $this->verificaProdutoExiste($dados->nome);
+        if($existe > 0){
+            Alert::error("PRODUTO COM O MESMO NOME JÁ CADASTRADO!", "VERIFIQUE AS INFORMAÇÕES E TENTE NOVAMENTE", "/produtos/cadastrar");
+            exit();
+        }
+
         $dados->precoCompra = str_replace(",", ".", $dados->precoCompra);
         $dados->precoCompra = (float) $dados->precoCompra;
-        $dados->precoVenda = str_replace(",", ".", $dados->precoCompra);
+        $dados->precoVenda = str_replace(",", ".", $dados->precoVenda);
         $dados->precoVenda = (float) $dados->precoVenda;
         $dados->estoqueAtual = (int) $dados->estoqueAtual;
         $dados->estoqueMinimo = (int) $dados->estoqueMinimo;

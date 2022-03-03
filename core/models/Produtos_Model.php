@@ -25,4 +25,8 @@ class Produtos_Model extends DataLayer{
         }
         return $retorno;
     }
+
+    public function verificaProdutoExiste($produto){
+        return $this->find("nome=:nome", "nome=$produto")->count();
+    }
 }
