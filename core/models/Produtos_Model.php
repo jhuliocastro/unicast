@@ -26,7 +26,21 @@ class Produtos_Model extends DataLayer{
         return $retorno;
     }
 
+    public function lista(){
+        return $this->find()->fetch(true);
+    }
+
     public function verificaProdutoExiste($produto){
         return $this->find("nome=:nome", "nome=$produto")->count();
+    }
+
+    public function retornaID(string $produto){
+        return $this->find("nome=:produto", "produto=$produto")->fetch();
+    }
+
+    public function atualizarEstoque(int $produto, int $quantidade){
+        $atualizar = $this->findById($produto);
+        $atualizar->estoqueAtual = $quantidade;
+        $atualizar->save();
     }
 }

@@ -18,6 +18,10 @@ $router->group("produtos");
 $router->get("/cadastrar", "Produtos:cadastrar");
 $router->post("/cadastrar", "Produtos:cadastrarSender");
 
+$router->group("estoque");
+$router->get("/entrada", "Estoque:entrada");
+$router->post("/entrada", "Estoque:entradaSender");
+
 $router->group("log");
 $router->get("/", "Log:relacao");
 

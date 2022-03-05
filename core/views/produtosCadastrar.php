@@ -31,7 +31,7 @@ $this->data["empresa"] = EMPRESA;
                                                 <div class="col-md-12" style="margin-top: 15px;">
                                                     <div class="form-group">
                                                         <label>Nome</label>
-                                                        <input type="text" class="form-control" required name="nome" id="nome">
+                                                        <input type="text" autocomplete="off" class="form-control" required name="nome" id="nome">
                                                     </div>
                                                 </div>
                                             </div>
@@ -39,7 +39,7 @@ $this->data["empresa"] = EMPRESA;
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label>Descrição</label>
-                                                        <textarea data-role="textarea" class="form-control" name="descricao" id="descricao"></textarea>
+                                                        <textarea data-role="textarea" autocomplete="off" class="form-control" name="descricao" id="descricao"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -47,13 +47,13 @@ $this->data["empresa"] = EMPRESA;
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Preço Venda</label>
-                                                        <input type="text" class="form-control" required data-prepend="R$" placeholder="00,00" name="precoVenda" id="precoVenda">
+                                                        <input type="text" autocomplete="off" class="form-control" required data-prepend="R$" placeholder="00,00" name="precoVenda" id="precoVenda">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Preço Compra</label>
-                                                        <input type="text" class="form-control" required data-prepend="R$" placeholder="00,00" name="precoCompra" id="precoCompra">
+                                                        <input type="text" autocomplete="off" class="form-control" required data-prepend="R$" placeholder="00,00" name="precoCompra" id="precoCompra">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -104,8 +104,9 @@ $this->data["empresa"] = EMPRESA;
 <?= $this->start("scripts"); ?>
 <script>
     $(document).ready(function(){
-        $("#precoVenda").mask("00,00");
-        $("#precoCompra").mask("00,00");
+        $("#precoVenda").mask('#.##0,00', {reverse: true});
+        $("#precoCompra").mask('#.##0,00', {reverse: true});
+        $("#nome").focus();
     });
 </script>
 <?= $this->end("scripts"); ?>

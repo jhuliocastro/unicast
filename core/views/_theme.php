@@ -114,6 +114,21 @@ $this->data["empresa"] = EMPRESA;
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="pcoded-hasmenu ">
+                                    <a href="javascript:void(0)" class="waves-effect waves-dark">
+                                        <span class="pcoded-micon">
+                                        <i class="fa fa-archive"></i>
+                                        </span>
+                                        <span class="pcoded-mtext">Estoque</span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class="">
+                                            <a href="/estoque/entrada" class="waves-effect waves-dark">
+                                                <span class="pcoded-mtext">Dar Entrada</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -201,7 +216,6 @@ $this->data["empresa"] = EMPRESA;
 <script src="/assets/js/vertical-layout.min.js" type="2d8d78e876b340f9029c575b-text/javascript"></script>
 <script type="2d8d78e876b340f9029c575b-text/javascript" src="/assets/js/crm-dashboard.min.js"></script>
 <script type="2d8d78e876b340f9029c575b-text/javascript" src="/assets/js/script.min.js"></script>
-<script src="/assets/js/jquery.mask.js"></script>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13" type="2d8d78e876b340f9029c575b-text/javascript"></script>
 <script type="2d8d78e876b340f9029c575b-text/javascript">
@@ -212,6 +226,11 @@ $this->data["empresa"] = EMPRESA;
   gtag('config', 'UA-23581568-13');
 </script>
 <script src="/assets/js/rocket-loader.min.js" data-cf-settings="2d8d78e876b340f9029c575b-|49" defer=""></script></body>
+<script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
+<script src="/assets/js/jquery.mask.js"></script>
 <?= $this->section("scripts") ?>
 <!-- Mirrored from colorlib.com/polygon/admindek/default/dashboard-crm.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Dec 2019 16:08:32 GMT -->
 </html>
