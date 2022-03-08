@@ -20,6 +20,67 @@ class Produtos extends Controller{
         return $produtos->verificaProdutoExiste($produto);
     }
 
+    public function relacao(){
+        parent::render("produtosRelacao");
+    }
+
+    public function tabela(){
+        $produtos = new Produtos_Model();
+        $listaProdutos = $produtos->lista();
+
+        $tabela["header"][] = [
+            "name" => "id",
+            "title" => "ID",
+            "sortable" => true,
+            "format" => "number"
+        ];
+        $tabela["header"][] = [
+            "name" => "produto",
+            "title" => "Produto",
+            "sortDir" => "asc",
+            "sortable" => true
+        ];
+        $tabela["header"][] = [
+            "name" => "precoVenda",
+            "title" => "Preço Venda",
+            "sortable" => true
+        ];
+        $tabela["header"][] = [
+            "name" => "precoCompra",
+            "title" => "Preço Compra",
+            "sortable" => true
+        ];
+        $tabela["header"][] = [
+            "name" => "estoqueMinimo",
+            "title" => "Estoque Mínimo",
+            "sortable" => true
+        ];
+        $tabela["header"][] = [
+            "name" => "estoqueAtual",
+            "title" => "Estoque Atual",
+            "sortable" => true
+        ];
+        $tabela["header"][] = [
+            "name" => "tipo",
+            "title" => "Tipo",
+            "sortable" => true
+        ];
+
+        foreach($listaProdutos as $produto){
+            $tabela["data"][] = [
+                $produto->id,
+                $produto->nome,
+                "R$ ".number_format($produto->precoVenda, 2, ',', '.'),
+                "R$ ".number_format($produto->precoCompra, 2, ',', '.'),
+                $produto->estoqueMinimo,
+                $produto->estoqueAtual,
+                $produto->unidadeMedida
+            ];
+        }
+
+        echo json_encode($tabela);
+    }
+
     public function cadastrarSender(){
         $dados = (object)$_POST;
 

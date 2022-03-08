@@ -12,6 +12,10 @@ class Estoque extends Controller{
         parent::__construct();
     }
 
+    public function relacao(){
+        parent::render("estoqueRelacao");
+    }
+
     public function entrada(){
         $produtosModel = new Produtos_Model();
         $produtos = $produtosModel->lista();
@@ -22,6 +26,37 @@ class Estoque extends Controller{
         parent::render("estoqueEntrada", [
             "produtos" => $listaProdutos
         ]);
+    }
+
+    public function tabela(){
+        $tabela["header"][] = [
+            "name" => "id",
+            "title" => "ID",
+            "sortable" => true,
+            "format" => "number"
+        ];
+        $tabela["header"][] = [
+            "name" => "produto",
+            "title" => "Produto",
+            "sortDir" => "asc",
+            "sortable" => true
+        ];
+        $tabela["header"][] = [
+            "name" => "estoque_atual",
+            "title" => "Estoque Atual",
+            "sortable" => true
+        ];
+
+        $produtos = new Produtos_Model();
+        $listaProdutos = $produtos->lista();
+        foreach($listaProdutos as $produto){
+            $tabela["data"][] = [
+                $produto->id,
+                $produto->nome,
+                $produto->estoqueAtual
+            ];
+        }
+        echo json_encode($tabela);
     }
 
     public function entradaSender(){
