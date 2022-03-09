@@ -19,6 +19,7 @@ $this->data["empresa"] = EMPRESA;
         .card-header {
             font-weight: bold;
             background-color: #0a6aa1;
+            color: white;
         }
     </style>
 </head>
@@ -47,6 +48,12 @@ $this->data["empresa"] = EMPRESA;
             </button>
         </div>
         <div class="section" id="estoque">
+            <button class="ribbon-button" onclick="window.location.href='/estoque/entrada'">
+                <span class="icon">
+                    <img src="/assets/images/entradaEstoque.png">
+                </span>
+                <span class="caption">Entrada</span>
+            </button>
             <button class="ribbon-button" onclick="window.location.href='/estoque/relacao'">
                 <span class="icon">
                     <img src="/assets/images/relacao.png">

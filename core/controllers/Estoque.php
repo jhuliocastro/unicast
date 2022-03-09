@@ -21,7 +21,7 @@ class Estoque extends Controller{
         $produtos = $produtosModel->lista();
         $listaProdutos = null;
         foreach($produtos as $d){
-            $listaProdutos .= "<option value='$d->nome'>";
+            $listaProdutos .= "<option value='$d->nome'>$d->nome</option>";
         }
         parent::render("estoqueEntrada", [
             "produtos" => $listaProdutos
