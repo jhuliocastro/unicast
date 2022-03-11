@@ -14,6 +14,10 @@ $router->get("/sair", "Login:sair");
 $router->group("dashboard");
 $router->get("/", "Dashboard:home");
 
+$router->group("clientes");
+$router->get("/cadastrar", "Clientes:cadastrar");
+$router->post("/cadastrar", "Clientes:cadastrarSender");
+
 $router->group("produtos");
 $router->get("/cadastrar", "Produtos:cadastrar");
 $router->post("/cadastrar", "Produtos:cadastrarSender");

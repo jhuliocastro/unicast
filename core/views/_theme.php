@@ -27,22 +27,23 @@ $this->data["empresa"] = EMPRESA;
 <nav data-role="ribbonmenu">
     <ul class="tabs-holder">
         <li class="static"><a href="#">Dashboard</a></li>
+        <li><a href="#clientes">Clientes</a></li>
         <li><a href="#produtos">Produtos</a></li>
         <li><a href="#estoque">Estoque</a></li>
         <li><a href="#configuracoes">Configurações</a></li>
     </ul>
 
     <div class="content-holder">
-        <div class="section" id="produtos">
-            <button class="ribbon-button" onclick="window.location.href='/produtos/cadastrar'">
+        <div class="section" id="clientes">
+            <button class="ribbon-button" onclick="window.location.href='/clientes/cadastrar'">
                 <span class="icon">
                     <img src="/assets/images/cadastrar.png">
                 </span>
                 <span class="caption">Cadastrar</span>
             </button>
-            <button class="ribbon-button" onclick="window.location.href='/produtos/relacao'">
+            <button class="ribbon-button" onclick="window.location.href='/clientes/relacao'">
                 <span class="icon">
-                    <img src="/assets/images/relacao.png">
+                    <img src="/assets/images/clientes.png">
                 </span>
                 <span class="caption">Relação</span>
             </button>
