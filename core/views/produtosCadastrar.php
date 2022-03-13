@@ -12,9 +12,8 @@ $this->data["empresa"] = EMPRESA;
             <div class="card-body p-2">
                 <div class="card-block">
                     <div class="container">
-
                         <div class="row">
-                            <div class="col-md-12" style="margin-top: 15px;">
+                            <div class="col-md-8" style="margin-top: 15px;">
                                 <div class="form-group">
                                     <label>Nome</label>
                                     <input type="text"
@@ -23,6 +22,12 @@ $this->data["empresa"] = EMPRESA;
                                            required
                                            name="nome"
                                            id="nome">
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="margin-top: 15px;">
+                                <div class="form-group">
+                                    <label>Código de Barras</label>
+                                    <input type="number" id="codigoBarras" name="codigoBarras" data-role="input">
                                 </div>
                             </div>
                         </div>
