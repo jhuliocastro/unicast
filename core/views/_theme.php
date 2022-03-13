@@ -15,6 +15,7 @@ $this->data["empresa"] = EMPRESA;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.8/jquery.mask.js"
             integrity="sha512-2Pv9x5icS9MKNqqCPBs8FDtI6eXY0GrtBy8JdSwSR4GVlBWeH5/eqXBFbwGGqHka9OABoFDelpyDnZraQawusw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/assets/js/hotkeys.js"></script>
     <style>
         .card-header {
             font-weight: bold;
@@ -30,6 +31,7 @@ $this->data["empresa"] = EMPRESA;
         <li><a href="#clientes">Clientes</a></li>
         <li><a href="#produtos">Produtos</a></li>
         <li><a href="#estoque">Estoque</a></li>
+        <li><a href="#pdv">PDV</a></li>
         <li><a href="#configuracoes">Configurações</a></li>
     </ul>
 
@@ -48,6 +50,20 @@ $this->data["empresa"] = EMPRESA;
                 <span class="caption">Relação</span>
             </button>
         </div>
+        <div class="section" id="produtos">
+            <button class="ribbon-button" onclick="window.location.href='/produtos/cadastrar'">
+                <span class="icon">
+                    <img src="/assets/images/cadastrar.png">
+                </span>
+                <span class="caption">Cadastrar</span>
+            </button>
+            <button class="ribbon-button" onclick="window.location.href='/produtos/relacao'">
+                <span class="icon">
+                    <img src="/assets/images/relacao.png">
+                </span>
+                <span class="caption">Relação</span>
+            </button>
+        </div>
         <div class="section" id="estoque">
             <button class="ribbon-button" onclick="window.location.href='/estoque/entrada'">
                 <span class="icon">
@@ -60,6 +76,20 @@ $this->data["empresa"] = EMPRESA;
                     <img src="/assets/images/relacao.png">
                 </span>
                 <span class="caption">Relação</span>
+            </button>
+        </div>
+        <div class="section" id="pdv">
+            <button class="ribbon-button" onclick="window.location.href='/pdv/caixa'">
+                <span class="icon">
+                    <img src="/assets/images/caixa.png">
+                </span>
+                <span class="caption">Caixa</span>
+            </button>
+            <button class="ribbon-button" onclick="window.location.href='/pdv/orcamento'">
+                <span class="icon">
+                    <img src="/assets/images/orcamento.png">
+                </span>
+                <span class="caption">Orçamento</span>
             </button>
         </div>
         <div class="section" id="configuracoes">

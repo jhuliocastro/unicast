@@ -39,6 +39,14 @@ class Produtos_Model extends DataLayer{
         return $this->find("nome=:produto", "produto=$produto")->fetch();
     }
 
+    public function retornoPorID(int $id){
+        return $this->findById($id);
+    }
+
+    public function dadosCodigoBarras(string $codigoBarras){
+        return $this->find("codigoBarras=:codigoBarras", "codigoBarras=$codigoBarras")->fetch();
+    }
+
     public function atualizarEstoque(int $produto, int $quantidade){
         $atualizar = $this->findById($produto);
         $atualizar->estoqueAtual = $quantidade;

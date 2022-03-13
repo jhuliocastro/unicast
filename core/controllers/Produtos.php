@@ -2,6 +2,7 @@
 namespace Controller;
 
 use Alertas\Alert;
+use Model\OrcamentosPedido_Model;
 use Model\Produtos_Model;
 
 class Produtos extends Controller{
@@ -79,6 +80,25 @@ class Produtos extends Controller{
         }
 
         echo json_encode($tabela);
+    }
+
+    public function dados(){
+        $produtos = new Produtos_Model();
+        $produto = $produtos->dadosCodigoBarras($_POST["codigoBarras"]);
+        $dados = [
+            "id" => $produto->id,
+            "produto" => $produto->nome,
+            "valor" => $produto->precoVenda
+        ];
+
+        $this->gravarProdutoOrcamento($_SESSION["orcamento"], $produto->id, $_POST['quantidadeDados']);
+
+        echo json_encode($dados);
+    }
+
+    private function gravarProdutoOrcamento(int $orcamento, int $produto, int $quantidade){
+        $model = new OrcamentosPedido_Model();
+        $model->cadastrar($orcamento, $produto, $quantidade);
     }
 
     public function cadastrarSender(){

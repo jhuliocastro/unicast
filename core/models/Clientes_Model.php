@@ -34,4 +34,16 @@ class Clientes_Model extends DataLayer{
 
         return $retorno;
     }
+
+    public function listaClientes(){
+        return $this->find()->fetch(true);
+    }
+
+    public function dadosClienteNome(string $cliente){
+        return $this->find("nome=:nome", "nome=$cliente")->fetch();
+    }
+
+    public function dadosClienteID(int $cliente){
+        return $this->findById($cliente);
+    }
 }
