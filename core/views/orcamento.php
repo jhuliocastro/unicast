@@ -3,6 +3,12 @@ $this->layout("_theme", $this->data);
 $this->data["empresa"] = EMPRESA;
 ?>
 
+<style>
+    .imagem-acao{
+        width: 30px;
+    }
+</style>
+
 <div class="pcoded-content">
     <div class="card">
         <div class="card-header">

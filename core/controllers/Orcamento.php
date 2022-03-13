@@ -50,7 +50,7 @@ class Orcamento extends Controller{
         $retorno = $orcamentos->novo($dadosCliente->id);
 
         if($retorno == true){
-            $this->router->redirect("/pdv/orcamento/aberto");
+            $this->router->redirect("/pdv/orcamento");
         }else{
             Alert::error("Erro ao abrir orçamento!", "Verifique o log para mais informaçãoes.", "/pdv/orcamento");
         }
@@ -67,7 +67,8 @@ class Orcamento extends Controller{
     }
 
     public function finalizar(){
-        Alert::question("Deseja finalizar o orçamento?", "", "/pdv/orcamento/finalizarSender", "/pdv/orcamento/aberto");
+        $orcamento = $_SESSION["orcamento"];
+        Alert::question("Deseja finalizar o orçamento?", "", "/pdv/orcamento/finalizarSender", "/pdv/orcamento/aberto/$orcamento");
     }
 
     public function finalizarSender(){
@@ -85,7 +86,8 @@ class Orcamento extends Controller{
 
         $orcamentos = new Orcamentos_Model();
         $orcamentos->atualizarValor($_SESSION["orcamento"], $valorTotal);
-        $retorno = $orcamentos->cancelarAbertos();
+        $retorno = $orcamentos->finalizar($_SESSION["orcamento"]);
+        unset($_SESSION["orcamento"]);
         if($retorno == true){
             Alert::success("Orçamento finalizado!", "Dirija-se ao caixa.", "/pdv/orcamento");
         }else{
@@ -93,14 +95,13 @@ class Orcamento extends Controller{
         }
     }
 
-    public function aberto(){
+    public function aberto($data){
         $valorTotalOrcamento = 0;
 
         $orcamentos = new Orcamentos_Model();
-        $retorno = $orcamentos->abertos();
-        if(!isset($_SESSION["orcamento"])){
-            $_SESSION["orcamento"] = $retorno->id;
-        }
+        $retorno = $orcamentos->dadosID($data["id"]);
+
+        $_SESSION["orcamento"] = $retorno->id;
 
         $orcamentoAberto = new OrcamentosPedido_Model();
         $produtos = $orcamentoAberto->retornoProdutos($retorno->id);
@@ -171,6 +172,10 @@ class Orcamento extends Controller{
             "name" => "status",
             "title" => "Status"
         ];
+        $tabela["header"][] = [
+            "name" => "acoes",
+            "title" => ""
+        ];
 
         $orcamentos = new Orcamentos_Model();
         $orcamentos = $orcamentos->lista();
@@ -183,20 +188,25 @@ class Orcamento extends Controller{
             $status = null;
 
             if($orcamento->aberto == true){
-                $status = "<img src='/assets/images/circuloVermelho.png' data-role='hint' data-hint-text='Em Aberto'>";
+                $status = "<img src='/assets/images/circuloVermelho.png' class='imagem-acao' data-role='hint' data-hint-text='Em Aberto'>";
             }else{
                 if($orcamento->faturado == true){
-                    $status = "<img src='/assets/images/circuloVerde.png' data-role='hint' data-hint-text='Faturado'>";
+                    $status = "<img src='/assets/images/circuloVerde.png' class='imagem-acao' data-role='hint' data-hint-text='Faturado'>";
                 }else{
-                    $status = "<img src='/assets/images/circuloAmarelo.png' data-role='hint' data-hint-text='Pedente de Faturamento'>";
+                    $status = "<img src='/assets/images/circuloAmarelo.png' class='imagem-acao' data-role='hint' data-hint-text='Pedente de Faturamento'>";
                 }
             }
+
+            $acoes = "
+            <a href='/pdv/orcamento/aberto/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
+            ";
 
             $tabela["data"][] = [
                 $orcamento->id,
                 $cliente->nome,
                 "R$ ".$valor,
-                $status
+                $status,
+                $acoes
             ];
         }
 

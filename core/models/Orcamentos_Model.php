@@ -34,8 +34,18 @@ class Orcamentos_Model extends DataLayer{
         return $this->find("aberto=:status", "status=1")->fetch();
     }
 
+    public function dadosID(int $id){
+        return $this->findById($id);
+    }
+
     public function cancelarAbertos(){
         $orcamento = $this->find("aberto=:aberto", "aberto=1")->fetch();
+        $orcamento->aberto = 0;
+        return $orcamento->save();
+    }
+
+    public function finalizar(int $id){
+        $orcamento = $this->findById($id);
         $orcamento->aberto = 0;
         return $orcamento->save();
     }

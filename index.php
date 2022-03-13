@@ -36,7 +36,7 @@ $router->get("/caixa", "Caixa:home");
 $router->get("/orcamento", "Orcamento:home");
 $router->get("/orcamento/novo", "Orcamento:novo");
 $router->post("/orcamento/andamento", "Orcamento:orcamento");
-$router->get("/orcamento/aberto", "Orcamento:aberto");
+$router->get("/orcamento/aberto/{id}", "Orcamento:aberto");
 $router->get("/orcamento/reabrir/cancelar", "Orcamento:cancelar");
 $router->get("/orcamento/finalizar", "Orcamento:finalizar");
 $router->get("/orcamento/finalizarSender", "Orcamento:finalizarSender");
