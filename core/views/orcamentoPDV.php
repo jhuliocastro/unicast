@@ -81,6 +81,20 @@ $this->data["empresa"] = EMPRESA;
     </form>
 </div>
 
+<div class="dialog" id="janelaProduto" data-role="dialog">
+    <form method="post" id="formProduto">
+        <div class="dialog-title">Digite o nome do produto</div>
+        <div class="dialog-content">
+            <input autocomplete="off" type="search" list="listProdutos" id="nomeProduto" name="nomeProduto" data-role="input">
+            <datalist id="listProdutos"><?= $this->data["produtos"] ?></datalist>
+        </div>
+        <div class="dialog-actions">
+            <button class="button js-dialog-close">Cancelar</button>
+            <button type="submit" class="button primary">Ok</button>
+        </div>
+    </form>
+</div>
+
 <?= $this->start("scripts"); ?>
 <script>
     var quantidade = 1;
@@ -95,6 +109,18 @@ $this->data["empresa"] = EMPRESA;
 
     valorTotalOrcamento = (Math.round(valorTotalOrcamento * 100) / 100).toFixed(2);
     $("#valorTotal").html("R$ "+valorTotalOrcamento);
+
+    $('#codigoBarras').on('keydown', null, 'f1', function () {
+        Metro.dialog.open("#janelaProduto");
+        $("#nomeProduto").focus();
+        return false;
+    });
+
+    $(document).on('keydown', null, 'f1', function () {
+        Metro.dialog.open("#janelaProduto");
+        $("#nomeProduto").focus();
+        return false;
+    });
 
     $('#codigoBarras').on('keydown', null, 'f2', function () {
         Metro.dialog.open("#janelaQuantidade");
@@ -120,7 +146,14 @@ $this->data["empresa"] = EMPRESA;
 
     $('#quantidadeProxProduto').on('keydown', null, 'esc', function () {
         Metro.dialog.close("#janelaQuantidade");
-        $("#quantidadeProxProduto").focus();
+        $("#codigoBarras").focus();
+        return false;
+    });
+
+    $('#nomeProduto').on('keydown', null, 'esc', function () {
+        Metro.dialog.close("#janelaProduto");
+        $("#nomeProduto").val("");
+        $("#codigoBarras").focus();
         return false;
     });
 
@@ -136,6 +169,45 @@ $this->data["empresa"] = EMPRESA;
         $("#quantidadeDados").val(quantidade);
         $("#quantidadeProxProduto").val("");
         $("#codigoBarras").focus();
+    });
+
+    $("#formProduto").submit(function(event){
+       event.preventDefault();
+        $.ajax({
+            url: "/produtos/pesquisar",
+            type: 'post',
+            dataType: "JSON",
+            data: {
+                produto: $("#nomeProduto").val()
+            },
+            beforeSend: function () {
+                $("#resultado").html("ENVIANDO...");
+            }
+        })
+            .done(function (produto) {
+                console.log(produto);
+                if(produto.codigoBarras !== null){
+                    $("#codigoBarras").val(produto.codigoBarras);
+                }else{
+                    var notify = Metro.notify;
+                    notify.create("Erro ao buscar código de barras!", "Erro", {
+                        cls: "alert"
+                    });
+                }
+
+                $("#nomeProduto").val("");
+                $("#codigoBarras").focus();
+            })
+            .fail(function (jqXHR, textStatus, msg) {
+                console.log(msg);
+                var notify = Metro.notify;
+                notify.create("Produto não cadastrado ou erro na pesquisa!", "Erro", {
+                    cls: "alert"
+                });
+                $("#nomeProduto").val("");
+            });
+
+        $("#nomeProduto").val();
     });
 
     $(document).ready(function () {

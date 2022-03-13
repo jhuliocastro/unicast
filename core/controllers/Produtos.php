@@ -101,6 +101,15 @@ class Produtos extends Controller{
         $model->cadastrar($orcamento, $produto, $quantidade);
     }
 
+    public function pesquisa(){
+        $model = new Produtos_Model();
+        $dados = $model->retornaID($_POST["produto"]);
+        $dados = [
+            "codigoBarras" => $dados->codigoBarras
+        ];
+        echo json_encode($dados);
+    }
+
     public function cadastrarSender(){
         $dados = (object)$_POST;
 

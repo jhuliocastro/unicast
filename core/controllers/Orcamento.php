@@ -143,11 +143,22 @@ class Orcamento extends Controller{
         $clientes = new Clientes_Model();
         $cliente = $clientes->dadosClienteID($retorno->cliente);
 
+        //LISTA DE PRODUTOS
+        $modelProdutos = new Produtos_Model();
+        $produtos = $modelProdutos->lista();
+        $listaProdutos = null;
+        foreach($produtos as $produto){
+            $listaProdutos .= "
+                <option>$produto->nome</option>
+            ";
+        }
+
         parent::render("orcamentoPDV", [
             "cliente" => $cliente->nome,
             "tabela" => $tabela,
             "valorTotal" => $valorTotalOrcamento,
-            "valorTotalJS" => $valorTotalOrcamentoJS
+            "valorTotalJS" => $valorTotalOrcamentoJS,
+            "produtos" => $listaProdutos
         ]);
     }
     public function tabela(){
