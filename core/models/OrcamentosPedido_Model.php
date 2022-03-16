@@ -19,4 +19,8 @@ class OrcamentosPedido_Model extends DataLayer{
     public function retornoProdutos(int $orcamento){
         return $this->find("orcamento=:orcamento", "orcamento=$orcamento")->order("id DESC")->fetch(true);
     }
+
+    public function verificaExiste(int $orcamento){
+        return $this->find("orcamento=:orcamento", "orcamento=$orcamento")->count();
+    }
 }

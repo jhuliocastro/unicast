@@ -34,6 +34,8 @@ $router->get("/lista", "Estoque:tabela");
 
 $router->group("pdv");
 $router->get("/caixa", "Caixa:home");
+$router->post("/caixa/importar", "Caixa:importar");
+$router->post("/caixa/valorTotal", "Caixa:valorTotal");
 $router->get("/orcamento", "Orcamento:home");
 $router->get("/orcamento/novo", "Orcamento:novo");
 $router->post("/orcamento/andamento", "Orcamento:orcamento");

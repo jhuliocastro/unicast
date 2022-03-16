@@ -17,6 +17,10 @@ class Orcamentos_Model extends DataLayer{
         return $this->find()->order("id DESC")->fetch(true);
     }
 
+    public function listaNaoFaturados(){
+        return $this->find("faturado=:faturado", "faturado=0")->order("id DESC")->fetch(true);
+    }
+
     public function novo(int $cliente){
         $this->cliente = $cliente;
         $this->aberto = true;
@@ -48,5 +52,9 @@ class Orcamentos_Model extends DataLayer{
         $orcamento = $this->findById($id);
         $orcamento->aberto = 0;
         return $orcamento->save();
+    }
+
+    public function verificaExiste(int $id){
+        return $this->find("id=:id", "id=$id")->count();
     }
 }
