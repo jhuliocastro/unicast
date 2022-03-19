@@ -66,6 +66,11 @@ class Produtos extends Controller{
             "title" => "Tipo",
             "sortable" => true
         ];
+        $tabela["header"][] = [
+          "name" => "acoes",
+          "title" => "Ações",
+          "sortable" => false
+        ];
 
         foreach($listaProdutos as $produto){
             $tabela["data"][] = [
@@ -75,7 +80,8 @@ class Produtos extends Controller{
                 "R$ ".number_format($produto->precoCompra, 2, ',', '.'),
                 $produto->estoqueMinimo,
                 $produto->estoqueAtual,
-                $produto->unidadeMedida
+                $produto->unidadeMedida,
+                "<a href='/produtos/editar/$produto->id'><img src='/assets/images/editar.png' class='imagem-acao'></a>"
             ];
         }
 
@@ -136,6 +142,46 @@ class Produtos extends Controller{
         }else if($retorno == true){
             parent::log("PRODUTO CADASTRADO");
             Alert::success("Produto cadastrado com sucesso!", "", "/produtos/cadastrar");
+        }
+    }
+
+    public function editar($data){
+        $model = new Produtos_Model();
+        $produto = $model->retornoPorID($data["id"]);
+        $produto->precoVenda = number_format($produto->precoVenda, 2, ",", ".");
+        $produto->precoCompra = number_format($produto->precoCompra, 2, ",", ".");
+        parent::render("produtosEditar", [
+            "nomeProduto" => $produto->nome,
+            "codigoBarras" => $produto->codigoBarras,
+            "precoVenda" => $produto->precoVenda,
+            "precoCompra" => $produto->precoCompra,
+            "quantidadeMinima" => $produto->estoqueMinimo,
+            "quantidadeAtual" => $produto->estoqueAtual,
+            "descricao" => $produto->descricao,
+            "unidadeMedida" => $produto->unidadeMedida,
+            "id" => $produto->id
+        ]);
+    }
+
+    public function editarSender(){
+        $dados = (object)$_POST;
+
+        $dados->precoCompra = str_replace(",", ".", $dados->precoCompra);
+        $dados->precoCompra = (float) $dados->precoCompra;
+        $dados->precoVenda = str_replace(",", ".", $dados->precoVenda);
+        $dados->precoVenda = (float) $dados->precoVenda;
+        $dados->estoqueAtual = (int) $dados->estoqueAtual;
+        $dados->estoqueMinimo = (int) $dados->estoqueMinimo;
+
+        $model = new Produtos_Model();
+        $retorno = $model->editar($dados);
+
+        if($retorno == false){
+            parent::log("ERRO AO EDITAR PRODUTO");
+            Alert::error("Erro ao editar produto!", "Verifique o log para mais informações.", "/produtos/cadastrar");
+        }else if($retorno == true){
+            parent::log("PRODUTO EDITADO");
+            Alert::success("Produto editado com sucesso!", $dados->nome, "/produtos/relacao");
         }
     }
 }

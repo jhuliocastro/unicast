@@ -27,6 +27,24 @@ class Produtos_Model extends DataLayer{
         return $retorno;
     }
 
+    public function editar($dados){
+        $produto = $this->findById($dados->id);
+        $produto->nome = $dados->nome;
+        $produto->descricao = $dados->descricao;
+        $produto->precoVenda = $dados->precoVenda;
+        $produto->precoCompra = $dados->precoCompra;
+        $produto->unidadeMedida = $dados->unidadeMedida;
+        $produto->estoqueMinimo = $dados->estoqueMinimo;
+        $produto->estoqueAtual = $dados->estoqueAtual;
+        $produto->codigoBarras = $dados->codigoBarras;
+        $retorno = $produto->save();
+        if($produto->fail()){
+            $controller = new Controller();
+            $controller->log($this->fail()->getMessage());
+        }
+        return $retorno;
+    }
+
     public function lista(){
         return $this->find()->fetch(true);
     }

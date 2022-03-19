@@ -24,6 +24,10 @@ $this->data["empresa"] = EMPRESA;
             background-color: #0a6aa1;
             color: white;
         }
+
+        .imagem-acao{
+            width: 30px;
+        }
     </style>
 </head>
 <body>
