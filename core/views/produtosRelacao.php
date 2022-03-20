@@ -10,11 +10,15 @@ $this->data["empresa"] = EMPRESA;
         </div>
         <div class="card-body p-2">
             <div class="card-block">
-                <div class="container-fluid tabela">
+                <div class="container-fluid">
                     <div>
-
+                        <button class="image-button" id="cadastrar">
+                            <span class="caption">F1 - Cadastrar</span>
+                            <span class="icon"><img src="/assets/images/cadastrar.png"></span>
+                        </button>
+                        <hr>
                     </div>
-                    <table id="tabela" class="display compact">
+                    <table id="tabela" class="display compact" style="width: 100%;">
                         <thead>
                             <tr>
                                 <td>ID</td>
@@ -43,5 +47,20 @@ $this->data["empresa"] = EMPRESA;
             'ajax': '/produtos/tabela',
         });
     });
+
+    //INICIO BOTAO CADASTRAR PRODUTO
+    $(document).on('keydown', null, 'f1', function () {
+        cadastrar();
+        return false;
+    });
+
+    $("#cadastrar").click(function(){
+       cadastrar();
+    });
+
+    function cadastrar(){
+        window.location.href = "/produtos/cadastrar";
+    }
+    //FIM BOTAO CADASTRAR PRODUTO
 </script>
 <?= $this->end("scripts"); ?>
