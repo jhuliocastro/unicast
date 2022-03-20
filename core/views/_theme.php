@@ -18,6 +18,9 @@ $this->data["empresa"] = EMPRESA;
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/assets/js/hotkeys.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/ju/dt-1.11.5/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.11.5/datatables.min.js"></script>
+    
     <style>
         .card-header {
             font-weight: bold;

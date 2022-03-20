@@ -10,8 +10,25 @@ $this->data["empresa"] = EMPRESA;
         </div>
         <div class="card-body p-2">
             <div class="card-block">
-                <div class="container-fluid">
-                    <table class="table" data-role="table" data-source="/produtos/tabela"></table>
+                <div class="container-fluid tabela">
+                    <div>
+
+                    </div>
+                    <table id="tabela" class="display compact">
+                        <thead>
+                            <tr>
+                                <td>ID</td>
+                                <td>Produto</td>
+                                <td>Preço Custo</td>
+                                <td>Preço Venda</td>
+                                <td>Estoque Mínimo</td>
+                                <td>Estoque Atual</td>
+                                <td>Tipo</td>
+                                <td>Ações</td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -21,7 +38,10 @@ $this->data["empresa"] = EMPRESA;
 <?= $this->start("scripts"); ?>
 <script>
     $(document).ready(function () {
-
+        $('#tabela').DataTable({
+            "paging": false,
+            'ajax': '/produtos/tabela',
+        });
     });
 </script>
 <?= $this->end("scripts"); ?>
