@@ -29,8 +29,8 @@ $router->get("/editar/{id}", "Produtos:editar");
 $router->post("/editar", "Produtos:editarSender");
 
 $router->group("estoque");
-$router->get("/entrada", "Estoque:entrada");
-$router->post("/entrada", "Estoque:entradaSender");
+$router->post("/entrada", "Estoque:entrada");
+$router->post("/saida", "Estoque:saida");
 $router->get("/relacao", "Estoque:relacao");
 $router->get("/lista", "Estoque:tabela");
 
@@ -46,6 +46,9 @@ $router->get("/orcamento/reabrir/cancelar", "Orcamento:cancelar");
 $router->get("/orcamento/finalizar", "Orcamento:finalizar");
 $router->get("/orcamento/finalizarSender", "Orcamento:finalizarSender");
 $router->get("/orcamento/tabela", "Orcamento:tabela");
+
+$router->group("nfe");
+$router->get("/", "NFE:home");
 
 $router->group("log");
 $router->get("/", "Log:relacao");

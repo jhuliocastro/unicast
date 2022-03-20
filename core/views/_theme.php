@@ -6,7 +6,7 @@ $this->data["empresa"] = EMPRESA;
 <head>
     <title>ERPCASTRO :: <?= $this->data["empresa"] ?></title>
     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/jquery-ui.css">
     <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script
@@ -18,9 +18,9 @@ $this->data["empresa"] = EMPRESA;
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/assets/js/hotkeys.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/ju/dt-1.11.5/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.11.5/datatables.min.js"></script>
-    
+
     <style>
         .card-header {
             font-weight: bold;
@@ -33,13 +33,14 @@ $this->data["empresa"] = EMPRESA;
         }
     </style>
 </head>
+
 <body>
 <nav data-role="ribbonmenu">
     <ul class="tabs-holder">
         <li class="static"><a href="#">Dashboard</a></li>
         <li><a href="#inicio">Início</a></li>
         <li><a href="#clientes">Clientes</a></li>
-        <li><a href="#estoque">Estoque</a></li>
+        <li><a href="#compras">Compras</a></li>
         <li><a href="#pdv">PDV</a></li>
         <li><a href="#configuracoes">Configurações</a></li>
     </ul>
@@ -66,6 +67,12 @@ $this->data["empresa"] = EMPRESA;
                 </span>
                 <span class="caption">Produtos</span>
             </button>
+            <button class="ribbon-button" onclick="window.location.href='/estoque/relacao'">
+                <span class="icon">
+                    <img src="/assets/images/estoque.png">
+                </span>
+                <span class="caption">Estoque</span>
+            </button>
         </div>
         <div class="section" id="estoque">
             <button class="ribbon-button" onclick="window.location.href='/estoque/entrada'">
@@ -74,11 +81,13 @@ $this->data["empresa"] = EMPRESA;
                 </span>
                 <span class="caption">Entrada</span>
             </button>
-            <button class="ribbon-button" onclick="window.location.href='/estoque/relacao'">
+        </div>
+        <div class="section" id="compras">
+            <button class="ribbon-button" onclick="window.location.href='/nfe'">
                 <span class="icon">
-                    <img src="/assets/images/relacao.png">
+                    <img src="/assets/images/nfe.svg">
                 </span>
-                <span class="caption">Relação</span>
+                <span class="caption">Importar NFe</span>
             </button>
         </div>
         <div class="section" id="pdv">

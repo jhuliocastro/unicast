@@ -110,6 +110,7 @@ $this->data["empresa"] = EMPRESA;
             </div>
             <div class="card-footer">
                 <button>CADASTRAR PRODUTO</button>
+                <button type="button" onclick="window.location.href='/produtos/relacao'">VOLTAR</button>
             </div>
         </form>
     </div>

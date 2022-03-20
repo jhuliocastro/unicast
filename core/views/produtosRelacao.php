@@ -12,10 +12,7 @@ $this->data["empresa"] = EMPRESA;
             <div class="card-block">
                 <div class="container-fluid">
                     <div>
-                        <button class="image-button" id="cadastrar">
-                            <span class="caption">F1 - Cadastrar</span>
-                            <span class="icon"><img src="/assets/images/cadastrar.png"></span>
-                        </button>
+                        <button id="cadastrar">F1 - CADASTRAR</button>
                         <hr>
                     </div>
                     <table id="tabela" class="display compact" style="width: 100%;">
@@ -45,6 +42,9 @@ $this->data["empresa"] = EMPRESA;
         $('#tabela').DataTable({
             "paging": false,
             'ajax': '/produtos/tabela',
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
+            }
         });
     });
 

@@ -1,13 +1,5 @@
 -- Adminer 4.8.1 MySQL 5.5.5-10.6.5-MariaDB dump
 
-SET NAMES utf8;
-SET time_zone = '+00:00';
-SET foreign_key_checks = 0;
-SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
-
-CREATE DATABASE `erpcastro` /*!40100 DEFAULT CHARACTER SET utf8mb3 */;
-USE `erpcastro`;
-
 DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE `clientes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
