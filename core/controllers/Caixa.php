@@ -144,6 +144,12 @@ class Caixa extends Controller
         }
     }
 
+    private function faturarOrcamento(){
+        $orcamento = $_SESSION["caixa"];
+        $model = new Orcamentos_Model();
+        $model->faturar($orcamento);
+    }
+
     private function saidaProdutos(){
         $orcamento = $_SESSION["caixa"];
         $model = new OrcamentosPedido_Model();

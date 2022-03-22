@@ -54,6 +54,12 @@ class Orcamentos_Model extends DataLayer{
         return $orcamento->save();
     }
 
+    public function faturar(int $orcamento){
+        $orcamento = $this->findById($orcamento);
+        $orcamento->faturado = 1;
+        $orcamento->save();
+    }
+
     public function verificaExiste(int $id){
         return $this->find("id=:id", "id=$id")->count();
     }
