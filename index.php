@@ -33,6 +33,7 @@ $router->post("/entrada", "Estoque:entrada");
 $router->post("/saida", "Estoque:saida");
 $router->get("/relacao", "Estoque:relacao");
 $router->get("/lista", "Estoque:tabela");
+$router->get("/atualizar", "Estoque:atualizar");
 
 $router->group("pdv");
 $router->get("/caixa", "Caixa:home");

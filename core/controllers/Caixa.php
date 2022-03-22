@@ -137,9 +137,24 @@ class Caixa extends Controller
         $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->desconto, $dados->troco, $dados->valorPagoPedido, "DINHEIRO");
 
         if($retorno == true){
+            $this->saidaProdutos();
             echo "true";
         }else{
             echo "false";
+        }
+    }
+
+    private function saidaProdutos(){
+        $orcamento = $_SESSION["caixa"];
+        $model = new OrcamentosPedido_Model();
+        $produtos = $model->retornoProdutos($orcamento);
+        foreach ($produtos as $produto){
+            $modelProduto = new Produtos_Model();
+            $dadosProduto = $modelProduto->retornoPorID($produto->produto);
+
+            $quantidadeNova = $dadosProduto->estoqueAtual - $produto->quantidade;
+
+            $modelProduto->atualizarEstoque($produto->produto, $quantidadeNova);
         }
     }
 
