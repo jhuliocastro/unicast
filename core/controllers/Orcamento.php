@@ -95,6 +95,19 @@ class Orcamento extends Controller{
         }
     }
 
+    public function dados(){
+        $model = new Orcamentos_Model();
+        $retorno = $model->dadosID($_POST["orcamento"]);
+        $cliente = $retorno->cliente;
+
+        $model = new Clientes_Model();
+        $retorno = $model->dadosClienteID($cliente);
+
+        $_SESSION["clienteCaixa"] = $retorno->id;
+
+        echo $retorno->nome;
+    }
+
     public function aberto($data){
         $valorTotalOrcamento = 0;
 
@@ -161,6 +174,7 @@ class Orcamento extends Controller{
             "produtos" => $listaProdutos
         ]);
     }
+
     public function tabela(){
         $tabela["header"][] = [
             "name" => "id",

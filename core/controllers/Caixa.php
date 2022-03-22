@@ -2,10 +2,12 @@
 
 namespace Controller;
 
+use Alertas\Alert;
 use Model\Clientes_Model;
 use Model\Orcamentos_Model;
 use Model\OrcamentosPedido_Model;
 use Model\Produtos_Model;
+use Model\Vendas_Model;
 
 class Caixa extends Controller
 {
@@ -37,9 +39,30 @@ class Caixa extends Controller
             }
         }
 
+        $model = new Produtos_Model();
+        $produtos = $model->lista();
+        $produtosLista = null;
+        foreach($produtos as $produto){
+            $produtosLista .= "
+                <option>$produto->nome</option>
+            ";
+        }
+
         parent::render("caixa", [
-            "orcamentos" => $tabelaOrcamento
+            "orcamentos" => $tabelaOrcamento,
+            "produtos" => $produtosLista
         ]);
+    }
+
+    public function pesquisarProduto(){
+        $model = new Produtos_Model();
+        $retorno = $model->verificaProdutoExiste($_POST["produto"]);
+        if($retorno == 0){
+            echo "nao existe";
+        }else{
+            $retorno = $model->retornaID($_POST["produto"]);
+            echo $retorno->codigoBarras;
+        }
     }
 
     public function valorTotal(){
@@ -51,8 +74,16 @@ class Caixa extends Controller
 
     public function importar()
     {
+        if(isset($_SESSION["caixa"]["produtos"])){
+            unset($_SESSION["caixa"]["produtos"]);
+            unset($_SESSION["caixa"]);
+        }
+
         $modelOrcamento = new Orcamentos_Model();
         $retorno = $modelOrcamento->verificaExiste($_POST["orcamento"]);
+
+        $_SESSION["caixa"] = $_POST["orcamento"];
+
         if ($retorno > 0) {
             $model = new OrcamentosPedido_Model();
             $existe = $model->verificaExiste($_POST["orcamento"]);
@@ -66,6 +97,8 @@ class Caixa extends Controller
                     $valorTotal = $dadosProduto->precoVenda * $produto->quantidade;
                     $valorTotal = number_format($valorTotal, 2, ",", ".");
                     $valorUN = number_format($dadosProduto->precoVenda, 2, ",", ".");
+
+                    $_SESSION["caixaProdutos"][] = $dadosProduto->id;
 
                     $tabela .= "
                         <tr>
@@ -85,5 +118,99 @@ class Caixa extends Controller
         } else {
             echo "nao existe";
         }
+    }
+
+    public function finalizarDinheiro(){
+        $dados = (object)$_POST;
+
+        $dados->valorPagoPedido = str_replace(",", ".", $dados->valorPagoPedido);
+        $dados->desconto = str_replace(",", ".", $dados->desconto);
+        $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
+
+        $dados->troco = $dados->valorPagoPedido - $dados->valorPedido;
+
+        if($dados->desconto == ""){
+            (float)$dados->desconto = 0.00;
+        }
+
+        $model = new Vendas_Model();
+        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->desconto, $dados->troco, $dados->valorPagoPedido, "DINHEIRO");
+
+        if($retorno == true){
+            echo "true";
+        }else{
+            echo "false";
+        }
+    }
+
+    public function trueDinheiro(){
+        unset($_SESSION["clienteCaixa"]);
+        unset($_SESSION["produtos"]);
+
+        $model = new Vendas_Model();
+        $retorno = $model->listaUltimo();
+
+        $retorno->troco = number_format($retorno->troco, 2, ",", ".");
+
+        parent::render("caixaTrue", [
+            "troco" => $retorno->troco
+        ]);
+    }
+
+    public function falseDinheiro(){
+        Alert::error("Venda não concluída!", "Contate o suporte.", "/pdv/vendas/relacao");
+    }
+
+    public function imprimirCupom(){
+        $model = new OrcamentosPedido_Model();
+        $produtos = $model->retornoProdutos($_SESSION["caixa"]);
+
+        $modelVendas = new Vendas_Model();
+        $dadosVenda = $modelVendas->listaUltimo();
+
+        $modelCliente = new Clientes_Model();
+        $dadosCliente = $modelCliente->dadosClienteID($dadosVenda->cliente);
+
+        $dados = null;
+        foreach ($produtos as $produto){
+            $modelProduto = new Produtos_Model();
+            $dadosProduto = $modelProduto->retornoPorID($produto->produto);
+
+            $valorTotalProduto = $dadosProduto->precoVenda * $produto->quantidade;
+            $valorTotalProduto = number_format($valorTotalProduto, 2, ",", ".");
+            $dadosProduto->precoVenda = number_format($dadosProduto->precoVenda, 2, ",", '.');
+
+
+            $dados .= "
+            <tr class=\"top\">
+                <td colspan=\"3\">$dadosProduto->nome</td>
+            </tr>
+            <tr>
+                <td>R$ $dadosProduto->precoVenda</td>
+                <td>$produto->quantidade</td>
+                <td>R$ $valorTotalProduto</td>
+            </tr>
+            ";
+        }
+
+        $subTotal = $dadosVenda->valorTotal + $dadosVenda->desconto;
+        $subTotal = number_format($subTotal, 2, ",", ".");
+
+        $total = $dadosVenda->valorTotal - $dadosVenda->desconto;
+        $total = number_format($total, 2, ",", ".");
+
+        parent::render("cupom", [
+            "produtos" => $dados,
+            "cliente" => $dadosCliente->nome,
+            "cpf" => $dadosCliente->cpf,
+            "dataHora" => date("d/m/Y H:i:s", strtotime($dadosVenda->created_at)),
+            "desconto" => number_format($dadosVenda->desconto, 2, ",", "."),
+            "subTotal" => $subTotal,
+            "total" => $total,
+            "modoPagamento" => $dadosVenda->formaPagamento,
+            "troco" => number_format($dadosVenda->troco, 2, ",", "."),
+            "valorPago" => number_format($dadosVenda->valorPago, 2, ",", "."),
+            "numeroVenda" => $dadosVenda->id
+        ]);
     }
 }
