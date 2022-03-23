@@ -32,7 +32,11 @@ class Controller{
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $usuario = $_SESSION["usuario"];
+        if(!isset($_SESSION["usuario"])){
+            $usuario = "";
+        }else{
+            $usuario = $_SESSION["usuario"];
+        }        
 
         $log = new Log_Model();
         $log->cadastrar($evento, $ip, $usuario);
