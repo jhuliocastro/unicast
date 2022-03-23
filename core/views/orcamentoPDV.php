@@ -230,7 +230,7 @@ $this->data["empresa"] = EMPRESA;
             })
                 .done(function (produto) {
                     console.log(produto);
-                    let valorUN = produto.valor.toFixed(2);
+                    let valorUN = Number(produto.valor).toFixed(2);
                     let valorTotal = valorUN * quantidade;
                     valorTotalOrcamento = parseFloat(valorTotalOrcamento);
                     console.log(valorTotalOrcamento);
