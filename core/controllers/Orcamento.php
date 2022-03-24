@@ -175,6 +175,73 @@ class Orcamento extends Controller{
         ]);
     }
 
+    public function fechado($data){
+        $valorTotalOrcamento = 0;
+
+        $orcamentos = new Orcamentos_Model();
+        $retorno = $orcamentos->dadosID($data["id"]);
+
+        $_SESSION["orcamento"] = $retorno->id;
+
+        $orcamentoAberto = new OrcamentosPedido_Model();
+        $produtos = $orcamentoAberto->retornoProdutos($retorno->id);
+        $tabela = null;
+
+        if($produtos == null){
+            $valorTotalOrcamentoJS = 0;
+        }else{
+            foreach ($produtos as $produto){
+                $model = new Produtos_Model();
+                $dadosProduto = $model->retornoPorID($produto->produto);
+
+                $valorUN = number_format($dadosProduto->precoVenda, 2, ",", ".");
+                $valorUN = "R$ ".$valorUN;
+
+                $valorTotal = $dadosProduto->precoVenda * $produto->quantidade;
+                $valorTotalOrcamento = (float)$valorTotalOrcamento + (float)$valorTotal;
+                $valorTotal = number_format($valorTotal, 2, ",", ".");
+                $valorTotal = "R$ ".$valorTotal;
+
+                $valorTotalOrcamentoJS = $valorTotalOrcamento;
+                //(float)$valorTotalOrcamento = str_replace(".", ",", (float)$valorTotalOrcamento);
+
+                //$valorTotalOrcamento = number_format($valorTotalOrcamento, 2, ",", ".");
+
+                $tabela .= "
+            <tr>
+                <td>$dadosProduto->id</td>
+                <td>$dadosProduto->nome</td>
+                <td>$produto->quantidade</td>
+                <td>$valorUN</td>
+                <td>$valorTotal</td>
+            </tr>
+            ";
+            }
+        }
+
+        //CONSULTA O NOME DO CLIENTE
+        $clientes = new Clientes_Model();
+        $cliente = $clientes->dadosClienteID($retorno->cliente);
+
+        //LISTA DE PRODUTOS
+        $modelProdutos = new Produtos_Model();
+        $produtos = $modelProdutos->lista();
+        $listaProdutos = null;
+        foreach($produtos as $produto){
+            $listaProdutos .= "
+                <option>$produto->nome</option>
+            ";
+        }
+
+        parent::render("orcamentoFechado", [
+            "cliente" => $cliente->nome,
+            "tabela" => $tabela,
+            "valorTotal" => $valorTotalOrcamento,
+            "valorTotalJS" => $valorTotalOrcamentoJS,
+            "produtos" => $listaProdutos
+        ]);
+    }
+
     public function tabela(){
         $tabela["header"][] = [
             "name" => "id",
@@ -212,19 +279,26 @@ class Orcamento extends Controller{
 
             $status = null;
 
+            $acoes = null;
+
             if($orcamento->aberto == true){
                 $status = "<img src='/assets/images/circuloVermelho.png' class='imagem-acao' data-role='hint' data-hint-text='Em Aberto'>";
+                $acoes .= "
+                        <a href='/pdv/orcamento/aberto/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
+                    ";
             }else{
                 if($orcamento->faturado == true){
                     $status = "<img src='/assets/images/circuloVerde.png' class='imagem-acao' data-role='hint' data-hint-text='Faturado'>";
+                    $acoes .= "
+                        <a href='/pdv/orcamento/fechado/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
+                    ";
                 }else{
                     $status = "<img src='/assets/images/circuloAmarelo.png' class='imagem-acao' data-role='hint' data-hint-text='Pedente de Faturamento'>";
+                    $acoes .= "
+                        <a href='/pdv/orcamento/aberto/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
+                    ";
                 }
             }
-
-            $acoes = "
-            <a href='/pdv/orcamento/aberto/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
-            ";
 
             $tabela["data"][] = [
                 $orcamento->id,

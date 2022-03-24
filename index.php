@@ -48,6 +48,7 @@ $router->get("/orcamento/finalizar", "Orcamento:finalizar");
 $router->get("/orcamento/finalizarSender", "Orcamento:finalizarSender");
 $router->get("/orcamento/tabela", "Orcamento:tabela");
 $router->post("/orcamento/dados", "Orcamento:dados");
+$router->get("/orcamento/fechado/{id}", "Orcamento:fechado");
 $router->post("/caixa/pesquisar/produto", "Caixa:pesquisarProduto");
 $router->post("/caixa/finalizar/dinheiro", "Caixa:finalizarDinheiro");
 $router->get("/caixa/finalizar/dinheiro/true", "Caixa:trueDinheiro");
@@ -56,6 +57,10 @@ $router->get("/imprimir/cupom", "Caixa:imprimirCupom");
 
 $router->get("/vendas", "Vendas:home");
 $router->get("/vendas/relacao", "Vendas:relacao");
+
+$router->group("/obras");
+$router->get("/", "Obras:home");
+$router->get("/relacao", "Obras:relacao");
 
 $router->group("nfe");
 $router->get("/", "NFE:home");

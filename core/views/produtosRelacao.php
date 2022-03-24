@@ -20,8 +20,8 @@ $this->data["empresa"] = EMPRESA;
                             <tr>
                                 <td>ID</td>
                                 <td>Produto</td>
-                                <td>Preço Custo</td>
                                 <td>Preço Venda</td>
+                                <td>Preço Custo</td>
                                 <td>Estoque Mínimo</td>
                                 <td>Estoque Atual</td>
                                 <td>Tipo</td>

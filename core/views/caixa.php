@@ -30,7 +30,7 @@ $this->data["empresa"] = EMPRESA;
                 <div class="card-body p-2">
                     <div class="card-block">
                         <div id="infos">
-
+                            <span class="valorTotal">Valor Total: <span id="valorTotal"></span></span>
                         </div>
                         <button type="button" id="botaoProduto" class="shortcut primary">
                             <span class="badge">F1</span>
@@ -153,20 +153,6 @@ $this->data["empresa"] = EMPRESA;
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Valor Total com Desconto</label>
-                            <input type="text" readonly data-prepend="R$" name="valorComDescontoDinheiro" id="valorComDescontoDinheiro" data-role="input">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Desconto</label>
-                            <input type="text" value="" name="descontoDinheiro" data-prepend="R$" id="descontoDinheiro" data-role="input">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
                             <label>Valor Pago</label>
                             <input type="text" name="valorPagoDinheiro" data-prepend="R$" id="valorPagoDinheiro" data-role="input">
                         </div>
@@ -204,6 +190,9 @@ $this->data["empresa"] = EMPRESA;
 
 <?= $this->start("scripts"); ?>
     <script>
+        var quantidade = 1;
+        var valorTotalOrcamento = 0;
+
         $(function() {
             $("#valorPagoDinheiro").mask('#.##0,00', {reverse: true});
             $("#descontoDinheiro").mask('#.##0,00', {reverse: true});
@@ -260,7 +249,6 @@ $this->data["empresa"] = EMPRESA;
 
         function finalizarVenda(){
             let valorPagoDinheiro = $("#valorPagoDinheiro").val();
-            let desconto = $("#descontoDinheiro").val();
             let valorPedido = $("#valorTotalCompraDinheiro").val();
 
             if(valorPagoDinheiro == ""){
@@ -272,7 +260,6 @@ $this->data["empresa"] = EMPRESA;
                     dataType: 'html',
                     data: {
                         valorPagoPedido: valorPagoDinheiro,
-                        desconto: desconto,
                         valorPedido: valorPedido
                     },
                     beforeSend: function () {
@@ -430,29 +417,65 @@ $this->data["empresa"] = EMPRESA;
 
         $(document).ready(function () {
             $("#codigoBarrasCaixa").focus();
+
+            $("#formEstoque").submit(function (event) {
+                event.preventDefault();
+                let codigoBarras = $("#codigoBarras").val();
+                $.ajax({
+                    url: "/produtos/dados",
+                    type: 'post',
+                    dataType: "JSON",
+                    data: {
+                        codigoBarras: codigoBarras,
+                        quantidadeDados: $("#quantidadeDados").val()
+                    },
+                    beforeSend: function () {
+                        $("#resultado").html("ENVIANDO...");
+                    }
+                })
+                    .done(function (produto) {
+                        console.log(produto);
+                        let valorUN = Number(produto.valor).toFixed(2);
+                        let valorTotal = valorUN * quantidade;
+                        valorTotalOrcamento = parseFloat(valorTotalOrcamento);
+                        console.log(valorTotalOrcamento);
+                        console.log(valorTotal);
+                        valorTotalOrcamento = valorTotalOrcamento + valorTotal;
+                        valorTotalOrcamento = valorTotalOrcamento.toFixed(2);
+
+                        valorTotal = valorTotal.toFixed(2);
+                        valorTotal = "R$ " + valorTotal;
+                        valorUN = "R$ " + valorUN;
+                        valorTotal = valorTotal.replace(".", ",");
+                        valorUN = valorUN.replace(".", ",");
+                        $("#tabela>tbody").prepend("<tr>" +
+                            "<td>" + produto.id + "</td>" +
+                            "<td>" + produto.produto + "</td>" +
+                            "<td>" + quantidade + "</td>" +
+                            "<td>" + valorUN + "</td>" +
+                            "<td>" + valorTotal + "</td>" +
+                            "</tr>");
+
+                        quantidade = 1;//VOLTA A QUANTIDADE PARA 1
+                        $("#quantidadeDados").val(quantidade);
+                        $("#codigoBarras").val("");
+
+
+                        $("#valorTotal").html("R$ " + valorTotalOrcamento);
+                        $("#valorTotalCompraDinheiro").val(valorTotalOrcamento);
+
+                    })
+                    .fail(function (jqXHR, textStatus, msg) {
+                        console.log(msg);
+                        var notify = Metro.notify;
+                        notify.create("Produto não cadastrado ou erro no cadastro!", "Erro", {
+                            cls: "alert"
+                        });
+                        $("#codigoBarras").val("");
+                    });
+            });
         });
 
-        $("#descontoDinheiro").on('keydown', function (){
-           let valorTotal = $("#valorTotalCompraDinheiro").val();
-           let desconto = $("#descontoDinheiro").val();
-
-           if(desconto === ""){
-                $("#valorComDescontoDinheiro").val($("#valorTotalCompraDinheiro").val());
-           }
-
-           let valorComDesconto = parseFloat(valorTotal.replace(",", ".")) - parseFloat(desconto.replace(",", "."));
-            if(valorComDesconto < 0){
-                $("#valorComDescontoDinheiro").val("");
-                Metro.toast.create("Desconto não pode ser maior que valor da venda!", null, null, "warning");
-
-            }else{
-                valorComDesconto = valorComDesconto.toFixed(2);
-                valorComDesconto = valorComDesconto.toString();
-                valorComDesconto = valorComDesconto.replace(".", ",");
-                $("#valorComDescontoDinheiro").val(valorComDesconto);
-            }
-
-        });
 
         //BOTAO PROCURAR PRODUTO
         $('#codigoBarras').on('keydown', null, 'f1', function () {
@@ -503,6 +526,7 @@ $this->data["empresa"] = EMPRESA;
             //DINHEIRO
             $("#finalizarVenda").dialog('close');
             $("#dinheiro").dialog('open');
+            $("#valorPagoDinheiro").focus();
             //window.location.href = "/pdv/caixa/finalizar/dinheiro";
         });
 

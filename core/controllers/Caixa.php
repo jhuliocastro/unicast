@@ -19,6 +19,10 @@ class Caixa extends Controller
 
     public function home()
     {
+        unset($_SESSION["caixaProdutos"]);
+        unset($_SESSION["clienteCaixa"]);
+        $_SESSION["clienteCaixa"] = 1;
+
         $model = new Orcamentos_Model();
         $orcamentos = $model->listaNaoFaturados();
         $tabelaOrcamento = null;
@@ -124,17 +128,14 @@ class Caixa extends Controller
         $dados = (object)$_POST;
 
         $dados->valorPagoPedido = str_replace(",", ".", $dados->valorPagoPedido);
-        $dados->desconto = str_replace(",", ".", $dados->desconto);
         $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
 
         $dados->troco = $dados->valorPagoPedido - $dados->valorPedido;
 
-        if($dados->desconto == ""){
-            (float)$dados->desconto = 0.00;
-        }
-
         $model = new Vendas_Model();
-        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->desconto, $dados->troco, $dados->valorPagoPedido, "DINHEIRO");
+        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->troco, $dados->valorPagoPedido, "DINHEIRO");
+
+        $this->faturarOrcamento();
 
         if($retorno == true){
             $this->saidaProdutos();
@@ -225,7 +226,7 @@ class Caixa extends Controller
             "cliente" => $dadosCliente->nome,
             "cpf" => $dadosCliente->cpf,
             "dataHora" => date("d/m/Y H:i:s", strtotime($dadosVenda->created_at)),
-            "desconto" => number_format($dadosVenda->desconto, 2, ",", "."),
+            "desconto" => number_format((float)$dadosVenda->desconto, 2, ",", "."),
             "subTotal" => $subTotal,
             "total" => $total,
             "modoPagamento" => $dadosVenda->formaPagamento,

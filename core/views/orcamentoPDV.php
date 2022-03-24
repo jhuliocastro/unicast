@@ -257,6 +257,7 @@ $this->data["empresa"] = EMPRESA;
 
 
                     $("#valorTotal").html("R$ " + valorTotalOrcamento);
+                    $("#valorTotalCompraDinheiro").val(valorTotalOrcamento);
 
                 })
                 .fail(function (jqXHR, textStatus, msg) {
