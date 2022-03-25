@@ -49,6 +49,8 @@ $router->get("/orcamento/finalizarSender", "Orcamento:finalizarSender");
 $router->get("/orcamento/tabela", "Orcamento:tabela");
 $router->post("/orcamento/dados", "Orcamento:dados");
 $router->get("/orcamento/fechado/{id}", "Orcamento:fechado");
+$router->get("/orcamento/excluir/{id}", "Orcamento:excluir");
+$router->get("/orcamento/excluirSender/{id}", "Orcamento:excluirSender");
 $router->post("/caixa/pesquisar/produto", "Caixa:pesquisarProduto");
 $router->post("/caixa/finalizar/dinheiro", "Caixa:finalizarDinheiro");
 $router->get("/caixa/finalizar/dinheiro/true", "Caixa:trueDinheiro");

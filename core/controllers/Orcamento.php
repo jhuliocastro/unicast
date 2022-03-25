@@ -285,17 +285,20 @@ class Orcamento extends Controller{
                 $status = "<img src='/assets/images/circuloVermelho.png' class='imagem-acao' data-role='hint' data-hint-text='Em Aberto'>";
                 $acoes .= "
                         <a href='/pdv/orcamento/aberto/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
+                        <a href='/pdv/orcamento/excluir/$orcamento->id'><img src='/assets/images/excluir.png' class='imagem-acao' data-role='hint' data-hint-text='Excluir'></a>
                     ";
             }else{
                 if($orcamento->faturado == true){
                     $status = "<img src='/assets/images/circuloVerde.png' class='imagem-acao' data-role='hint' data-hint-text='Faturado'>";
                     $acoes .= "
                         <a href='/pdv/orcamento/fechado/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
+                        <a href='/pdv/orcamento/excluir/$orcamento->id' disabled><img src='/assets/images/excluir.png' class='imagem-acao' style='-webkit-filter: grayscale(100%);' data-role='hint' data-hint-text='Excluir'></a>
                     ";
                 }else{
                     $status = "<img src='/assets/images/circuloAmarelo.png' class='imagem-acao' data-role='hint' data-hint-text='Pedente de Faturamento'>";
                     $acoes .= "
                         <a href='/pdv/orcamento/aberto/$orcamento->id'><img src='/assets/images/abrir.png' class='imagem-acao' data-role='hint' data-hint-text='Abrir'></a>
+                        <a href='/pdv/orcamento/excluir/$orcamento->id'><img src='/assets/images/excluir.png' class='imagem-acao' data-role='hint' data-hint-text='Excluir'></a>
                     ";
                 }
             }
@@ -310,5 +313,23 @@ class Orcamento extends Controller{
         }
 
         echo json_encode($tabela);
+    }
+
+    public function excluir($data){
+        Alert::question("Confirma exclusão do orçamento $data[id]?", "Essa ação não tem volta.", "/pdv/orcamento/excluirSender/$data[id]", "/pdv/orcamento");
+    }
+
+    public function excluirSender($data){
+        $model = new OrcamentosPedido_Model();
+        $model->excluir($data["id"]);
+
+        $model = new Orcamentos_Model();
+        $retorno = $model->excluir($data["id"]);
+
+        if($retorno == true){
+            Alert::success("Orçamento excluído!", "", "/pdv/orcamento");
+        }else{
+            Alert::error("Erro ao excluir orçamento!", "Contate o administrador do sistema!", "/pdv/orcamento");
+        }
     }
 }

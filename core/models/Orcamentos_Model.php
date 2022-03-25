@@ -63,4 +63,8 @@ class Orcamentos_Model extends DataLayer{
     public function verificaExiste(int $id){
         return $this->find("id=:id", "id=$id")->count();
     }
+
+    public function excluir(int $id){
+        return ($this->findById($id))->destroy();
+    }
 }

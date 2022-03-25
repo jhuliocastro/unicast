@@ -23,4 +23,9 @@ class OrcamentosPedido_Model extends DataLayer{
     public function verificaExiste(int $orcamento){
         return $this->find("orcamento=:orcamento", "orcamento=$orcamento")->count();
     }
+
+    public function excluir(int $orcamento){
+        $model = $this->find("orcamento=:orc", "orc=$orcamento")->fetch();
+        $model->destroy();
+    }
 }
