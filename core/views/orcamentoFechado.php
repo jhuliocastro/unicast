@@ -43,33 +43,6 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
-<div class="dialog" id="janelaQuantidade" data-role="dialog">
-    <form method="post" id="formQuantidade">
-        <div class="dialog-title">Insira a quantidade desejada</div>
-        <div class="dialog-content">
-            <input type="number" id="quantidadeProxProduto" name="quantidadeProxProduto" data-role="input">
-        </div>
-        <div class="dialog-actions">
-            <button class="button js-dialog-close">Cancelar</button>
-            <button type="submit" class="button primary">Ok</button>
-        </div>
-    </form>
-</div>
-
-<div class="dialog" id="janelaProduto" data-role="dialog">
-    <form method="post" id="formProduto">
-        <div class="dialog-title">Digite o nome do produto</div>
-        <div class="dialog-content">
-            <input autocomplete="off" type="search" list="listProdutos" id="nomeProduto" name="nomeProduto" data-role="input">
-            <datalist id="listProdutos"><?= $this->data["produtos"] ?></datalist>
-        </div>
-        <div class="dialog-actions">
-            <button class="button js-dialog-close">Cancelar</button>
-            <button type="submit" class="button primary">Ok</button>
-        </div>
-    </form>
-</div>
-
 <?= $this->start("scripts"); ?>
 <script>
     var quantidade = 1;
@@ -88,7 +61,6 @@ $this->data["empresa"] = EMPRESA;
     $(document).ready(function () {
         $('#tabela').DataTable({
             "paging": false,
-            'ajax': '/pdv/orcamento/dados/',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
             }
