@@ -11,10 +11,23 @@ $this->data["empresa"] = EMPRESA;
         <div class="card-body p-2">
             <div class="card-block">
                 <div class="container-fluid">
-                    <button class="shortcut" id="botaoNovoOrcamento" style="margin-bottom: 10px; background-color: white;">
-                        <img style="width: 100%;" src="/assets/images/cadastrar.png">
+                    <button type="button" class="shortcut primary" id="botaoNovoOrcamento">
+                        <span class="badge">F1</span>
+                        <span class="caption">Novo</span>
+                        <span class="mif-add icon"></span>
                     </button>
-                    <table class="table" data-role="table" data-source="/pdv/orcamento/tabela"></table>
+                    <table id="tabela" class="display compact" style="width: 100%;">
+                        <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Cliente</td>
+                            <td>Valor</td>
+                            <td>Situação</td>
+                            <td>Ações</td>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -26,6 +39,20 @@ $this->data["empresa"] = EMPRESA;
     $(document).ready(function () {
         $("#botaoNovoOrcamento").click(function(){
             window.location.href = "/pdv/orcamento/novo";
+        });
+
+        $('#tabela').DataTable({
+            "paging": false,
+            "aaSorting": [[0, "desc"]],
+            'ajax': '/pdv/orcamento/tabela',
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
+            }
+        });
+
+        $(document).on('keydown', null, 'f1', function () {
+            window.location.href = "/pdv/orcamento/novo";
+            return false;
         });
     });
 </script>

@@ -243,32 +243,6 @@ class Orcamento extends Controller{
     }
 
     public function tabela(){
-        $tabela["header"][] = [
-            "name" => "id",
-            "title" => "ID",
-            "sortable" => true,
-            "sortDir" => "desc",
-            "format" => "number"
-        ];
-        $tabela["header"][] = [
-            "name" => "cliente",
-            "title" => "Cliente",
-            "sortable" => true
-        ];
-        $tabela["header"][] = [
-            "name" => "valor",
-            "title" => "Valor",
-            "sortable" => true
-        ];
-        $tabela["header"][] = [
-            "name" => "status",
-            "title" => "Status"
-        ];
-        $tabela["header"][] = [
-            "name" => "acoes",
-            "title" => ""
-        ];
-
         $orcamentos = new Orcamentos_Model();
         $orcamentos = $orcamentos->lista();
         foreach ($orcamentos as $orcamento){
