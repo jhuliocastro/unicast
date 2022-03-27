@@ -70,4 +70,11 @@ class Produtos_Model extends DataLayer{
         $atualizar->estoqueAtual = $quantidade;
         $atualizar->save();
     }
+
+    public function alterarValor(int $id, float $valorCompra, float $valorVenda){
+        $model = $this->findById($id);
+        $model->precoCompra = $valorCompra;
+        $model->precoVenda = $valorVenda;
+        return $model->save();
+    }
 }

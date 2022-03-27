@@ -30,6 +30,10 @@ class Produtos extends Controller{
         $listaProdutos = $produtos->lista();
 
         foreach($listaProdutos as $produto){
+            $acoes = "
+            <a href='/produtos/editar/$produto->id'><img src='/assets/images/editar.png' data-role='hint' data-hint-text='Editar' class='imagem-acao'></a>
+            <a href='#' onclick='abrirJanelaAlterarValor($produto->id)'><img src='/assets/images/valor.png' data-role='hint' data-hint-text='Alterar Valor' class='imagem-acao'></a>
+            ";
             if($produto->estoqueAtual == 0){
                 $tabela["data"][] = [
                     "<span style='color: red;'>$produto->id</span>",
@@ -39,7 +43,7 @@ class Produtos extends Controller{
                     "<span style='color: red;'>$produto->estoqueMinimo</span>",
                     "<span style='color: red;'>$produto->estoqueAtual</span>",
                     "<span style='color: red;'>$produto->unidadeMedida</span>",
-                    "<span style='color: red;'><a href='/produtos/editar/$produto->id'><img src='/assets/images/editar.png' class='imagem-acao'></a></span>"
+                    $acoes
                 ]; 
             }else{
                 $tabela["data"][] = [
@@ -50,12 +54,47 @@ class Produtos extends Controller{
                     $produto->estoqueMinimo,
                     $produto->estoqueAtual,
                     $produto->unidadeMedida,
-                    "<a href='/produtos/editar/$produto->id'><img src='/assets/images/editar.png' class='imagem-acao'></a>"
+                    $acoes
                 ];
             }
         }
 
         echo json_encode($tabela);
+    }
+
+    public function dadosID(){
+        $model = new Produtos_Model();
+        $produto = $model->retornoPorID($_POST["id"]);
+        $valorVenda = number_format($produto->precoVenda, 2, ',', '.');
+        $valorCompra = number_format($produto->precoCompra, 2, ",", ".");
+        $retorno = [
+            "produto" => $produto->nome,
+            'valorCompra' => $valorCompra,
+            'valorVenda' => $valorVenda
+        ];
+        echo json_encode($retorno);
+    }
+
+    public function alterarValor(){
+        $dados = (object)$_POST;
+
+        $dados->valorCompra = str_replace(",", ".", $dados->valorCompra);
+        $dados->valorVenda = str_replace(",", ".", $dados->valorVenda);
+
+        $model = new Produtos_Model();
+        $retorno = $model->alterarValor($dados->id, $dados->valorCompra, $dados->valorVenda);
+
+        if($retorno == true){
+            $retorno = [
+                "retorno" => "true"
+            ];
+        }else{
+            $retorno = [
+                "retorno" => "false"
+            ];
+        }
+
+        echo json_encode($retorno);
     }
 
     public function dados(){
