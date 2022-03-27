@@ -78,21 +78,16 @@ class Produtos extends Controller{
     public function alterarValor(){
         $dados = (object)$_POST;
 
-        $dados->valorCompra = str_replace(",", ".", $dados->valorCompra);
+        $dados->valorVenda = str_replace(".", "", $dados->valorVenda);
         $dados->valorVenda = str_replace(",", ".", $dados->valorVenda);
+        $dados->valorVenda = (float) $dados->valorVenda;
+
+        $dados->valorCompra = str_replace(".", "", $dados->valorCompra);
+        $dados->valorCompra = str_replace(",", ".", $dados->valorCompra);        
+        $dados->valorCompra = (float) $dados->valorCompra;
 
         $model = new Produtos_Model();
         $retorno = $model->alterarValor($dados->id, $dados->valorCompra, $dados->valorVenda);
-
-        if($retorno == true){
-            $retorno = [
-                "retorno" => "true"
-            ];
-        }else{
-            $retorno = [
-                "retorno" => "false"
-            ];
-        }
 
         echo json_encode($retorno);
     }

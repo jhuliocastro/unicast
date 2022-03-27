@@ -75,6 +75,19 @@ class Produtos_Model extends DataLayer{
         $model = $this->findById($id);
         $model->precoCompra = $valorCompra;
         $model->precoVenda = $valorVenda;
-        return $model->save();
+        $retorno = $model->save();
+        
+        if($model->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $model->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true
+            ];
+        }
+
+        return $retorno;
     }
 }

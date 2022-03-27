@@ -129,7 +129,7 @@ $this->data["empresa"] = EMPRESA;
             success: function(retorno) {
                 dialog.dialog('close');
                 tabela.ajax.reload();
-                if(retorno.retorno == "true"){
+                if(retorno.status == true){
                     Swal.fire(
                         'Valor Atualizado!',
                         '',
@@ -138,7 +138,7 @@ $this->data["empresa"] = EMPRESA;
                 }else{
                     Swal.fire(
                         'Erro ao atualizar valor!',
-                        'Contate o administrador do sistema',
+                        retorno.erro,
                         'error'
                     );
                 }
