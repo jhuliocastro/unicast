@@ -294,16 +294,16 @@ class Orcamento extends Controller{
     }
 
     public function excluirSender($data){
-        $model = new OrcamentosPedido_Model();
-        $model->excluir($data["id"]);
+        //$model = new OrcamentosPedido_Model();
+        //$model->excluir($data["id"]);
 
         $model = new Orcamentos_Model();
         $retorno = $model->excluir($data["id"]);
 
-        if($retorno == true){
+        if($retorno["retorno"] == true){
             Alert::success("Orçamento excluído!", "", "/pdv/orcamento");
         }else{
-            Alert::error("Erro ao excluir orçamento!", "Contate o administrador do sistema!", "/pdv/orcamento");
+            Alert::error("Erro ao excluir orçamento!", $retorno["erro"], "/pdv/orcamento");
         }
     }
 

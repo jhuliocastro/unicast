@@ -65,6 +65,19 @@ class Orcamentos_Model extends DataLayer{
     }
 
     public function excluir(int $id){
-        return ($this->findById($id))->destroy();
+        $model = $this->findById($id);
+        $retorno = $model->destroy();
+        if($model->fail()){
+            $retorno = [
+                "retorno" => false,
+                "erro" => $model->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "retorno" => true
+            ];
+        }
+
+        return $retorno;
     }
 }
