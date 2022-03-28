@@ -36,6 +36,11 @@ $this->data["empresa"] = EMPRESA;
                         <span class="caption">Finalizar</span>
                         <span class="mif-clipboard icon"></span>
                     </button>
+                    <button type="button" id="botaoFinalizar" class="shortcut primary">
+                        <span class="badge">F4</span>
+                        <span class="caption">Excluir<br/> Produto</span>
+                        <span class="mif-cancel icon"></span>
+                    </button>
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12" style="margin-top: 15px;">
@@ -78,6 +83,20 @@ $this->data["empresa"] = EMPRESA;
             <button class="button js-dialog-close">Cancelar</button>
             <button type="submit" class="button primary">Ok</button>
         </div>
+    </form>
+</div>
+
+<div id="janelaExcluirProduto" title="Excluir Produto">
+    <form>
+        <fieldset>
+            <div class="form-group">
+                <label>Informe o nome do produto:</label>
+                <input type="text" name="idExcluirProduto" id="idExcluirProduto" data-role="input">
+            </div>
+            <hr>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
     </form>
 </div>
 
@@ -144,6 +163,18 @@ $this->data["empresa"] = EMPRESA;
         return false;
     });
 
+    $('#codigoBarras').on('keydown', null, 'f4', function () {
+        $("#janelaExcluirProduto").dialog('open');
+        $("#idProdutoExcluir").focus();
+        return false;
+    });
+
+    $(document).on('keydown', null, 'f4', function () {
+        $("#janelaExcluirProduto").dialog('open');
+        $("#idProdutoExcluir").focus();
+        return false;
+    });
+
     $('#quantidadeProxProduto').on('keydown', null, 'esc', function () {
         Metro.dialog.close("#janelaQuantidade");
         $("#codigoBarras").focus();
@@ -170,6 +201,55 @@ $this->data["empresa"] = EMPRESA;
         $("#quantidadeProxProduto").val("");
         $("#codigoBarras").focus();
     });
+
+    var dialog = $("#janelaExcluirProduto").dialog({
+        autoOpen: false,
+        width: 800
+    });
+
+    var form = dialog.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        excluirProduto();
+    });
+
+    function excluirProduto(){
+        $("#janelaExcluirProduto").dialog('close');
+        let produto = $("#idExcluirProduto").val();
+        $("#idExcluirProduto").val("");
+        $.ajax({
+            url: "/pdv/orcamento/excluir/produto",
+            type: 'post',
+            dataType: "JSON",
+            data: {
+                produto: produto
+            },
+            beforeSend: function () {
+                $("#resultado").html("ENVIANDO...");
+            }
+        })
+            .done(function (produto) {
+                console.log(produto);
+                if(produto.codigoBarras !== null){
+                    $("#codigoBarras").val(produto.codigoBarras);
+                }else{
+                    var notify = Metro.notify;
+                    notify.create("Erro ao buscar código de barras!", "Erro", {
+                        cls: "alert"
+                    });
+                }
+
+                $("#nomeProduto").val("");
+                $("#codigoBarras").focus();
+            })
+            .fail(function (jqXHR, textStatus, msg) {
+                console.log(msg);
+                var notify = Metro.notify;
+                notify.create("Produto não cadastrado ou erro na pesquisa!", "Erro", {
+                    cls: "alert"
+                });
+                $("#nomeProduto").val("");
+            });
+    }
 
     $("#formProduto").submit(function(event){
        event.preventDefault();

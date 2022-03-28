@@ -306,4 +306,9 @@ class Orcamento extends Controller{
             Alert::error("Erro ao excluir orçamento!", "Contate o administrador do sistema!", "/pdv/orcamento");
         }
     }
+
+    public function excluirProduto(){
+        $dados = (object)$_POST;
+
+    }
 }

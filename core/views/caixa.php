@@ -10,6 +10,12 @@ $this->data["empresa"] = EMPRESA;
             font-weight: bold;
         }
 
+        .spanDesconto {
+            color: black;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
         .numeroOrcamento{
             color: black;
             font-size: 26px;
@@ -40,7 +46,7 @@ $this->data["empresa"] = EMPRESA;
                         <button type="button" id="botaoImportar" class="shortcut primary">
                             <span class="badge">F2</span>
                             <span class="caption">Importar</span>
-                            <span class="mif-search icon"></span>
+                            <span class="mif-download icon"></span>
                         </button>
                         <button type="button" id="botaoQuantidade" class="shortcut primary">
                             <span class="badge">F3</span>
@@ -51,6 +57,11 @@ $this->data["empresa"] = EMPRESA;
                             <span class="badge">F4</span>
                             <span class="caption">Finalizar</span>
                             <span class="mif-clipboard icon"></span>
+                        </button>
+                        <button type="button" id="botaoFinalizar" class="shortcut primary">
+                            <span class="badge">F5</span>
+                            <span class="caption">Desconto</span>
+                            <span class="mif-calculator icon"></span>
                         </button>
                         <div class="container">
                             <div class="row">
@@ -188,14 +199,30 @@ $this->data["empresa"] = EMPRESA;
         </form>
     </div>
 
+    <div id="janelaDesconto" title="Aplicar Desconto">
+        <form>
+            <fieldset>
+                <div class="form-group">
+                    <label>Informe o valor</label>
+                    <input type="text" class="" id="valorDesconto" name="valorDesconto" data-role="input">
+                </div>
+                <hr>
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
 <?= $this->start("scripts"); ?>
     <script>
         var quantidade = 1;
         var valorTotalOrcamento = 0;
+        var valorDesconto = 0;
+        var valorCaixa = 0;
 
         $(function() {
             $("#valorPagoDinheiro").mask('#.##0,00', {reverse: true});
-            $("#descontoDinheiro").mask('#.##0,00', {reverse: true});
+            $("#valorDesconto").mask('#.##0,00', {reverse: true});
 
             var dialog = $("#importarOrcamento").dialog({
                 autoOpen: false,
@@ -245,7 +272,34 @@ $this->data["empresa"] = EMPRESA;
                 event.preventDefault();
                 finalizarVenda();
             });
+
+            //JANELA DE DESCONTO
+            var dialog4 = $("#janelaDesconto").dialog({
+                autoOpen: false,
+                width: 800,
+                buttons: {
+                    "Aplicar": desconto
+                }
+            });
+
+            var form4 = dialog4.find( "form" ).on( "submit", function( event ) {
+                event.preventDefault();
+                desconto();
+            });
         });
+
+        function desconto(){
+            valorDesconto = $("#valorDesconto").val();
+            valorDesconto = valorDesconto.replace(",", ".");
+   
+            $("#spanDesconto").html("R$ " + valorDesconto.replace(".", ","));
+
+            $("#janelaDesconto").dialog('close');
+
+            $("#valorDesconto").val("");
+
+            Metro.toast.create("Desconto Aplicado!", null, null, "success");
+        }
 
         function finalizarVenda(){
             let valorPagoDinheiro = $("#valorPagoDinheiro").val();
@@ -260,7 +314,8 @@ $this->data["empresa"] = EMPRESA;
                     dataType: 'html',
                     data: {
                         valorPagoPedido: valorPagoDinheiro,
-                        valorPedido: valorPedido
+                        valorPedido: valorCaixa,
+                        desconto: valorDesconto
                     },
                     beforeSend: function () {
                         $("#resultado").html("ENVIANDO...");
@@ -336,13 +391,14 @@ $this->data["empresa"] = EMPRESA;
                     console.log(valorTotal);
                     $("#infos").html("<span class='numeroOrcamento'>Orçamento: <span id='numeroOrcamento'>" + numeroPedido + "</span></span>" +
                         "<br/>" +
-                        "<span class='valorTotal'>Valor Total: <span id='valorTotal'>R$ " + valorTotal + "</span></span>");
+                        "<span class='valorTotal'>Valor Total: <span id='valorTotal'>R$ " + valorTotal + "</span></span><br/>" +
+                        "<span class='spanDesconto'>Desconto: <span id='spanDesconto'>R$ 0,00</span></span>");
                     $("#valorTotalCompraDinheiro").val(valorTotal);
+                    valorTotalOrcamento = valorTotal;
                 })
                 .fail(function (jqXHR, textStatus, msg) {
                     console.log(msg);
                 });
-
         }
 
         function formImportar(){
@@ -381,7 +437,7 @@ $this->data["empresa"] = EMPRESA;
                             $("#numeroPedidoImportar").val("");
                             $("#importarOrcamento").dialog('close');
                             Metro.toast.create("Orçamento importado!", null, null, "info");
-                            infos(numeroPedido);
+                            infos(numeroPedido);                            
                         }
 
                     })
@@ -517,6 +573,17 @@ $this->data["empresa"] = EMPRESA;
             return false;
         });
 
+        //BOTAO DESCONTO
+        $('#codigoBarras').on('keydown', null, 'f5', function () {
+            $("#janelaDesconto").dialog('open');
+            return false;
+        });
+
+        $(document).on('keydown', null, 'f5', function () {
+            $("#janelaDesconto").dialog('open');
+            return false;
+        });
+
         $("#botaoFinalizar").click(function(){
             $("#finalizarVenda").dialog('open');
         });
@@ -527,7 +594,18 @@ $this->data["empresa"] = EMPRESA;
             $("#finalizarVenda").dialog('close');
             $("#dinheiro").dialog('open');
             $("#valorPagoDinheiro").focus();
-            //window.location.href = "/pdv/caixa/finalizar/dinheiro";
+
+            valorCaixa = valorTotalOrcamento;
+            valorTotalOrcamento = valorTotalOrcamento.replace(",", ".");
+            valorDesconto = valorDesconto.replace(",", ".");
+
+            valorTotalOrcamento = valorTotalOrcamento - valorDesconto;
+            valorTotalOrcamento = valorTotalOrcamento.toFixed(2);
+
+            valorTotalOrcamento = valorTotalOrcamento.replace(".", ",");
+
+            $("#valorTotalCompraDinheiro").val(valorTotalOrcamento);
+
         });
 
         $("#finalizarVenda").on('keydown', null, '2', function () {

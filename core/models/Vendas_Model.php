@@ -9,13 +9,14 @@ class Vendas_Model extends DataLayer{
         parent::__construct("vendas", [], "id", true);
     }
 
-    public function cadastrar(int $cliente, int $orcamento, float $valorTotal, float $troco, float $valorPago, string $formaPagamento){
+    public function cadastrar(int $cliente, int $orcamento, float $valorTotal, float $troco, float $valorPago, string $formaPagamento, float $desconto){
         $this->cliente = $cliente;
         $this->orcamento = $orcamento;
         $this->valorTotal = $valorTotal;
         $this->troco = $troco;
         $this->valorPago = $valorPago;
         $this->formaPagamento = $formaPagamento;
+        $this->desconto = $desconto;
         return $this->save();
     }
 
