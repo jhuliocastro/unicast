@@ -31,6 +31,20 @@ $this->data["empresa"] = EMPRESA;
         .imagem-acao{
             width: 30px;
         }
+        #carrega{
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background-color: white;
+        }
+
+        #loader{
+            margin: 0 auto;
+            top: 48%;
+        }
     </style>
 </head>
 
@@ -73,6 +87,12 @@ $this->data["empresa"] = EMPRESA;
                 </span>
                 <span class="caption">Estoque</span>
             </button>
+            <button class="ribbon-button" onclick="window.location.href='/obras'">
+                <span class="icon">
+                    <img src="/assets/images/obras.png">
+                </span>
+                <span class="caption">Obras</span>
+            </button>
         </div>
         <div class="section" id="estoque">
             <button class="ribbon-button" onclick="window.location.href='/estoque/entrada'">
@@ -103,6 +123,12 @@ $this->data["empresa"] = EMPRESA;
                 </span>
                 <span class="caption">Orçamento</span>
             </button>
+            <button class="ribbon-button" onclick="window.location.href='/pdv/vendas'">
+                <span class="icon">
+                    <img src="/assets/images/vendas.png">
+                </span>
+                <span class="caption">Vendas</span>
+            </button>
         </div>
         <div class="section" id="configuracoes">
             <button class="ribbon-button" onclick="window.location.href='/produtos/relacao'">
@@ -114,7 +140,25 @@ $this->data["empresa"] = EMPRESA;
         </div>
     </div>
 </nav>
+<div id="carrega">
+    <div id="loader" data-role="activity" data-type="square" data-style="color"></div>
+</div>
 <?= $this->section("content") ?>
 </body>
+<script>
+    $(window).on("load", function(){
+        desloader();
+    });
+
+    function desloader(){
+        $("#loader").delay(500).fadeOut("slow");
+        $("#carrega").delay(500).fadeOut("slow");
+    }
+
+    function loader(){
+        $("#loader").delay(100).fadeIn("slow");
+        $("#carrega").delay(100).fadeIn("slow");
+    }
+</script>
 <?= $this->section("scripts") ?>
 </html>
