@@ -309,6 +309,22 @@ class Orcamento extends Controller{
 
     public function excluirProduto(){
         $dados = (object)$_POST;
+        $model = new OrcamentosPedido_Model();
+        $retorno = $model->verificaExisteExcluirProduto($dados->produto, $_SESSION["orcamento"]);
+        if($retorno == 0){
+            $json = ["status"=> 0];
+        }else{
+            $retorno = $model->excluirProduto($dados->produto, $_SESSION["orcamento"]);
+            if($retorno["status"] == true){
+                $json = ["status" => 1];
+            }else{
+                $json = [
+                    "status" => 2,
+                    "erro" => $retorno["erro"]
+                ];
+            }
+        }
 
+        echo json_encode($json);
     }
 }

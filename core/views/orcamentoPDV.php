@@ -219,7 +219,7 @@ $this->data["empresa"] = EMPRESA;
         $.ajax({
             url: "/pdv/orcamento/excluir/produto",
             type: 'post',
-            dataType: "JSON",
+            dataType: "html",
             data: {
                 produto: produto
             },
@@ -229,13 +229,18 @@ $this->data["empresa"] = EMPRESA;
         })
             .done(function (produto) {
                 console.log(produto);
-                if(produto.codigoBarras !== null){
-                    $("#codigoBarras").val(produto.codigoBarras);
+                if(produto.status == true){
+                    Swal.fire(
+                        'bm Tracalho',
+                        'Produto Excluído!',
+                        'success'
+                        );
                 }else{
-                    var notify = Metro.notify;
-                    notify.create("Erro ao buscar código de barras!", "Erro", {
-                        cls: "alert"
-                    });
+                    Swal.fire(
+                        'Erro ao excluir produto de orçamento',
+                        produto.error,
+                        'error'
+                        );
                 }
 
                 $("#nomeProduto").val("");
