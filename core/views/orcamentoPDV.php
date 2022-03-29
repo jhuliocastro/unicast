@@ -219,7 +219,7 @@ $this->data["empresa"] = EMPRESA;
         $.ajax({
             url: "/pdv/orcamento/excluir/produto",
             type: 'post',
-            dataType: "html",
+            dataType: "json",
             data: {
                 produto: produto
             },
@@ -230,17 +230,10 @@ $this->data["empresa"] = EMPRESA;
             .done(function (produto) {
                 console.log(produto);
                 if(produto.status == true){
-                    Swal.fire(
-                        'bm Tracalho',
-                        'Produto Excluído!',
-                        'success'
-                        );
+                    Metro.toast.create("Produto Excluído!", null, null, "info");
                 }else{
-                    Swal.fire(
-                        'Erro ao excluir produto de orçamento',
-                        produto.error,
-                        'error'
-                        );
+                    console.log(produto.erro);
+                    Metro.toast.create("Erro! Contate o administrador do sistema.", null, null, "alert");
                 }
 
                 $("#nomeProduto").val("");

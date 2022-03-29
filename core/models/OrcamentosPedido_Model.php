@@ -30,19 +30,23 @@ class OrcamentosPedido_Model extends DataLayer{
     }
 
     public function excluirProduto(int $produto, int $orcamento){
-        $model = $this->find("produto=:produto AND orcamento=:orcamento", "produto=$produto&orcamento=$orcamento")->fetch(true);
-        $model->destroy();
-
-        var_dump($model);
-        if($model->fail()){
-            $retorno = [
-                "status" => false,
-                "erro" => $model->fail()->getMessage()
-            ];
-        }else{
-            $retorno = ["status"=>true];
+        $model = $this->find("orcamento=:orc AND produto=:produto", "orc=$orcamento&produto=$produto")->fetch(true);
+        foreach($model as $produto){
+            $excluir = ($this)->findById($produto->id);
+            $excluir->destroy();
+            if($excluir->fail()){
+                $retorno = [
+                    "status" => false,
+                    "erro" => $excluir->fail()->getMessage()
+                ];
+                exit();
+            }
         }
 
+        $retorno = [
+            "status" => true
+        ];
+        
         return $retorno;
     }
 

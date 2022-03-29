@@ -316,10 +316,10 @@ class Orcamento extends Controller{
         }else{
             $retorno = $model->excluirProduto($dados->produto, $_SESSION["orcamento"]);
             if($retorno["status"] == true){
-                $json = ["status" => 1];
+                $json = ["status" => true];
             }else{
                 $json = [
-                    "status" => 2,
+                    "status" => false,
                     "erro" => $retorno["erro"]
                 ];
             }
