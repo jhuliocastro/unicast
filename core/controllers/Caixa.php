@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Alertas\Alert;
+use Model\CaixaDiario_Model;
 use Model\Clientes_Model;
 use Model\Orcamentos_Model;
 use Model\OrcamentosPedido_Model;
@@ -139,10 +140,16 @@ class Caixa extends Controller
 
         if($retorno == true){
             $this->saidaProdutos();
+            $this->gravaCaixaDiario($dados->valorPagoPedido, "VENDA Nº ".$_SESSION["caixa"], "Entrada");
             echo "true";
         }else{
             echo "false";
         }
+    }
+
+    public function gravaCaixaDiario($valor, $descricao, $tipo){
+        $caixaDiario = new CaixaDiario_Model();
+        $retorno = $caixaDiario->inserir($valor, $descricao, $tipo);
     }
 
     private function faturarOrcamento(){

@@ -14,10 +14,12 @@ $router->get("/sair", "Login:sair");
 $router->group("dashboard");
 $router->get("/", "Dashboard:home");
 
+//CLIENTES
 $router->group("clientes");
 $router->get("/cadastrar", "Clientes:cadastrar");
 $router->post("/cadastrar", "Clientes:cadastrarSender");
 
+//PRODUTOS
 $router->group("produtos");
 $router->get("/cadastrar", "Produtos:cadastrar");
 $router->post("/cadastrar", "Produtos:cadastrarSender");
@@ -30,6 +32,7 @@ $router->get("/editar/{id}", "Produtos:editar");
 $router->post("/editar", "Produtos:editarSender");
 $router->post("/alterar/valor", "Produtos:alterarValor");
 
+//ESTOQUE
 $router->group("estoque");
 $router->post("/entrada", "Estoque:entrada");
 $router->post("/saida", "Estoque:saida");
@@ -37,6 +40,7 @@ $router->get("/relacao", "Estoque:relacao");
 $router->get("/lista", "Estoque:tabela");
 $router->get("/atualizar", "Estoque:atualizar");
 
+//PDV ORCAMENTO E CAIXA
 $router->group("pdv");
 $router->get("/caixa", "Caixa:home");
 $router->post("/caixa/importar", "Caixa:importar");
@@ -61,18 +65,36 @@ $router->get("/caixa/finalizar/dinheiro/true", "Caixa:trueDinheiro");
 $router->get("/caixa/finalizar/dinheiro/false", "Caixa:falseDinheiro");
 $router->get("/imprimir/cupom", "Caixa:imprimirCupom");
 
+//VENDAS
 $router->get("/vendas", "Vendas:home");
 $router->get("/vendas/relacao", "Vendas:relacao");
 
+//OBRAS
 $router->group("/obras");
 $router->get("/", "Obras:home");
 $router->get("/relacao", "Obras:relacao");
 
+//NFE
 $router->group("nfe");
 $router->get("/", "NFE:home");
 
+//LOG
 $router->group("log");
 $router->get("/", "Log:relacao");
+
+//CAIXA DIARIOS
+$router->group("caixaDiario");
+$router->get("/", "CaixaDiario:home");
+$router->get("/tabela", "CaixaDiario:tabela");
+$router->get("/abrir", "CaixaDiario:abrir");
+$router->post("/incluir", "CaixaDiario:incluirSender");
+$router->get("/excluir/{id}", "CaixaDiario:excluir");
+$router->get("/excluir/sender/{id}", "CaixaDiario:excluirSender");
+$router->get("/fechar", "CaixaDiario:fechar");
+$router->get("/fechar/sender", "CaixaDiario:fecharSender");
+$router->get("/incluir", "CaixaDiario:incluir");
+$router->get("/relatorio/selecionar", "CaixaDiario:relatorioSelecionar");
+$router->get("/relatorio/selecionar/{data}", "CaixaDiario:relatorio");
 
 $router->dispatch();
 
