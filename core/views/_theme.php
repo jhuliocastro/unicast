@@ -147,7 +147,7 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </nav>
 <div id="carrega">
-    <div id="loader" data-role="activity" data-type="square" data-style="color"></div>
+    <div id="loader" data-role="activity" data-type="atom" data-style="color"></div>
 </div>
 <?= $this->section("content") ?>
 </body>
