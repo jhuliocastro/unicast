@@ -14,7 +14,7 @@ $this->data["empresa"] = EMPRESA;
 
 <div class="pcoded-content">
     <div class="card">
-        <form method="post" action="/pdv/orcamento/andamento" id="formEstoque">
+        <form method="post" id="formEstoque">
             <div class="card-header">
                 Novo Orçamento :: <?= $this->data["empresa"] ?> :: <?= $this->data["cliente"] ?>
             </div>
@@ -55,7 +55,8 @@ $this->data["empresa"] = EMPRESA;
                 </div>
             </div>
             <hr>
-            <table class="table" data-role="table" id="tabela">
+            </form>
+            <table id="tabela" class="display compact" style="width: 100%;">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -65,11 +66,9 @@ $this->data["empresa"] = EMPRESA;
                     <th>VALOR TOTAL</th>
                 </tr>
                 </thead>
-                <tbody>
-                    <?= $this->data["tabela"] ?>
-                </tbody>
+                <tbody></tbody>
             </table>
-        </form>
+        
     </div>
 </div>
 
@@ -90,7 +89,7 @@ $this->data["empresa"] = EMPRESA;
     <form>
         <fieldset>
             <div class="form-group">
-                <label>Informe o nome do produto:</label>
+                <label>Informe o ID do produto:</label>
                 <input type="text" name="idExcluirProduto" id="idExcluirProduto" data-role="input">
             </div>
             <hr>
@@ -236,6 +235,8 @@ $this->data["empresa"] = EMPRESA;
                     Metro.toast.create("Erro! Contate o administrador do sistema.", null, null, "alert");
                 }
 
+                tabela.ajax.reload();
+
                 $("#nomeProduto").val("");
                 $("#codigoBarras").focus();
             })
@@ -290,6 +291,14 @@ $this->data["empresa"] = EMPRESA;
 
     $(document).ready(function () {
         $("#codigoBarras").focus();
+
+        var tabela = $('#tabela').DataTable({
+            "paging": false,
+            'ajax': '/pdv/orcamento/aberto/relacao/<?= $this->data["orcamento"] ?>',
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
+            }
+        });
 
         $("#formEstoque").submit(function (event) {
             event.preventDefault();

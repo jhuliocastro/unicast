@@ -108,6 +108,46 @@ class Orcamento extends Controller{
         echo $retorno->nome;
     }
 
+    public function abertoTabela($data){
+        $valorTotalOrcamento = 0;
+        $tabela = null;
+
+        $orcamentoAberto = new OrcamentosPedido_Model();
+        $produtos = $orcamentoAberto->retornoProdutos($data["id"]);
+        
+        if($produtos == null){
+           
+        }else{
+            foreach ($produtos as $produto){
+                $model = new Produtos_Model();
+                $dadosProduto = $model->retornoPorID($produto->produto);
+    
+                $valorUN = number_format($dadosProduto->precoVenda, 2, ",", ".");
+                $valorUN = "R$ ".$valorUN;
+    
+                $valorTotal = $dadosProduto->precoVenda * $produto->quantidade;
+                $valorTotalOrcamento = (float)$valorTotalOrcamento + (float)$valorTotal;
+                $valorTotal = number_format($valorTotal, 2, ",", ".");
+                $valorTotal = "R$ ".$valorTotal;
+    
+                $valorTotalOrcamentoJS = $valorTotalOrcamento;
+                //(float)$valorTotalOrcamento = str_replace(".", ",", (float)$valorTotalOrcamento);
+    
+                //$valorTotalOrcamento = number_format($valorTotalOrcamento, 2, ",", ".");
+    
+                $tabela["data"][] = [
+                    $dadosProduto->id,
+                    $dadosProduto->nome,
+                    $produto->quantidade,
+                    $valorUN,
+                    $valorTotal
+                ];            
+            }
+        }        
+
+        echo json_encode($tabela);
+    }
+
     public function aberto($data){
         $valorTotalOrcamento = 0;
 
@@ -167,6 +207,7 @@ class Orcamento extends Controller{
         }
 
         parent::render("orcamentoPDV", [
+            "orcamento" => $data["id"],
             "cliente" => $cliente->nome,
             "tabela" => $tabela,
             "valorTotal" => $valorTotalOrcamento,
