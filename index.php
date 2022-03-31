@@ -87,12 +87,11 @@ $router->group("caixaDiario");
 $router->get("/", "CaixaDiario:home");
 $router->get("/tabela", "CaixaDiario:tabela");
 $router->get("/abrir", "CaixaDiario:abrir");
-$router->post("/incluir", "CaixaDiario:incluirSender");
+$router->post("/sangria", "CaixaDiario:sangria");
 $router->get("/excluir/{id}", "CaixaDiario:excluir");
 $router->get("/excluir/sender/{id}", "CaixaDiario:excluirSender");
 $router->get("/fechar", "CaixaDiario:fechar");
 $router->get("/fechar/sender", "CaixaDiario:fecharSender");
-$router->get("/incluir", "CaixaDiario:incluir");
 $router->get("/relatorio/selecionar", "CaixaDiario:relatorioSelecionar");
 $router->get("/relatorio/selecionar/{data}", "CaixaDiario:relatorio");
 

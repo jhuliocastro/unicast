@@ -118,33 +118,23 @@ class CaixaDiario extends Controller
         Alert::success("Caixa fechado!", "", "/dashboard");
     }
 
-    public function incluir(){
-        $dataAtual = date("Y-m-d");
-        $caixa = new CaixaDiario_Situacao_Model();
-        $count = $caixa->find("dataCaixa=:data", "data=$dataAtual")->count();
-        if($count == 0){
-            $this->router->redirect("/caixa");
-        }
-        $dados = $caixa->find("dataCaixa=:data", "data=$dataAtual")->fetch();
-        if($dados->situacao == "FECHADO"){
-            parent::alerta("warning", "Caixa do dia já foi fechado!", "Entre em contato com o administrador do sistema", "/painel");
-            die();
-        }
-        parent::render("caixa", "novoLancamento", []);
-    }
-
-    public function incluirSender(){
+    public function sangria(){
         $dados = (object) $_POST;
         $caixa = new CaixaDiario_Model();
-        $caixa->descricao = $dados->descricao;
-        $caixa->tipo = $dados->tipo;
-        $caixa->valor = $dados->valor;
+        $caixa->inserir($dados->valor, $dados->descricao, "Saida");
         $caixa->save();
         if($caixa->fail()){
-            parent::alerta("error", "Erro ao processar requisição!", $caixa->fail()->getMessage(), "/caixa/incluir");
-            die();
+            $retorno = [
+                "status" => false,
+                "erro" => $caixa->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true
+            ];
         }
-        parent::alerta("success", "Lançamento incluído com sucesso!", "", "/caixa");
+
+        echo json_encode($retorno);
     }
 
     public function abrir(){
