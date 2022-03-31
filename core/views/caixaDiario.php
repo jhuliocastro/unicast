@@ -28,6 +28,7 @@ $this->data["empresa"] = EMPRESA;
                                 <td>Descrição</td>
                                 <td>Valor</td>
                                 <td>Tipo</td>
+                                <td></td>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -67,6 +68,53 @@ $this->data["empresa"] = EMPRESA;
 <?= $this->start("scripts"); ?>
 <script>
     var tabela;
+
+    function excluir(id){
+        Swal.fire({
+            title: 'Confirma exclusão do caixa?',
+            text: "Essa ação não tem volta!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Voltar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/caixaDiario/excluir',
+                    dataType: "JSON",
+                    data: {
+                        id: id
+                    },
+                    success: function(retorno) {
+                        console.log(retorno);
+                        tabela.ajax.reload();
+                        if(retorno.status == true){
+                            Swal.fire(
+                                'Excluído!',
+                                '',
+                                'success'
+                            );
+                        }else{
+                            Swal.fire(
+                                'Erro ao excluir!',
+                                retorno.erro,
+                                'error'
+                            );
+                        }
+                    }
+                });
+
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    }
 
     function sangria(){
         let descricao = $("#descricaoSangria").val();
@@ -158,6 +206,8 @@ $this->data["empresa"] = EMPRESA;
         $("#sangria").click(function (){
            dialog.dialog('open');
         });
+
+
 
     });
 </script>

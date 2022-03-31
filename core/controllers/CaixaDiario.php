@@ -28,13 +28,6 @@ class CaixaDiario extends Controller
         }
     }
 
-    public function excluir($data){
-        extract($data);
-        $caixa = new CaixaDiario_Model();
-        $dados = $caixa->findById($id);
-        parent::alertaQuestion("Confirma exclusão do lançamento?", $dados->descricao, "/caixa/excluir/sender/$id", "/caixa");
-    }
-
     public function relatorioSelecionar(){
         parent::render("caixa", "relatorioSelecionar", []);
     }
@@ -42,6 +35,7 @@ class CaixaDiario extends Controller
     public function tabela(){
         $caixa = new CaixaDiario_Model();
         $lista = $caixa->find()->order("id ASC")->fetch(true);
+        $i = 0;
         foreach($lista as $d){
             if(date("Y-m-d") == date("Y-m-d", strtotime($d->created_at))){
                 $valor = "R$ ".$d->valor;
@@ -50,11 +44,21 @@ class CaixaDiario extends Controller
                 }else{
                     $valor = "<span style='color: red; font-weight: bold;'>$valor</span>";
                 }
+
+                if($i == 0){
+                    $opcoes = "<a data-role='hint' disabled data-hint-text='Excluir' href='#'><img style='cursor: no-drop; -webkit-filter: grayscale(100%);' class='imagem-acao' src='/assets/images/excluir.png'></a>";
+                }else{
+                    $opcoes = "<a data-role='hint' onclick='excluir($d->id)' data-hint-text='Excluir' href='#'><img class='imagem-acao' src='/assets/images/excluir.png'></a>";
+                }
+
+                $i = 1;
+
                 $tabela["data"][] = [
                      $d->id,
                      $d->descricao,
                      $d->tipo,
-                     $valor
+                     $valor,
+                     $opcoes
                 ];
             }
         }
@@ -62,15 +66,10 @@ class CaixaDiario extends Controller
         echo json_encode($tabela);
     }
 
-    public function excluirSender($data){
-        extract($data);
-        $caixa = (new CaixaDiario_Model())->findById($id);
-        $caixa->destroy();
-        if($caixa->fail()){
-            parent::alerta("error", "Erro ao processar requisição!", $caixa->fail()->getMessage(), "/caixa");
-            die();
-        }
-        parent::alerta("success", "Lançamento excluído com sucesso!", "", "/caixa");
+    public function excluir(){
+        $model = new CaixaDiario_Model();
+        $retorno = $model->excluir($_POST["id"]);
+        echo json_encode($retorno);
     }
 
     public function relatorioDiario($dados){
@@ -185,39 +184,11 @@ class CaixaDiario extends Controller
                         <td>$d->descricao</td>
                         <td>$d->tipo</td>
                         <td>$valor</td>
-                        <td>
-                            $opcoes
-                        </td>
+                        <td>tewste</td>
                     </tr>
                 ";
             }
         }
         return $tabela;
     }
- /*
-    public function listaDiario($data){
-        $arquivos = new CaixaDiario_Model();
-        $listaArquivos = $arquivos->lista();
-        $dados["data"] = array();
-        for($i=0;$i<sizeof($listaArquivos);$i++){
-            if(date("Y-m-d", strtotime($data["data"])) == date("Y-m-d", strtotime($listaArquivos[$i]->created_at))){
-                $id = $listaArquivos[$i]->id;
-                $valor = "R$ ".$listaArquivos[$i]->valor;
-                if($listaArquivos[$i]->tipo == "Entrada"){
-                    $valor = "<span style='color: darkgreen; font-weight: bold;'>$valor</span>";
-                }else{
-                    $valor = "<span style='color: red; font-weight: bold;'>$valor</span>";
-                }
-                $provisorio = [
-                    $t,
-                    $id,
-                    $listaArquivos[$i]->descricao,
-                    $listaArquivos[$i]->tipo,
-                    $valor
-                ];
-                $dados["data"][] = $provisorio;
-            }
-        }
-        echo json_encode($dados);
-    }*/
 }
