@@ -21,8 +21,7 @@ $router->post("/cadastrar", "Clientes:cadastrarSender");
 
 //PRODUTOS
 $router->group("produtos");
-$router->get("/cadastrar", "Produtos:cadastrar");
-$router->post("/cadastrar", "Produtos:cadastrarSender");
+$router->post("/cadastrar", "Produtos:cadastrar");
 $router->get("/relacao", "Produtos:relacao");
 $router->get("/tabela", "Produtos:tabela");
 $router->post("/dados", "Produtos:dados");

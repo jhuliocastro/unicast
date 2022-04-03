@@ -12,10 +12,6 @@ class Produtos extends Controller{
         parent::__construct();
     }
 
-    public function cadastrar(){
-        parent::render("produtosCadastrar");
-    }
-
     private function verificaProdutoExiste($produto){
         $produtos = new Produtos_Model();
         return $produtos->verificaProdutoExiste($produto);
@@ -120,33 +116,37 @@ class Produtos extends Controller{
         echo json_encode($dados);
     }
 
-    public function cadastrarSender(){
+    public function cadastrar(){
         $dados = (object)$_POST;
+
+        $retorno = [];
 
         //VERIFICA SE PRODUTO JÁ EXISTE
         $existe = $this->verificaProdutoExiste($dados->nome);
         if($existe > 0){
-            Alert::error("PRODUTO COM O MESMO NOME JÁ CADASTRADO!", "VERIFIQUE AS INFORMAÇÕES E TENTE NOVAMENTE", "/produtos/cadastrar");
-            exit();
+            $retorno = [
+                "status" => false,
+                "erro" => "existe"
+            ];
+        }else{
+            if($dados->precoVenda == null){
+                $dados->precoVenda = 0.00;
+            }
+            if($dados->precoCompra == null){
+                $dados->precoCompra = 0.00;
+            }
+
+            $dados->precoCompra = str_replace(",", ".", $dados->precoCompra);
+            $dados->precoCompra = (float) $dados->precoCompra;
+            $dados->precoVenda = str_replace(",", ".", $dados->precoVenda);
+            $dados->precoVenda = (float) $dados->precoVenda;
+
+            $produtos = new Produtos_Model();
+            $retorno = $produtos->cadastrar($dados);
+
         }
 
-        $dados->precoCompra = str_replace(",", ".", $dados->precoCompra);
-        $dados->precoCompra = (float) $dados->precoCompra;
-        $dados->precoVenda = str_replace(",", ".", $dados->precoVenda);
-        $dados->precoVenda = (float) $dados->precoVenda;
-        $dados->estoqueAtual = (int) $dados->estoqueAtual;
-        $dados->estoqueMinimo = (int) $dados->estoqueMinimo;
-
-        $produtos = new Produtos_Model();
-        $retorno = $produtos->cadastrar($dados);
-
-        if($retorno == false){
-            parent::log("ERRO CADASTRO DE PRODUTOS");
-            Alert::error("Erro ao cadastrar produto!", "Verifique o log para mais informações.", "/produtos/cadastrar");
-        }else if($retorno == true){
-            parent::log("PRODUTO CADASTRADO");
-            Alert::success("Produto cadastrado com sucesso!", "", "/produtos/cadastrar");
-        }
+        echo json_encode($retorno);
     }
 
     public function editar($data){

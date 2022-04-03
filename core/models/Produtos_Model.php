@@ -12,17 +12,23 @@ class Produtos_Model extends DataLayer{
 
     public function cadastrar($dados){
         $this->nome = $dados->nome;
-        $this->descricao = $dados->descricao;
+        $this->descricao = "";
         $this->precoVenda = $dados->precoVenda;
         $this->precoCompra = $dados->precoCompra;
         $this->unidadeMedida = $dados->unidadeMedida;
-        $this->estoqueMinimo = $dados->estoqueMinimo;
-        $this->estoqueAtual = $dados->estoqueAtual;
+        $this->estoqueMinimo = 1;
+        $this->estoqueAtual = 0;
         $this->codigoBarras = $dados->codigoBarras;
         $retorno = $this->save();
         if($this->fail()){
             $controller = new Controller();
             $controller->log($this->fail()->getMessage());
+            $retorno = [
+                "status" => false,
+                "erro" => $this->fail()->getMessage()
+            ];
+        }else{
+            $retorno = ["status"=>true];
         }
         return $retorno;
     }

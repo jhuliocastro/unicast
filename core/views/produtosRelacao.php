@@ -42,6 +42,56 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
+<div id="janelaCadastrarProduto" title="Cadastrar Produto">
+    <form>
+        <fieldset>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Nome*: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-role="input" class="input-small" name="nomeCadastrar" id="nomeCadastrar">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Unidade Medida*: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-role="input" class="input-small" name="unidadeMedidaCadastrar" id="unidadeMedidaCadastrar">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Valor Compra: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="valorCompraCadastrar" name="valorCompraCadastrar">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Valor Venda: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="valorVendaCadastrar" name="valorVendaCadastrar">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Código de Barras*: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="number" data-role="input" class="input-small" name="codigoBarrasCadastrar" id="codigoBarrasCadastrar">
+                </div>
+            </div>
+            <hr>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
 <div id="janelaAlterarValor" title="Alterar Valor">
     <form>
         <fieldset>
@@ -93,7 +143,9 @@ $this->data["empresa"] = EMPRESA;
         });
 
         $("#valorVendaAlterarValor").mask('#.##0,00', {reverse: true});
+        $("#valorVendaCadastrar").mask('#.##0,00', {reverse: true});
         $("#valorCompraAlterarValor").mask('#.##0,00', {reverse: true});
+        $("#valorCompraCadastrar").mask('#.##0,00', {reverse: true});
     });
 
     //INICIO BOTAO CADASTRAR PRODUTO
@@ -107,13 +159,88 @@ $this->data["empresa"] = EMPRESA;
     });
 
     function cadastrar(){
-        window.location.href = "/produtos/cadastrar";
+        dialogCadastrar.dialog('open');
     }
     //FIM BOTAO CADASTRAR PRODUTO
 
     var dialog = $("#janelaAlterarValor").dialog({
         autoOpen: false,
         width: 600
+    });
+
+    var dialogCadastrar = $("#janelaCadastrarProduto").dialog({
+        autoOpen: false,
+        width: 600,
+        buttons: {
+            "Cadastrar": cadastrarSender
+        }
+    });
+
+    function cadastrarSender(){
+       let nome = $("#nomeCadastrar").val();
+       let codigoBarras = $("#codigoBarrasCadastrar").val();
+       let precoVenda = $("#valorVendaCadastrar").val();
+       let precoCompra = $("#valorCompraCadastrar").val();
+       let unidadeMedida = $("#unidadeMedidaCadastrar").val();
+
+       if(nome === "" || codigoBarras === "" || unidadeMedida === ""){
+           Swal.fire(
+               'Campos Obrigatórios em Branco!',
+               "Verifique os dados e tente novamente.",
+               'error'
+           );
+       }else{
+           $.ajax({
+               type: 'POST',
+               url: '/produtos/cadastrar',
+               dataType: "JSON",
+               data: {
+                   nome: nome,
+                   codigoBarras: codigoBarras,
+                   precoVenda: precoVenda,
+                   precoCompra: precoCompra,
+                   unidadeMedida: unidadeMedida
+               },
+               success: function(retorno) {
+                   console.log(retorno);
+                   dialogCadastrar.dialog('close');
+                   tabela.ajax.reload();
+                   if(retorno.status === true){
+                       Swal.fire(
+                           'Produto Cadastrado!',
+                           '',
+                           'success'
+                       );
+                   }else{
+                       if(retorno.erro === "existe"){
+                           Swal.fire(
+                               'Produto com o mesmo nome já exixte!',
+                               "Verifique os dados e tente novamente.",
+                               'error'
+                           );
+                       }else{
+                           Swal.fire(
+                               'Erro ao cadastrar produto!',
+                               retorno.erro,
+                               'error'
+                           );
+                       }
+
+                   }
+
+                   $("#nomeCadastrar").val("");
+                   $("#codigoBarrasCadastrar").val("");
+                   $("#valorVendaCadastrar").val("");
+                   $("#valorCompraCadastrar").val("");
+                   $("#unidadeMedidaCadastrar").val("");
+               }
+           });
+       }
+    }
+
+    var form2 = dialogCadastrar.find( "form" ).on( "submit", function( event ) {
+       event.preventDefault();
+       cadastrarSender();
     });
 
     var form = dialog.find( "form" ).on( "submit", function( event ) {
