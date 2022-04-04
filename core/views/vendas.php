@@ -48,8 +48,8 @@ $this->data["empresa"] = EMPRESA;
         });
     });
 
-    function cupom(id){
-        window.open("/pdv/imprimir/cupom/" + id, '_blanck');
+    function cupom(orcamento, venda){
+        window.open("/pdv/imprimir/cupom/" + orcamento + "/" + venda, '_blanck');
     }
 
     //INICIO BOTAO CADASTRAR PRODUTO

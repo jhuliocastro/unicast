@@ -40,4 +40,8 @@ class Vendas_Model extends DataLayer{
     public function lista(){
         return $this->find()->fetch(true);
     }
+
+    public function dadosID($id){
+        return $this->findById($id);
+    }
 }

@@ -64,7 +64,7 @@ $router->get("/caixa/finalizar/dinheiro/true", "Caixa:trueDinheiro");
 $router->get("/caixa/finalizar/dinheiro/false", "Caixa:falseDinheiro");
 $router->post("/caixa/finalizar/cartao", "Caixa:finalizarCartao");
 $router->get("/imprimir/cupom", "Caixa:imprimirCupom");
-$router->get("/imprimir/cupom/{id}", "Vendas:imprimirCupomID");
+$router->get("/imprimir/cupom/{orcamento}/{venda}", "Vendas:imprimirCupomID");
 
 //VENDAS
 $router->get("/vendas", "Vendas:home");
