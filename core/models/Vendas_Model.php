@@ -17,7 +17,20 @@ class Vendas_Model extends DataLayer{
         $this->valorPago = $valorPago;
         $this->formaPagamento = $formaPagamento;
         $this->desconto = $desconto;
-        return $this->save();
+        $this->save();
+
+        if($this->fail()){
+            $retorno = [
+                "status" => false,
+                "error" => $this->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true
+            ];
+        }
+
+        return $retorno;
     }
 
     public function listaUltimo(){

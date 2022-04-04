@@ -95,22 +95,7 @@ $this->data["empresa"] = EMPRESA;
             </form>
         </div>
     </div>
-<!--
-    <div class="dialog" id="importarOrcamento" data-role="dialog">
-        <form method="post" id="formImportar">
-            <div class="dialog-title">Selecione o orçamento</div>
-            <div class="dialog-content">
-               <select data-role="select" id="orcamento" name="orcamento">
 
-               </select>
-            </div>
-            <div class="dialog-actions">
-                <button type="button" class="button js-dialog-close">Cancelar</button>
-                <button type="submit" class="button primary">Ok</button>
-            </div>
-        </form>
-    </div>
--->
     <div id="importarOrcamento" title="Importar Orçamento">
         <form>
             <fieldset>
@@ -144,6 +129,24 @@ $this->data["empresa"] = EMPRESA;
                     <label>Informe o nome do produto:</label>
                     <input type="text" list="listaProdutos" name="procurarProdutosLista" id="procurarProdutosLista" data-role="input">
                     <datalist id="listaProdutos"><?= $this->data["produtos"]  ?></datalist>
+                </div>
+                <hr>
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
+    <div id="cartao" title="Finalizar Venda">
+        <form>
+            <fieldset>
+                <div class="form-group">
+                    <label>Informe um método de pagamento: (Digite o número correspondente no teclado)</label>
+                    <ul data-role="list-view">
+                        <li>1 - CRÉDITO</li>
+                        <li>2 - DÉBITO</li>
+                        <a href="#"></a>
+                    </ul>
                 </div>
                 <hr>
                 <!-- Allow form submission with keyboard without duplicating the dialog button -->
@@ -286,12 +289,60 @@ $this->data["empresa"] = EMPRESA;
                 event.preventDefault();
                 desconto();
             });
+
+            var dialog5 = $("#cartao").dialog({
+                autoOpen: false,
+                width: 800,
+                buttons: {
+                    "Finalizar": finalizarVendaCartao
+                }
+            });
+
+            var form5 = dialog5.find( "form" ).on( "submit", function( event ) {
+                event.preventDefault();
+                finalizarVendaCartao();
+            });
         });
+
+        function finalizarVendaCartao(funcao){
+            $.ajax({
+                url: "/pdv/caixa/finalizar/cartao",
+                type: 'post',
+                dataType: 'JSON',
+                data: {
+                    valorPedido: valorCaixa,
+                    desconto: valorDesconto,
+                    modoPagamento: funcao
+                }
+            })
+                .done(function (retorno) {
+                    console.log(retorno);
+                    if(retorno.status === true){
+                        Swal.fire({
+                            title: 'Venda Concluída!',
+                            text: "",
+                            icon: 'success'
+                        }).then((result) => {
+                            window.location.href = "/vendas";
+                        });
+                    }else{
+                        Swal.fire({
+                            title: 'Erro ao realizar venda!',
+                            text: retorno.error,
+                            icon: 'error'
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, msg) {
+                    console.log(msg);
+
+                });
+        }
 
         function desconto(){
             valorDesconto = $("#valorDesconto").val();
             valorDesconto = valorDesconto.replace(",", ".");
-   
+
             $("#spanDesconto").html("R$ " + valorDesconto.replace(".", ","));
 
             $("#janelaDesconto").dialog('close');
@@ -324,9 +375,19 @@ $this->data["empresa"] = EMPRESA;
                     .done(function (retorno) {
                         console.log(retorno);
                         if(retorno == "true"){
-                            window.location.href = "/pdv/caixa/finalizar/dinheiro/true";
+                            Swal.fire({
+                                title: 'Venda Concluída!',
+                                text: "",
+                                icon: 'success'
+                            }).then((result) => {
+                               window.location.href = "/vendas";
+                            });
                         }else{
-                            window.location.href = "/pdv/caixa/finalizar/dinheiro/false";
+                            Swal.fire({
+                                title: 'Erro ao realizar venda!',
+                                text: retorno.error,
+                                icon: 'error'
+                            });
                         }
                     })
                     .fail(function (jqXHR, textStatus, msg) {
@@ -437,7 +498,7 @@ $this->data["empresa"] = EMPRESA;
                             $("#numeroPedidoImportar").val("");
                             $("#importarOrcamento").dialog('close');
                             Metro.toast.create("Orçamento importado!", null, null, "info");
-                            infos(numeroPedido);                            
+                            infos(numeroPedido);
                         }
 
                     })
@@ -561,7 +622,6 @@ $this->data["empresa"] = EMPRESA;
             $("#importarOrcamento").dialog('open');
         });
 
-
         //BOTAO FINALIZAR VENDA
         $('#codigoBarras').on('keydown', null, 'f4', function () {
             $("#finalizarVenda").dialog('open');
@@ -609,7 +669,8 @@ $this->data["empresa"] = EMPRESA;
         });
 
         $("#finalizarVenda").on('keydown', null, '2', function () {
-            alert('tesate');
+            $("#finalizarVenda").dialog('close');
+            $("#cartao").dialog('open');
         });
 
         $("#finalizarVenda").on('keydown', null, '3', function () {
@@ -626,6 +687,18 @@ $this->data["empresa"] = EMPRESA;
 
         $("#finalizarVenda").on('keydown', null, '6', function () {
             alert('tesate');
+        });
+
+        //CARTAO CREDITO
+        $("#cartao").on('keydown', null, '1', function () {
+            $("#cartao").dialog('close');
+            finalizarVendaCartao('credito');
+        });
+
+        //CARTAO DEBITO
+        $("#cartao").on('keydown', null, '2', function () {
+            $("#cartao").dialog('close');
+            finalizarVendaCartao('debito');
         });
 
     </script>

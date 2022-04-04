@@ -147,6 +147,37 @@ class Caixa extends Controller
         }
     }
 
+    public function finalizarCartao(){
+        $dados = (object)$_POST;
+
+        $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
+
+        $dados->troco = $dados->valorPedido - $dados->desconto;
+
+        switch ($dados->modoPagamento){
+            case 'credito':
+                $dados->modoPagamento = "CARTÃO DE CRÉDITO";
+                break;
+            case 'debito':
+                $dados->modoPagamento = "CARTÃO DE DÉBITO";
+                break;
+        }
+
+        $model = new Vendas_Model();
+        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->troco, $dados->valorPedido, $dados->modoPagamento, (float)$dados->desconto);
+
+        $this->faturarOrcamento();
+
+        if($retorno["status"] == true){
+            $this->saidaProdutos();
+            $retorno = [
+                "status" => true
+            ];
+        }
+
+        echo json_encode($retorno);
+    }
+
     public function gravaCaixaDiario($valor, $descricao, $tipo){
         $caixaDiario = new CaixaDiario_Model();
         $retorno = $caixaDiario->inserir($valor, $descricao, $tipo);
