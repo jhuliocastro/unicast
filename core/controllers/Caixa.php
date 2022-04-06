@@ -140,7 +140,7 @@ class Caixa extends Controller
 
         if($retorno["status"] == true){
             $this->saidaProdutos();
-            $this->gravaCaixaDiario($dados->valorPagoPedido, "VENDA Nº ".$_SESSION["caixa"], "Entrada");
+            $this->gravaCaixaDiario($dados->valorPedido, "VENDA Nº ".$_SESSION["caixa"], "Entrada");
             $retorno = [
                 "status" => true
             ];
