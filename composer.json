@@ -23,6 +23,7 @@
     "league/plates": "^3.4",
     "coffeecode/datalayer": "^1.1",
     "jhuliocastro/alertas": "^2.1",
-    "sabre/xml": "^2.2"
+    "sabre/xml": "^2.2",
+    "ext-json": "*"
   }
 }

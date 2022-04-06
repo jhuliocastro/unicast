@@ -138,21 +138,21 @@ class Caixa extends Controller
 
         $this->faturarOrcamento();
 
-        if($retorno == true){
+        if($retorno["status"] == true){
             $this->saidaProdutos();
             $this->gravaCaixaDiario($dados->valorPagoPedido, "VENDA Nº ".$_SESSION["caixa"], "Entrada");
-            echo "true";
-        }else{
-            echo "false";
+            $retorno = [
+                "status" => true
+            ];
         }
+
+        echo json_encode($retorno);
     }
 
     public function finalizarCartao(){
         $dados = (object)$_POST;
 
         $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
-
-        $dados->troco = $dados->valorPedido - $dados->desconto;
 
         switch ($dados->modoPagamento){
             case 'credito':
@@ -164,7 +164,7 @@ class Caixa extends Controller
         }
 
         $model = new Vendas_Model();
-        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->troco, $dados->valorPedido, $dados->modoPagamento, (float)$dados->desconto);
+        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, 0, $dados->valorPedido, $dados->modoPagamento, (float)$dados->desconto);
 
         $this->faturarOrcamento();
 

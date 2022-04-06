@@ -305,6 +305,7 @@ $this->data["empresa"] = EMPRESA;
         });
 
         function finalizarVendaCartao(funcao){
+            console.log(valorCaixa);
             $.ajax({
                 url: "/pdv/caixa/finalizar/cartao",
                 type: 'post',
@@ -318,13 +319,7 @@ $this->data["empresa"] = EMPRESA;
                 .done(function (retorno) {
                     console.log(retorno);
                     if(retorno.status === true){
-                        Swal.fire({
-                            title: 'Venda Concluída!',
-                            text: "",
-                            icon: 'success'
-                        }).then((result) => {
-                            window.location.href = "/vendas";
-                        });
+                        window.location.href = "/pdv/caixa/finalizar/dinheiro/true";
                     }else{
                         Swal.fire({
                             title: 'Erro ao realizar venda!',
@@ -375,13 +370,7 @@ $this->data["empresa"] = EMPRESA;
                     .done(function (retorno) {
                         console.log(retorno);
                         if(retorno == "true"){
-                            Swal.fire({
-                                title: 'Venda Concluída!',
-                                text: "",
-                                icon: 'success'
-                            }).then((result) => {
-                               window.location.href = "/vendas";
-                            });
+                            window.location.href = "/pdv/caixa/finalizar/dinheiro/true";
                         }else{
                             Swal.fire({
                                 title: 'Erro ao realizar venda!',
@@ -656,7 +645,9 @@ $this->data["empresa"] = EMPRESA;
             $("#valorPagoDinheiro").focus();
 
             valorCaixa = valorTotalOrcamento;
+
             valorTotalOrcamento = valorTotalOrcamento.replace(",", ".");
+            valorDesconto = valorDesconto.toString();
             valorDesconto = valorDesconto.replace(",", ".");
 
             valorTotalOrcamento = valorTotalOrcamento - valorDesconto;
@@ -669,6 +660,17 @@ $this->data["empresa"] = EMPRESA;
         });
 
         $("#finalizarVenda").on('keydown', null, '2', function () {
+            valorCaixa = valorTotalOrcamento;
+
+            valorTotalOrcamento = valorTotalOrcamento.replace(",", ".");
+            valorDesconto = valorDesconto.toString();
+            valorDesconto = valorDesconto.replace(",", ".");
+
+            valorTotalOrcamento = valorTotalOrcamento - valorDesconto;
+            valorTotalOrcamento = valorTotalOrcamento.toFixed(2);
+
+            valorTotalOrcamento = valorTotalOrcamento.replace(".", ",");
+
             $("#finalizarVenda").dialog('close');
             $("#cartao").dialog('open');
         });
