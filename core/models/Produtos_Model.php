@@ -75,6 +75,19 @@ class Produtos_Model extends DataLayer{
         $atualizar = $this->findById($produto);
         $atualizar->estoqueAtual = $quantidade;
         $atualizar->save();
+
+        if($atualizar->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $atualizar->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true
+            ];
+        }
+
+        return $retorno;
     }
 
     public function alterarValor(int $id, float $valorCompra, float $valorVenda){

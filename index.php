@@ -35,8 +35,6 @@ $router->post("/alterar/valor", "Produtos:alterarValor");
 $router->group("estoque");
 $router->post("/entrada", "Estoque:entrada");
 $router->post("/saida", "Estoque:saida");
-$router->get("/relacao", "Estoque:relacao");
-$router->get("/lista", "Estoque:tabela");
 $router->get("/atualizar", "Estoque:atualizar");
 
 //PDV ORCAMENTO E CAIXA

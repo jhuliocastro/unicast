@@ -13,6 +13,17 @@ class HistoricoEstoque_Model extends DataLayer{
         $this->acao = $acao;
         $this->produto = $produto;
         $this->quantidade = $quantidade;
-        return $this->save();
+        $this->save();
+
+        if($this->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $this->fail()->getMessage()
+            ];
+        }else{
+            $retorno = ["status" => true];
+        }
+
+        return $retorno;
     }
 }

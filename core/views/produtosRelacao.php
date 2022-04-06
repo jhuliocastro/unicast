@@ -126,6 +126,58 @@ $this->data["empresa"] = EMPRESA;
     </form>
 </div>
 
+<div id="janelaEntradaEstoque" title="Entrada Estoque">
+    <form>
+        <fieldset>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Produto: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-role="input" class="input-small" disabled name="produtoEntradaEstoque" id="produtoEntradaEstoque">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Quantidade: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="quantidadeEntrada" name="quantidadeEntrada">
+                </div>
+            </div>
+            <hr>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<div id="janelaSaidaEstoque" title="Saída Estoque">
+    <form>
+        <fieldset>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Produto: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-role="input" class="input-small" disabled name="produtoSaidaEstoque" id="produtoSaidaEstoque">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 infos">
+                    <label>Quantidade: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="quantidadeSaida" name="quantidadeSaida">
+                </div>
+            </div>
+            <hr>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
 <?= $this->start("scripts"); ?>
 <script>   
     var tabela;
@@ -147,6 +199,41 @@ $this->data["empresa"] = EMPRESA;
         $("#valorCompraAlterarValor").mask('#.##0,00', {reverse: true});
         $("#valorCompraCadastrar").mask('#.##0,00', {reverse: true});
     });
+
+    function saidaEstoque(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/produtos/pesquisar/dados/id',
+            dataType: "JSON",
+            data: {
+                id: id,
+            },
+            success: function(retorno) {
+                console.log(retorno);
+                $("#produtoSaidaEstoque").val(retorno.produto);
+                dialogSaidaEstoque.dialog('open');
+                $("#quantidadeSaida").focus();
+            }
+        });
+    }
+
+    function entradaEstoque(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/produtos/pesquisar/dados/id',
+            dataType: "JSON",
+            data: {
+                id: id,
+            },
+            success: function(retorno) {
+                console.log(retorno);
+                $("#produtoEntradaEstoque").val(retorno.produto);
+                dialogEntradaEstoque.dialog('open');
+                $("#quantidadeEntrada").focus();
+            }
+        });
+
+    }
 
     //INICIO BOTAO CADASTRAR PRODUTO
     $(document).on('keydown', null, 'f1', function () {
@@ -174,6 +261,16 @@ $this->data["empresa"] = EMPRESA;
         buttons: {
             "Cadastrar": cadastrarSender
         }
+    });
+
+    var dialogEntradaEstoque = $("#janelaEntradaEstoque").dialog({
+        autoOpen: false,
+        width: 600
+    });
+
+    var dialogSaidaEstoque = $("#janelaSaidaEstoque").dialog({
+        autoOpen: false,
+        width: 600
     });
 
     function cadastrarSender(){
@@ -237,6 +334,76 @@ $this->data["empresa"] = EMPRESA;
            });
        }
     }
+
+    var form4 = dialogEntradaEstoque.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '/estoque/entrada',
+            dataType: "JSON",
+            data: {
+                produto: $("#produtoEntradaEstoque").val(),
+                quantidadeEntrada: $("#quantidadeEntrada").val()
+            },
+            success: function(retorno) {
+                console.log(retorno);
+
+                $("#produtoEntradaEstoque").val("");
+                $("#quantidadeEntrada").val("");
+                dialogEntradaEstoque.dialog('close');
+
+                if(retorno.status === true){
+                    tabela.ajax.reload();
+                    Swal.fire(
+                        'Estoque Atualizado!',
+                        '',
+                        'success'
+                    );
+                }else{
+                    Swal.fire(
+                        'Erro ao atualizar estoque!',
+                        retorno.erro,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
+    var form3 = dialogSaidaEstoque.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '/estoque/saida',
+            dataType: "JSON",
+            data: {
+                produto: $("#produtoSaidaEstoque").val(),
+                quantidadeSaida: $("#quantidadeSaida").val()
+            },
+            success: function(retorno) {
+                console.log(retorno);
+
+                $("#produtoSaidaEstoque").val("");
+                $("#quantidadeSaida").val("");
+                dialogSaidaEstoque.dialog('close');
+
+                if(retorno.status === true){
+                    tabela.ajax.reload();
+                    Swal.fire(
+                        'Estoque Atualizado!',
+                        '',
+                        'success'
+                    );
+                }else{
+                    Swal.fire(
+                        'Erro ao atualizar estoque!',
+                        retorno.erro,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
 
     var form2 = dialogCadastrar.find( "form" ).on( "submit", function( event ) {
        event.preventDefault();

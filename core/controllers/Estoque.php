@@ -47,57 +47,66 @@ class Estoque extends Controller{
         $dados = (object)$_POST;
 
         if($dados->quantidadeSaida == 0 || $dados->quantidadeSaida == null){
-            Alert::warning("Não é permitido valor nulo.", "Verifique e tente novamente!", "/estoque/relacao");
-            exit();
+            $retorno = [
+              "status" => false,
+              "erro" => "Não é permitido valor nulo."
+            ];
+        }else{
+            $produtosModel = new Produtos_Model();
+            $retorno = $produtosModel->retornaID($dados->produto);
+            $produto = $retorno->id;
+
+            $nomeProduto = $retorno->nome;
+            $dados->quantidadeSaida = (int)$dados->quantidadeSaida;
+
+            if($dados->quantidadeSaida > $retorno->estoqueAtual){
+                $retorno = [
+                    "status" => false,
+                    "erro" => "Quantidade não pode ser maior que o estoque atual!"
+                ];
+            }else{
+                $quantidade = $retorno->estoqueAtual - $dados->quantidadeSaida;
+
+                $retorno = $produtosModel->atualizarEstoque($produto, $quantidade);
+
+                if($retorno["status"] == true){
+                    $historicoModel = new HistoricoEstoque_Model();
+                    $retorno = $historicoModel->cadastrar(0, $dados->quantidadeSaida, $quantidade);
+
+                    if($retorno["status"] == true){
+                        $retorno = [
+                            "status" => true
+                        ];
+                    }
+                }
+            }
         }
 
-        $produtosModel = new Produtos_Model();
-        $retorno = $produtosModel->retornoPorID($dados->idQuantidadeSaida);
-
-        $nomeProduto = $retorno->nome;
-        $dados->quantidadeSaida = (int)$dados->quantidadeSaida;
-
-        if($dados->quantidadeSaida > $retorno->estoqueAtual){
-            Alert::error("Quantidade não pode ser maior que o estoque atual!", "", "/estoque/relacao");
-            exit();
-        }
-
-        $quantidade = $retorno->estoqueAtual - $dados->quantidadeSaida;
-
-        $produtosModel->atualizarEstoque($dados->idQuantidadeSaida, $quantidade);
-
-        $historicoModel = new HistoricoEstoque_Model();
-        $retorno = $historicoModel->cadastrar(0, $dados->idQuantidadeSaida, $quantidade);
-
-        if($retorno == false){
-            parent::log("ERRO");
-            Alert::error("Erro ao cadastrar estoque!", "Verifique o log para mais informações.", "/estoque/relacao");
-        }else if($retorno == true){
-            parent::log("ESTOQUE CADASTRADO");
-            Alert::success("Saída Estoque Efetuada!", $nomeProduto, "/estoque/relacao");
-        }
+        echo json_encode($retorno);
     }
 
     public function entrada(){
         $dados = (object)$_POST;
         $produtosModel = new Produtos_Model();
-        $retorno = $produtosModel->retornoPorID($dados->idQuantidadeEntrada);
+        $retorno = $produtosModel->retornaID($dados->produto);
         $produto = $retorno->id;
 
         $quantidade = $dados->quantidadeEntrada+ $retorno->estoqueAtual;
 
-        $produtosModel->atualizarEstoque($produto, $quantidade);
+        $retorno = $produtosModel->atualizarEstoque($produto, $quantidade);
 
-        $historicoModel = new HistoricoEstoque_Model();
-        $retorno = $historicoModel->cadastrar(1, $produto, $dados->quantidadeEntrada);
+        if($retorno["status"] == true){
+            $historicoModel = new HistoricoEstoque_Model();
+            $retorno = $historicoModel->cadastrar(1, $produto, $dados->quantidadeEntrada);
 
-        if($retorno == false){
-            parent::log("ERRO");
-            Alert::error("Erro ao cadastrar estoque!", "Verifique o log para mais informações.", "/estoque/relacao");
-        }else if($retorno == true){
-            parent::log("ESTOQUE CADASTRADO");
-            Alert::success("Entrada Estoque Efetuada!", "", "/estoque/relacao");
+            if($retorno["status"] == true){
+                $retorno = [
+                    "status" => true
+                ];
+            }
         }
+
+        echo json_encode($retorno);
     }
 
 }
