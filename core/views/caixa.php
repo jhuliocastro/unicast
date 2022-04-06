@@ -357,7 +357,7 @@ $this->data["empresa"] = EMPRESA;
                 $.ajax({
                     url: "/pdv/caixa/finalizar/dinheiro",
                     type: 'post',
-                    dataType: 'html',
+                    dataType: 'json',
                     data: {
                         valorPagoPedido: valorPagoDinheiro,
                         valorPedido: valorCaixa,
@@ -369,7 +369,7 @@ $this->data["empresa"] = EMPRESA;
                     })
                     .done(function (retorno) {
                         console.log(retorno);
-                        if(retorno == "true"){
+                        if(retorno.status === true){
                             window.location.href = "/pdv/caixa/finalizar/dinheiro/true";
                         }else{
                             Swal.fire({

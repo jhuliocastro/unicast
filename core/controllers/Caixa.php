@@ -131,7 +131,7 @@ class Caixa extends Controller
         $dados->valorPagoPedido = str_replace(",", ".", $dados->valorPagoPedido);
         $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
 
-        $dados->troco = ($dados->valorPedido - $dados->desconto) - $dados->valorPagoPedido;
+        $dados->troco = $dados->valorPagoPedido - ($dados->valorPedido - $dados->desconto);
 
         $model = new Vendas_Model();
         $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->troco, $dados->valorPagoPedido, "DINHEIRO", (float)$dados->desconto);
