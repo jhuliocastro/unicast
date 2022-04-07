@@ -23,6 +23,8 @@ $this->data["empresa"] = EMPRESA;
                                 <td>Orçamento</td>
                                 <td>Valor Total</td>
                                 <td>Valor Pago</td>
+                                <td>Desconto</td>
+                                <td>Troco</td>
                                 <td>Forma Pagamento</td>
                                 <td>Data/Hora</td>
                                 <td>Ações</td>
@@ -41,6 +43,7 @@ $this->data["empresa"] = EMPRESA;
     $(document).ready(function () {
         $('#tabela').DataTable({
             "paging": false,
+            "order": [[0, "desc"]],
             'ajax': '/pdv/vendas/relacao',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"

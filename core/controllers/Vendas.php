@@ -88,6 +88,8 @@ class Vendas extends Controller
                 $venda->orcamento,
                 "R$ " . number_format($venda->valorTotal, 2, ',', '.'),
                 "R$ " . number_format($venda->valorPago, 2, ',', '.'),
+                "R$ " . number_format($venda->desconto, 2, ',', '.'),
+                "R$ " . number_format($venda->troco, 2, ',', '.'),
                 $venda->formaPagamento,
                 date("d/m/Y H:i:s", strtotime($venda->created_at)),
                 $opcoes
