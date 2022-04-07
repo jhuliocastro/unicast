@@ -34,22 +34,10 @@ class Produtos extends Controller{
             ";
             if($produto->estoqueAtual == 0){
                 $tabela["data"][] = [
-                    "<span style='color: red;'>$produto->id</span>",
-                    "<span style='color: red;'>$produto->nome</span>",
-                    "<span style='color: red;'>R$".number_format($produto->precoVenda, 2, ',', '.')."</span>",
-                    "<span style='color: red;'>R$".number_format($produto->precoCompra, 2, ',', '.')."</span>",
-                    "<span style='color: red;'>$produto->estoqueMinimo</span>",
-                    "<span style='color: red;'>$produto->estoqueAtual</span>",
-                    "<span style='color: red;'>$produto->unidadeMedida</span>",
-                    $acoes
-                ]; 
-            }else{
-                $tabela["data"][] = [
                     $produto->id,
+                    $produto->codigoBarras,
                     $produto->nome,
                     "R$ ".number_format($produto->precoVenda, 2, ',', '.'),
-                    "R$ ".number_format($produto->precoCompra, 2, ',', '.'),
-                    $produto->estoqueMinimo,
                     $produto->estoqueAtual,
                     $produto->unidadeMedida,
                     $acoes
