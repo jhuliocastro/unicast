@@ -136,11 +136,13 @@ class Caixa extends Controller
         $model = new Vendas_Model();
         $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->troco, $dados->valorPagoPedido, "DINHEIRO", (float)$dados->desconto);
 
+        $valorCaixaDiario = $dados->valorPedido - $dados->desconto;
+
         $this->faturarOrcamento();
 
         if($retorno["status"] == true){
             $this->saidaProdutos();
-            $this->gravaCaixaDiario($dados->valorPedido, "VENDA Nº ".$_SESSION["caixa"], "Entrada");
+            $this->gravaCaixaDiario($valorCaixaDiario, "VENDA Nº ".$_SESSION["caixa"], "Entrada");
             $retorno = [
                 "status" => true
             ];
