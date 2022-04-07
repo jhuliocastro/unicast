@@ -281,7 +281,7 @@ class Caixa extends Controller
             ";
         }
 
-        $subTotal = $dadosVenda->valorTotal + $dadosVenda->desconto;
+        $subTotal = $dadosVenda->valorTotal;
         $subTotal = number_format($subTotal, 2, ",", ".");
 
         $total = $dadosVenda->valorTotal - $dadosVenda->desconto;
