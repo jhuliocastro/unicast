@@ -188,10 +188,10 @@ $this->data["empresa"] = EMPRESA;
                     <ul data-role="list-view">
                         <li>1 - DINHEIRO</li>
                         <li>2 - DÉBITO/CRÉDITO</li>
-                        <li>3 - CREDIÁRIO</li>
-                        <li>4 - CRÉDITO LOJA</li>
+                        <li disabled>3 - CREDIÁRIO</li>
+                        <li disabled>4 - CRÉDITO LOJA</li>
                         <li>5 - PIX</li>
-                        <li>6 - TED/DOC</li>
+                        <li disabled>6 - TED/DOC</li>
                         <a href="#"></a>
                     </ul>
                 </div>
@@ -303,6 +303,35 @@ $this->data["empresa"] = EMPRESA;
                 finalizarVendaCartao();
             });
         });
+
+        function finalizarVendaPIX(){
+            console.log(valorCaixa);
+            $.ajax({
+                url: "/pdv/caixa/finalizar/pix",
+                type: 'post',
+                dataType: 'JSON',
+                data: {
+                    valorPedido: valorCaixa,
+                    desconto: valorDesconto
+                }
+            })
+                .done(function (retorno) {
+                    console.log(retorno);
+                    if(retorno.status === true){
+                        window.location.href = "/pdv/caixa/finalizar/dinheiro/true";
+                    }else{
+                        Swal.fire({
+                            title: 'Erro ao realizar venda!',
+                            text: retorno.error,
+                            icon: 'error'
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, msg) {
+                    console.log(msg);
+
+                });
+        }
 
         function finalizarVendaCartao(funcao){
             console.log(valorCaixa);
@@ -684,7 +713,19 @@ $this->data["empresa"] = EMPRESA;
         });
 
         $("#finalizarVenda").on('keydown', null, '5', function () {
-            alert('tesate');
+            valorCaixa = valorTotalOrcamento;
+
+            valorTotalOrcamento = valorTotalOrcamento.replace(",", ".");
+            valorDesconto = valorDesconto.toString();
+            valorDesconto = valorDesconto.replace(",", ".");
+
+            valorTotalOrcamento = valorTotalOrcamento - valorDesconto;
+            valorTotalOrcamento = valorTotalOrcamento.toFixed(2);
+
+            valorTotalOrcamento = valorTotalOrcamento.replace(".", ",");
+
+            $("#finalizarVenda").dialog('close');
+            finalizarVendaPIX();
         });
 
         $("#finalizarVenda").on('keydown', null, '6', function () {

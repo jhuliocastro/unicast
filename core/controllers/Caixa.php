@@ -156,6 +156,8 @@ class Caixa extends Controller
 
         $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
 
+        $dados->valorPago = $dados->valorPedido - $dados->desconto;
+
         switch ($dados->modoPagamento){
             case 'credito':
                 $dados->modoPagamento = "CARTÃO DE CRÉDITO";
@@ -167,6 +169,30 @@ class Caixa extends Controller
 
         $model = new Vendas_Model();
         $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, 0, $dados->valorPedido, $dados->modoPagamento, (float)$dados->desconto);
+
+        $this->faturarOrcamento();
+
+        if($retorno["status"] == true){
+            $this->saidaProdutos();
+            $retorno = [
+                "status" => true
+            ];
+        }
+
+        echo json_encode($retorno);
+    }
+
+    public function finalizarPIX(){
+        $dados = (object)$_POST;
+
+        $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
+
+        $dados->valorPago = $dados->valorPedido - $dados->desconto;
+
+        $dados->modoPagamento = "PIX";
+
+        $model = new Vendas_Model();
+        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, 0, $dados->valorPago, $dados->modoPagamento, (float)$dados->desconto);
 
         $this->faturarOrcamento();
 
