@@ -38,7 +38,7 @@ class CaixaDiario extends Controller
         $i = 0;
         foreach($lista as $d){
             if(date("Y-m-d") == date("Y-m-d", strtotime($d->created_at))){
-                $valor = "R$ ".$d->valor;
+                $valor = "R$ ".number_format((float)$d->valor, 2, ",", ".");
                 if($d->tipo == "Entrada"){
                     $valor = "<span style='color: darkgreen; font-weight: bold;'>$valor</span>";
                 }else{
