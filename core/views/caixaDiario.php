@@ -26,8 +26,8 @@ $this->data["empresa"] = EMPRESA;
                             <tr>
                                 <td>ID</td>
                                 <td>Descrição</td>
-                                <td>Valor</td>
                                 <td>Tipo</td>
+                                <td>Valor</td>
                                 <td></td>
                             </tr>
                         </thead>
