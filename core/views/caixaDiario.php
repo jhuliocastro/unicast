@@ -116,6 +116,10 @@ $this->data["empresa"] = EMPRESA;
         })
     }
 
+    function imprimirSaida(id){
+        window.open("/caixaDiario/cupom/sangria/" + id, '_blanck');
+    }
+
     function sangria(){
         let descricao = $("#descricaoSangria").val();
         let valor = $("#valorSangria").val();

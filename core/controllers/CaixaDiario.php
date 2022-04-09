@@ -32,6 +32,17 @@ class CaixaDiario extends Controller
         parent::render("caixa", "relatorioSelecionar", []);
     }
 
+    public function cupomSangria($data){
+        $model = new CaixaDiario_Model();
+        $dados = $model->dadosID($data["id"]);
+
+        parent::render("cupomSangria", [
+            "dataHora" => date("d/m/Y H:i:s", strtotime($dados->created_at)),
+            "sangria" => $dados->descricao,
+            "valor" => $dados->valor
+        ]);
+    }
+
     public function tabela(){
         $caixa = new CaixaDiario_Model();
         $lista = $caixa->find()->order("id ASC")->fetch(true);
@@ -41,14 +52,16 @@ class CaixaDiario extends Controller
                 $valor = "R$ ".number_format((float)$d->valor, 2, ",", ".");
                 if($d->tipo == "Entrada"){
                     $valor = "<span style='color: darkgreen; font-weight: bold;'>$valor</span>";
+                    $opcoes = "<a data-role='hint' disabled data-hint-text='Imprimir' href='#'><img style='cursor: no-drop; -webkit-filter: grayscale(100%);' class='imagem-acao' src='/assets/images/imprimir.png'></a>";
                 }else{
                     $valor = "<span style='color: red; font-weight: bold;'>$valor</span>";
+                    $opcoes = "<a data-role='hint' onclick='imprimirSaida($d->id)' data-hint-text='Imprimir' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>";
                 }
 
                 if($i == 0){
-                    $opcoes = "<a data-role='hint' disabled data-hint-text='Excluir' href='#'><img style='cursor: no-drop; -webkit-filter: grayscale(100%);' class='imagem-acao' src='/assets/images/excluir.png'></a>";
+                    $opcoes .= "<a data-role='hint' disabled data-hint-text='Excluir' href='#'><img style='cursor: no-drop; -webkit-filter: grayscale(100%);' class='imagem-acao' src='/assets/images/excluir.png'></a>";
                 }else{
-                    $opcoes = "<a data-role='hint' onclick='excluir($d->id)' data-hint-text='Excluir' href='#'><img class='imagem-acao' src='/assets/images/excluir.png'></a>";
+                    $opcoes .= "<a data-role='hint' onclick='excluir($d->id)' data-hint-text='Excluir' href='#'><img class='imagem-acao' src='/assets/images/excluir.png'></a>";
                 }
 
                 $i = 1;

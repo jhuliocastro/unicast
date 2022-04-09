@@ -82,7 +82,7 @@ $router->get("/", "NFE:home");
 $router->group("log");
 $router->get("/", "Log:relacao");
 
-//CAIXA DIARIOS
+//CAIXA DIARIO
 $router->group("caixaDiario");
 $router->get("/", "CaixaDiario:home");
 $router->get("/tabela", "CaixaDiario:tabela");
@@ -91,8 +91,7 @@ $router->post("/sangria", "CaixaDiario:sangria");
 $router->post("/excluir", "CaixaDiario:excluir");
 $router->get("/fechar", "CaixaDiario:fechar");
 $router->get("/fechar/sender", "CaixaDiario:fecharSender");
-$router->get("/relatorio/selecionar", "CaixaDiario:relatorioSelecionar");
-$router->get("/relatorio/selecionar/{data}", "CaixaDiario:relatorio");
+$router->get("/cupom/sangria/{id}", "CaixaDiario:cupomSangria");
 
 $router->dispatch();
 

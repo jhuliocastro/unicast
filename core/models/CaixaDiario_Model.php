@@ -44,4 +44,8 @@ class CaixaDiario_Model extends DataLayer{
         }
         return $retorno;
     }
+
+    public function dadosID($id){
+        return $this->findById($id);
+    }
 }
