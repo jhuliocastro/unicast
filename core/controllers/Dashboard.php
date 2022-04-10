@@ -1,6 +1,8 @@
 <?php
 namespace Controller;
 
+use Model\Produtos_Model;
+
 class Dashboard extends Controller{
     public function __construct($router)
     {
@@ -9,6 +11,10 @@ class Dashboard extends Controller{
     }
 
     public function home(){
-        parent::render("dashboard");
+        $model = new Produtos_Model();
+        $quantidadeProdutos = $model->quantidadeTotal;
+        parent::render("dashboard", [
+            "totalProdutos" => $quantidadeProdutos
+        ]);
     }
 }

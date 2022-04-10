@@ -51,7 +51,7 @@ $this->data["empresa"] = EMPRESA;
 <body>
 <nav data-role="ribbonmenu">
     <ul class="tabs-holder">
-        <li class="static"><a href="#">Dashboard</a></li>
+        <li class="static"><a href="/dashboard">Dashboard</a></li>
         <li><a href="#inicio">Início</a></li>
         <li><a href="#clientes">Clientes</a></li>
         <li><a href="#compras">Compras</a></li>
