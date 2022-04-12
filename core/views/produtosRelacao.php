@@ -185,7 +185,7 @@ $this->data["empresa"] = EMPRESA;
         var produtoAlterarValor = null;
 
         tabela = $('#tabela').DataTable({
-            "paging": false,
+            "paging": true,
             "order": [[2, "asc"]],
             'ajax': '/produtos/tabela',
             "language": {
