@@ -8,11 +8,19 @@ class CaixaDiario_Model extends DataLayer{
         parent::__construct("caixa", [], "id", true);
     }
 
+    public function lista(){
+        return $this->find()->fetch(true);
+    }
+
     public function inserir($valor, $descricao, $tipo){
         $this->valor = $valor;
         $this->descricao = $descricao;
         $this->tipo = $tipo;
         return $this->save();
+    }
+
+    public function dadosDia($data){
+        return $this->find("created_at=:c", "c=$data")->fetch(true);
     }
 
     public function saldoDia($dia){

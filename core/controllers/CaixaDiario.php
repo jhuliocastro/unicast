@@ -28,10 +28,6 @@ class CaixaDiario extends Controller
         }
     }
 
-    public function relatorioSelecionar(){
-        parent::render("caixa", "relatorioSelecionar", []);
-    }
-
     public function cupomSangria($data){
         $model = new CaixaDiario_Model();
         $dados = $model->dadosID($data["id"]);
@@ -85,11 +81,32 @@ class CaixaDiario extends Controller
         echo json_encode($retorno);
     }
 
-    public function relatorioDiario($dados){
-        parent::render("caixa", "relatorioCaixaDiario", [
-            "data" => $dados["data"],
-            "dataBR" => date("d/m/Y", strtotime($dados["data"]))
-        ]);
+    public function relatorioDiario(){
+        $tabela = null;
+        $valor = 0;
+
+        $model = new CaixaDiario_Situacao_Model();
+        $dados = $model->lista();
+        foreach($dados as $d){
+            if($d->situacao == "FECHADO"){
+                $valor = 0;
+                $model = new CaixaDiario_Model();
+                $retorno = $model->lista();
+                foreach($retorno as $r){
+                    if(date("Y-m-d", strtotime($r->created_at)) == date("Y-m-d", strtotime($d->dataCaixa))){
+                        $valor = $valor + (float)$r->valor;
+                    }
+                }
+                $tabela["data"][] = [
+                    $d->id,
+                    date("d/m/Y", strtotime($d->dataCaixa)),
+                    "R$ ".$valor,
+                    "<a data-role='hint' data-hint-text='Imprimir Relátorio' onclick='relatorio(\"$d->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>"
+                ];
+            }            
+        }      
+        
+        echo json_encode($tabela);
     }
 
     public static function saldoDiario(){
@@ -127,7 +144,7 @@ class CaixaDiario extends Controller
             Alert::error("Erro ao processar requisição!", $caixa->fail()->getMessage(), "/caixaDiario");
             die();
         }
-        Alert::success("Caixa fechado!", "", "/dashboard");
+        Alert::success("Caixa fechado!", "", "/relatorios/caixaDiario");
     }
 
     public function sangria(){

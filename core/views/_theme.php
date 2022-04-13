@@ -54,7 +54,8 @@ $this->data["empresa"] = EMPRESA;
         <li class="static"><a href="/dashboard">Dashboard</a></li>
         <li><a href="#inicio">Início</a></li>
         <li><a href="#clientes">Clientes</a></li>
-        <li><a href="#compras">Compras</a></li>
+        <li><a href="#fiscal">Fiscal</a></li>
+        <li><a href="#relatorios">Relatórios</a></li>
         <li><a href="#pdv">PDV</a></li>
         <li><a href="#configuracoes">Configurações</a></li>
     </ul>
@@ -87,6 +88,12 @@ $this->data["empresa"] = EMPRESA;
                 </span>
                 <span class="caption">Obras</span>
             </button>
+            <button class="ribbon-button" onclick="window.location.href='/empresas'">
+                <span class="icon">
+                    <img src="/assets/images/empresas.png">
+                </span>
+                <span class="caption">Empresas</span>
+            </button>
             <button class="ribbon-button" onclick="window.location.href='/caixaDiario'">
                 <span class="icon">
                     <img src="/assets/images/caixa.png">
@@ -102,12 +109,26 @@ $this->data["empresa"] = EMPRESA;
                 <span class="caption">Entrada</span>
             </button>
         </div>
-        <div class="section" id="compras">
+        <div class="section" id="fiscal">
             <button class="ribbon-button" onclick="window.location.href='/nfe'">
                 <span class="icon">
                     <img src="/assets/images/nfe.svg">
                 </span>
                 <span class="caption">Importar NFe</span>
+            </button>
+            <button class="ribbon-button" onclick="window.location.href='/nfe/manifestacao'">
+                <span class="icon">
+                    <img src="/assets/images/nfe.svg">
+                </span>
+                <span class="caption">Manifestação</span>
+            </button>
+        </div>
+        <div class="section" id="relatorios">
+            <button class="ribbon-button" onclick="window.location.href='/relatorios/caixaDiario'">
+                <span class="icon">
+                    <img src="/assets/images/caixa.png">
+                </span>
+                <span class="caption">Caixa Diário</span>
             </button>
         </div>
         <div class="section" id="pdv">

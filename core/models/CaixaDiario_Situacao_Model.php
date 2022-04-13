@@ -12,6 +12,10 @@ class CaixaDiario_Situacao_Model extends DataLayer{
         return $this->find("dataCaixa=:data", "data=$data")->count();
     }
 
+    public function dadosID(int $id){
+        return $this->findById($id);
+    }
+
     public function dados($data){
         return $this->find("dataCaixa=:data", "data=$data")->fetch();
     }
@@ -32,5 +36,9 @@ class CaixaDiario_Situacao_Model extends DataLayer{
         $query = $this->findById($dados->id);
         $query->situacao = "FECHADO";
         return $query->save();
+    }
+
+    public function lista(){
+        return $this->find()->fetch(true);
     }
 }

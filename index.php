@@ -93,6 +93,11 @@ $router->get("/fechar", "CaixaDiario:fechar");
 $router->get("/fechar/sender", "CaixaDiario:fecharSender");
 $router->get("/cupom/sangria/{id}", "CaixaDiario:cupomSangria");
 
+$router->group("/relatorios");
+$router->get("/caixaDiario", "Relatorios:caixaDiario");
+$router->get("/caixaDiario/tabela", "CaixaDiario:relatorioDiario");
+$router->get("/caixaDiario/imprimir/{id}", "Relatorios:imprimirCaixaDiario");
+
 $router->dispatch();
 
 if($router->error()){
