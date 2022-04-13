@@ -174,7 +174,7 @@ class CaixaDiario extends Controller
         $cc = new CaixaDiario_Model();
         $data = date("Y-m-d", strtotime('-1 days', strtotime($dados->dataCaixa)));
         $valor = $cc->saldoDia($data);
-        $valor = str_replace(".", ",", $valor);
+        $valor = str_replace(",", ".", $valor);
         $cc->inserir($valor, "SALDO DIA ANTERIOR", "Entrada");
         $this->router->redirect("/caixaDiario");
     }
