@@ -1,6 +1,10 @@
 <?php
 namespace Controller;
 
+use Core\TForm;
+use Core\TInput;
+use Core\TPage;
+use Core\TTable;
 use Model\Empresas_Model;
 
 class Empresas extends Controller{
@@ -10,7 +14,20 @@ class Empresas extends Controller{
     }
 
     public function home(){
-        parent::render("empresas");
+        //DADOS DAS EMPRESAS
+        $model = new Empresas_Model();
+        $dadosEmpresas = $model->list();
+
+        var_dump($dadosEmpresas);
+
+        $page = new TPage(0, "Empresas");
+
+        $tabela = new TTable("tabela");
+        $tabela->addColumn("ID");
+        $tabela->addColumn("Razão Social");
+
+        //var_dump($tabela);
+        //parent::render("empresas");
     }
 
     public function tabela(){
