@@ -56,6 +56,7 @@ $router->get("/orcamento/fechado/{id}", "Orcamento:fechado");
 $router->get("/orcamento/excluir/{id}", "Orcamento:excluir");
 $router->get("/orcamento/excluirSender/{id}", "Orcamento:excluirSender");
 $router->post("/orcamento/excluir/produto", "Orcamento:excluirProduto");
+$router->get("/orcamento/pdf/{id}", "Orcamento:exportarPDF");
 $router->post("/caixa/pesquisar/produto", "Caixa:pesquisarProduto");
 $router->post("/caixa/finalizar/dinheiro", "Caixa:finalizarDinheiro");
 $router->get("/caixa/finalizar/dinheiro/true", "Caixa:trueDinheiro");
@@ -77,6 +78,7 @@ $router->get("/relacao", "Obras:relacao");
 //NFE
 $router->group("nfe");
 $router->get("/", "NFE:home");
+$router->get("/manifestacao", "NFE:manifestacao");
 
 //LOG
 $router->group("log");
@@ -93,6 +95,12 @@ $router->get("/fechar", "CaixaDiario:fechar");
 $router->get("/fechar/sender", "CaixaDiario:fecharSender");
 $router->get("/cupom/sangria/{id}", "CaixaDiario:cupomSangria");
 
+//EMPRESAS
+$router->group("empresas");
+$router->get("/", "Empresas:home");
+$router->get("/tabela", "Empresas:tabela");
+
+//RELATORIOS
 $router->group("/relatorios");
 $router->get("/caixaDiario", "Relatorios:caixaDiario");
 $router->get("/caixaDiario/tabela", "CaixaDiario:relatorioDiario");

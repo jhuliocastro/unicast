@@ -11,8 +11,9 @@
   ],
   "autoload": {
     "psr-4": {
-      "Model\\": "core/models",
-      "Controller\\": "core/controllers"
+      "Model\\": "src/models",
+      "Controller\\": "src/controllers",
+      "Core\\": "core"
     },
     "files": [
       "config.php"
@@ -24,6 +25,7 @@
     "coffeecode/datalayer": "^1.1",
     "jhuliocastro/alertas": "^2.1",
     "sabre/xml": "^2.2",
-    "ext-json": "*"
+    "ext-json": "*",
+    "dompdf/dompdf": "^1.2"
   }
 }

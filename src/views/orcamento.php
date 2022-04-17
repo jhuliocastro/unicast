@@ -53,7 +53,12 @@ $this->data["empresa"] = EMPRESA;
         $(document).on('keydown', null, 'f1', function () {
             window.location.href = "/pdv/orcamento/novo";
             return false;
-        });
+        });         
+        
     });
+
+    function exportarPDF(id){
+        window.open('/pdv/orcamento/pdf/' + id, '_blanck');
+    }
 </script>
 <?= $this->end("scripts"); ?>

@@ -27,6 +27,16 @@ class Controller{
         echo $template->render($view, $dados);
     }
 
+    public function html($view, array $dados = []){
+        if(isset($_SESSION["usuario"])){
+            $usuarios = new Login_Model();
+            $retornoUsuarios = $usuarios->dadosUsuarioAtivo();
+            $dados["usuario"] = $retornoUsuarios->nomeCompleto;
+        }
+        $template = new Engine($this->caminhoViews);
+        return $template->render($view, $dados);
+    }
+
     public function log(string $evento){
         $ip = $_SERVER["REMOTE_ADDR"];
         if (session_status() === PHP_SESSION_NONE) {

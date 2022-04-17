@@ -51,6 +51,10 @@ class Produtos_Model extends DataLayer{
         return $retorno;
     }
 
+    public function quantidadeTotal(){
+        return $this->find()->count();
+    }
+
     public function lista(){
         return $this->find()->fetch(true);
     }
