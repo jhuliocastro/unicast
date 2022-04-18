@@ -7,7 +7,7 @@ use Core\IModel;
 class Empresas_Model extends DataLayer implements IModel {
     public function __construct()
     {
-        parent::__construct("empresas", [], "id", true);
+        parent::__construct("empresas", ["razaoSocial"], "id", true);
     }
 
     /**
@@ -62,5 +62,16 @@ class Empresas_Model extends DataLayer implements IModel {
     {
         // TODO: Implement list() method.
         return $this->find()->fetch(true);
+    }
+
+    /**
+     * @param array $column
+     * @return array
+     */
+    public function listColumn(string $column): array
+    {
+        // TODO: Implement listColumn() method.
+        $dados = null;
+        return $this->find(null, null, $column)->fetch(true);
     }
 }

@@ -14,25 +14,43 @@ class Empresas extends Controller{
     }
 
     public function home(){
-        //DADOS DAS EMPRESAS
-        $model = new Empresas_Model();
-        $dadosEmpresas = $model->list();
+        $page = new TPage(0, "Empresas"); //INICIALIZA A PAGINA INDICANDO QUE VAI SER DO TIPO TABELA
 
-        var_dump($dadosEmpresas);
+        $form = new TForm("cadastro", 0);
+        $form->addInput("razaoSocial", "Razão Social", "text", "true", null);
+        $form = $form->modal("cadastrarEmpresa", "Cadastrar Empresa", "600", false);
 
-        $page = new TPage(0, "Empresas");
+        $page->addForm($form);
 
-        $tabela = new TTable("tabela");
+        $tabela = new TTable("tabela"); //INICIALIZA A TABELA
+
+        //ADICIONA AS COLUNAS
         $tabela->addColumn("ID");
         $tabela->addColumn("Razão Social");
+        $tabela->addColumn("Nome Fantasia");
+        $tabela->addColumn("CNPJ");
+        $tabela->addColumn("Ações");
 
-        //var_dump($tabela);
-        //parent::render("empresas");
+        $tabela->urlData("/empresas/tabela"); //INDICA A URL DOS DADOS EM JSON
+        $tabela->paging(true, 50); //ATIVA A PAGINAÇÃO POR 50 RESULTADOS POR PAGINA
+        $tabela->order(1, "asc"); //ATIVA A ORDENACAO DA TABELA
+
+        $tabela = $tabela->close(); //FINALIZA A TABELA
+
+        $page->addTable($tabela); //ADICIONA A TABELA A PAGINA
+
+        //ADICIONA BOTOES A PAGINA
+        $page->addButton("cadastrar", "Cadastrar", "cadastrar()", null);
+        $page->addButton("editar", "editar", "", null);
+
+        $page->addJS("empresas");
+
+        $page->close(); //FINALIZA E EXIBE A PAGINA
     }
 
     public function tabela(){
         $empresas = new Empresas_Model();
-        $listaEmpresas = $empresas->lista();
+        $listaEmpresas = $empresas->list();
 
         $tabela = null;
 
@@ -45,9 +63,9 @@ class Empresas extends Controller{
             ";
                 $tabela["data"][] = [
                     $empresa->id,
-                    $empresa->cnpj,
                     $empresa->razaoSocial,
                     $empresa->nomeFantasia,
+                    $empresa->cnpj,
                     $acoes
                 ];
         }

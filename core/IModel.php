@@ -8,4 +8,5 @@ interface IModel{
     public function dataID(int $id);
     public function dataName(string $name);
     public function list();
+    public function listColumn(string $column);
 }
