@@ -84,6 +84,10 @@ $this->data["empresa"] = EMPRESA;
         <td colspan="2">Valor</td>
         <td align="right">R$ <?= $this->data["valor"] ?></td>
     </tr>
+    <tr class="ttu">
+        <td colspan="2">Saldo</td>
+        <td align="right">R$ <?= $this->data["saldo"] ?></td>
+    </tr>
     <tr class="sup">
         <td colspan="3" align="center">
             www.erpcastro.com.br
@@ -93,7 +97,7 @@ $this->data["empresa"] = EMPRESA;
 </table>
 
 <script>
-    //window.print();
-    //window.addEventListener("afterprint", function(event) { window.close(); });
-    //window.onafterprint();
+    window.print();
+    window.addEventListener("afterprint", function(event) { window.close(); });
+    window.onafterprint();
 </script>
