@@ -100,6 +100,12 @@ $this->data["empresa"] = EMPRESA;
                 </span>
                 <span class="caption">Caixa Diário</span>
             </button>
+            <button class="ribbon-button" onclick="window.location.href='/consultaPreco'">
+                <span class="icon">
+                    <img src="/assets/images/consultaPreco.png">
+                </span>
+                <span class="caption">Consulta de Preços</span>
+            </button>
         </div>
         <div class="section" id="estoque">
             <button class="ribbon-button" onclick="window.location.href='/estoque/entrada'">

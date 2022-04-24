@@ -106,6 +106,11 @@ $router->get("/caixaDiario", "Relatorios:caixaDiario");
 $router->get("/caixaDiario/tabela", "CaixaDiario:relatorioDiario");
 $router->get("/caixaDiario/imprimir/{id}", "Relatorios:imprimirCaixaDiario");
 
+//CONSULTA DE PRECOS
+$router->group("consultaPreco");
+$router->get("/", "ConsultaPreco:home");
+$router->get("/tabela", "ConsultaPreco:tabela");
+
 $router->dispatch();
 
 if($router->error()){
