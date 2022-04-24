@@ -32,6 +32,18 @@ class Produtos extends Controller{
             <a href='javascript:void(0)' onclick='entradaEstoque($produto->id)'><img src='/assets/images/entradaEstoque.png' data-role='hint' data-hint-text='Entrada Estoque' class='imagem-acao'></a>
             <a href='javascript:void(0)' onclick='saidaEstoque($produto->id)'><img id='saidaEstoque' src='/assets/images/saidaEstoque.png' data-role='hint' data-hint-text='Saída Estoque' class='imagem-acao'></a>
             ";
+
+            if($produto->estoqueAtual <= 0){
+                $tabela["data"][] = [
+                    "<span style='color: red;'>".$produto->id."</span>",
+                    "<span style='color: red;'>".$produto->codigoBarras."</span>",
+                    "<span style='color: red;'>".$produto->nome."</span>",
+                    "<span style='color: red;'>"."R$ ".number_format($produto->precoVenda, 2, ',', '.')."</span>",
+                    "<span style='color: red;'>".$produto->estoqueAtual."</span>",
+                    "<span style='color: red;'>".$produto->unidadeMedida."</span>",
+                    $acoes
+                ];
+            }else{
                 $tabela["data"][] = [
                     $produto->id,
                     $produto->codigoBarras,
@@ -41,6 +53,7 @@ class Produtos extends Controller{
                     $produto->unidadeMedida,
                     $acoes
                 ];
+            }
         }
 
         echo json_encode($tabela);
