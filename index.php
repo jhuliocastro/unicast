@@ -18,6 +18,8 @@ $router->get("/", "Dashboard:home");
 $router->group("clientes");
 $router->get("/cadastrar", "Clientes:cadastrar");
 $router->post("/cadastrar", "Clientes:cadastrarSender");
+$router->get("/relacao", "Clientes:relacao");
+$router->get("/tabela", "Clientes:tabela");
 
 //PRODUTOS
 $router->group("produtos");

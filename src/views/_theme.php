@@ -53,7 +53,6 @@ $this->data["empresa"] = EMPRESA;
     <ul class="tabs-holder">
         <li class="static"><a href="/dashboard">Dashboard</a></li>
         <li><a href="#inicio">Início</a></li>
-        <li><a href="#clientes">Clientes</a></li>
         <li><a href="#fiscal">Fiscal</a></li>
         <li><a href="#relatorios">Relatórios</a></li>
         <li><a href="#pdv">PDV</a></li>
@@ -61,20 +60,6 @@ $this->data["empresa"] = EMPRESA;
     </ul>
 
     <div class="content-holder">
-        <div class="section" id="clientes">
-            <button class="ribbon-button" onclick="window.location.href='/clientes/cadastrar'">
-                <span class="icon">
-                    <img src="/assets/images/cadastrar.png">
-                </span>
-                <span class="caption">Cadastrar</span>
-            </button>
-            <button class="ribbon-button" onclick="window.location.href='/clientes/relacao'">
-                <span class="icon">
-                    <img src="/assets/images/clientes.png">
-                </span>
-                <span class="caption">Relação</span>
-            </button>
-        </div>
         <div class="section" id="inicio">
             <button class="ribbon-button" onclick="window.location.href='/produtos/relacao'">
                 <span class="icon">
@@ -87,6 +72,12 @@ $this->data["empresa"] = EMPRESA;
                     <img src="/assets/images/obras.png">
                 </span>
                 <span class="caption">Obras</span>
+            </button>
+            <button class="ribbon-button" onclick="window.location.href='/clientes/relacao'">
+                <span class="icon">
+                    <img src="/assets/images/clientes.png">
+                </span>
+                <span class="caption">Clientes</span>
             </button>
             <button class="ribbon-button" onclick="window.location.href='/empresas'">
                 <span class="icon">
