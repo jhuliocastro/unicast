@@ -141,7 +141,7 @@ $this->data["empresa"] = EMPRESA;
                     <label>Quantidade: </label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="quantidadeEntrada" name="quantidadeEntrada">
+                    <input type="text" data-role="input" class="input-small" id="quantidadeEntrada" name="quantidadeEntrada">
                 </div>
             </div>
             <hr>
@@ -167,7 +167,7 @@ $this->data["empresa"] = EMPRESA;
                     <label>Quantidade: </label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="quantidadeSaida" name="quantidadeSaida">
+                    <input type="text" data-role="input" class="input-small" id="quantidadeSaida" name="quantidadeSaida">
                 </div>
             </div>
             <hr>
