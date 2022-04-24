@@ -17,7 +17,8 @@ class Relatorios extends Controller{
 
     public function imprimirCaixaDiario($data){
         $tabela = null;
-        $valor = 0;
+        $valorEntrada = 0;
+        $valorSaida = 0;
 
         $model = new CaixaDiario_Situacao_Model();
         $dadosCaixa = $model->dadosID($data["id"]);
@@ -29,14 +30,20 @@ class Relatorios extends Controller{
                 $tabela .= "
                     <tr>
                         <td colspan='2'>$r->descricao</td>
-                        <td>R$ $r->valor</td>
+                        <td>R$ ".number_format((float)$r->valor, 2, ",", ".")."</td>
                     </tr>
                 ";
-                $valor = $valor + $r->valor;
+                if($r->tipo == "Entrada"){
+                    $valorEntrada = $valorEntrada + $r->valor;
+                }else{
+                    $valorSaida = $valorSaida + $r->valor;
+                }
+
             }
         }
 
-        $valor = number_format($valor, 2, ",", ".");
+        $valorEntrada = number_format($valorEntrada, 2, ",", ".");
+        $valorSaida = number_format($valorSaida, 2, ",", ".");
 
         $saldo = $model->saldoDia($dadosCaixa->dataCaixa);
         $saldo = number_format($saldo, 2, ",", ".");
@@ -44,7 +51,8 @@ class Relatorios extends Controller{
         parent::render("cupomCaixaDiario", [
             "linhas" => $tabela,
             "data" => date("d/m/Y", strtotime($r->created_at)),
-            "valor" => $valor,
+            "totalEntrada" => $valorEntrada,
+            "totalSaida" => $valorSaida,
             "saldo" => $saldo
         ]);
     }

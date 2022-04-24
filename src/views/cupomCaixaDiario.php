@@ -81,8 +81,12 @@ $this->data["empresa"] = EMPRESA;
         </td>
     </tr>
     <tr class="ttu">
-        <td colspan="2">Valor</td>
-        <td align="right">R$ <?= $this->data["valor"] ?></td>
+        <td colspan="2">Total de Entrada</td>
+        <td align="right">R$ <?= $this->data["totalEntrada"] ?></td>
+    </tr>
+    <tr class="ttu">
+        <td colspan="2">Total de Saída</td>
+        <td align="right">R$ <?= $this->data["totalSaida"] ?></td>
     </tr>
     <tr class="ttu">
         <td colspan="2">Saldo</td>

@@ -94,13 +94,15 @@ class CaixaDiario extends Controller
                 $retorno = $model->lista();
                 foreach($retorno as $r){
                     if(date("Y-m-d", strtotime($r->created_at)) == date("Y-m-d", strtotime($d->dataCaixa))){
-                        $valor = $valor + (float)$r->valor;
+                        if($r->tipo == "Entrada"){
+                            $valor = $valor + (float)$r->valor;
+                        }
                     }
                 }
                 $tabela["data"][] = [
                     $d->id,
                     date("d/m/Y", strtotime($d->dataCaixa)),
-                    "R$ ".$valor,
+                    "R$ ".number_format($valor, 2, ",", "."),
                     "<a data-role='hint' data-hint-text='Imprimir Relátorio' onclick='relatorio(\"$d->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>"
                 ];
             }            
