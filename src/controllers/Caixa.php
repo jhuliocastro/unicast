@@ -20,6 +20,37 @@ class Caixa extends Controller
 
     public function home()
     {
+        $selectClientes = null;
+
+        $clientesModel = new Clientes_Model();
+        $clientes = $clientesModel->listaClientes();
+        foreach($clientes as $cliente){
+            if($cliente->nome == "Consumidor"){
+                $selectClientes .= "
+                <option selected id='$cliente->id'>$cliente->nome</option>
+            ";
+            }else{
+                $selectClientes .= "
+                <option id='$cliente->id'>$cliente->nome</option>
+            ";
+            }
+        }
+
+        $model = new Produtos_Model();
+        $produtos = $model->lista();
+        $produtosLista = null;
+        foreach($produtos as $produto){
+            $produtosLista .= "
+                <option>$produto->nome</option>
+            ";
+        }
+
+        parent::render("caixaTeste", [
+            "clientes" => $selectClientes,
+            "listaProdutos" => $produtosLista
+        ]);
+
+        /*
         unset($_SESSION["caixaProdutos"]);
         unset($_SESSION["clienteCaixa"]);
         $_SESSION["clienteCaixa"] = 1;
@@ -56,18 +87,26 @@ class Caixa extends Controller
         parent::render("caixa", [
             "orcamentos" => $tabelaOrcamento,
             "produtos" => $produtosLista
-        ]);
+        ]);*/
     }
 
     public function pesquisarProduto(){
         $model = new Produtos_Model();
         $retorno = $model->verificaProdutoExiste($_POST["produto"]);
         if($retorno == 0){
-            echo "nao existe";
+            $retorno = [
+                "status" => false,
+                "erro" => "Produto não existe!"
+            ];
         }else{
             $retorno = $model->retornaID($_POST["produto"]);
-            echo $retorno->codigoBarras;
+            $retorno = [
+                "status" => true,
+                "codigoBarras" => $retorno->codigoBarras
+            ];
         }
+
+        echo json_encode($retorno);
     }
 
     public function valorTotal(){
@@ -151,6 +190,34 @@ class Caixa extends Controller
         echo json_encode($retorno);
     }
 
+    public function pagamento(){
+        $dinheiro = $_POST["dinheiro"];
+        $credito = $_POST["credito"];
+        $debito = $_POST["debito"];
+        $pix = $_POST["pix"];
+        $crediario = $_POST["crediario"];
+        (float)$valorTotal = $_POST["valorTotal"];
+
+        (float)$dinheiro = str_replace(',', '.', $dinheiro);
+        (float)$credito = str_replace(',', '.', $credito);
+        (float)$debito = str_replace(',', '.', $debito);
+        (float)$pix = str_replace(',', '.', $pix);
+        (float)$crediario = str_replace(',', '.', $crediario);
+
+        $valor = (float)$dinheiro + (float)$credito + (float)$debito + (float)$pix + (float)$crediario;
+
+        if($valor > $valorTotal) {
+
+        }else if($valor < $valorTotal){
+            $retorno = [
+                "status" => false,
+                "error" => "Valor declarado não pode ser menor do que o valor da conta!"
+            ];
+        }
+
+        echo json_encode($retorno);
+    }
+
     public function finalizarCartao(){
         $dados = (object)$_POST;
 
@@ -185,9 +252,13 @@ class Caixa extends Controller
     public function finalizarPIX(){
         $dados = (object)$_POST;
 
-        $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
+        var_dump($dados);
 
-        $dados->valorPago = $dados->valorPedido - $dados->desconto;
+        (float)$dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
+
+        (float)$dados->valorPago = (float)$dados->valorPedido - (float)$dados->desconto;
+
+        var_dump($dados->valorPago, $dados->valorPedido);
 
         $dados->modoPagamento = "PIX";
 

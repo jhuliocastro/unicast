@@ -1,14 +1,14 @@
 <?php
-const URL = "http://erpcastro";
+const URL = "http://localhost";
 const EMPRESA = "MRE ARMAZÉM";
 
 const DATA_LAYER_CONFIG = [
     "driver" => "mysql",
     "host" => "localhost",
-    "port" => "3309",
-    "dbname" => "erpcastro",
-    "username" => "jhuliocastro",
-    "passwd" => "25072018",
+    "port" => "3306",
+    "dbname" => "unicast",
+    "username" => "root",
+    "passwd" => "",
     "options" => [
         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

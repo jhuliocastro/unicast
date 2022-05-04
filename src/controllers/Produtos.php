@@ -98,8 +98,6 @@ class Produtos extends Controller{
             "valor" => $produto->precoVenda
         ];
 
-        $this->gravarProdutoOrcamento($_SESSION["orcamento"], $produto->id, $_POST['quantidadeDados']);
-
         echo json_encode($dados);
     }
 
