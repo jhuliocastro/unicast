@@ -202,6 +202,7 @@ $this->data["empresa"] = EMPRESA;
     var troco = 0;
     var valorRestante = 0;
     var valorContagemPagamento = 0;
+    var orcamento = null;
 
     var audio = new Audio("/assets/sons/beep.mp3");
 
@@ -271,6 +272,10 @@ $this->data["empresa"] = EMPRESA;
     });
 
     function pagamento(){
+        let lista2 = '{ "produtos" : [' + lista + ']}';
+        lista2 = JSON.parse(lista2);
+        lista2 = JSON.stringify(lista2);
+        
         $.ajax({
             url: "/pdv/caixa/pagamento",
             type: 'post',
@@ -281,7 +286,11 @@ $this->data["empresa"] = EMPRESA;
                 debito: $("#debitoPagamento").val(),
                 crediario: $("#crediarioPagamento").val(),
                 pix: $("#pixPagamento").val(),
-                valorTotal: valorTotalCompra
+                valorTotal: valorTotalCompra,
+                desconto: desconto,
+                cliente: $("#cliente").val(),
+                orcamento: orcamento,
+                produtos: lista2
             }
         })
             .done(function (retorno) {
@@ -291,6 +300,8 @@ $this->data["empresa"] = EMPRESA;
                     notify.create(retorno.error, "Erro", {
                         cls: "alert"
                     });
+                }else{
+                    window.location.href = "/pdv/caixa/finalizar/true/" + retorno.id;
                 }
             })
             .fail(function (jqXHR, textStatus, msg) {

@@ -9,6 +9,7 @@ use Model\Orcamentos_Model;
 use Model\OrcamentosPedido_Model;
 use Model\Produtos_Model;
 use Model\Vendas_Model;
+use Model\Vendas_Produtos_Model;
 
 class Caixa extends Controller
 {
@@ -164,114 +165,78 @@ class Caixa extends Controller
         }
     }
 
-    public function finalizarDinheiro(){
-        $dados = (object)$_POST;
-
-        $dados->valorPagoPedido = str_replace(",", ".", $dados->valorPagoPedido);
-        $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
-
-        $dados->troco = $dados->valorPagoPedido - ($dados->valorPedido - $dados->desconto);
-
-        $model = new Vendas_Model();
-        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, $dados->troco, $dados->valorPagoPedido, "DINHEIRO", (float)$dados->desconto);
-
-        $valorCaixaDiario = $dados->valorPedido - $dados->desconto;
-
-        $this->faturarOrcamento();
-
-        if($retorno["status"] == true){
-            $this->saidaProdutos();
-            $this->gravaCaixaDiario($valorCaixaDiario, "VENDA Nº ".$_SESSION["caixa"], "Entrada");
-            $retorno = [
-                "status" => true
-            ];
-        }
-
-        echo json_encode($retorno);
-    }
-
     public function pagamento(){
         $dinheiro = $_POST["dinheiro"];
         $credito = $_POST["credito"];
         $debito = $_POST["debito"];
         $pix = $_POST["pix"];
         $crediario = $_POST["crediario"];
-        (float)$valorTotal = $_POST["valorTotal"];
+        $valorTotal = $_POST["valorTotal"];
+        $desconto = $_POST["desconto"];
+        $cliente = $_POST["cliente"];
+        $orcamento = $_POST["orcamento"];
+        $produtos = json_decode($_POST["produtos"]);
 
-        (float)$dinheiro = str_replace(',', '.', $dinheiro);
-        (float)$credito = str_replace(',', '.', $credito);
-        (float)$debito = str_replace(',', '.', $debito);
-        (float)$pix = str_replace(',', '.', $pix);
-        (float)$crediario = str_replace(',', '.', $crediario);
+        $arquivo = 'produtos.json';
+        $json = json_encode($produtos);
+        $file = fopen(__DIR__ . '/../../temp/' . $arquivo,'w');
+        fwrite($file, $json);
+        fclose($file);
 
-        $valor = (float)$dinheiro + (float)$credito + (float)$debito + (float)$pix + (float)$crediario;
+        if($orcamento == ""){
+            $orcamento = null;
+        }
 
+        $model = new Clientes_Model();
+        $dadosCliente = $model->dadosClienteNome($cliente);
+
+        if($dinheiro == "") $dinheiro = 0;
+        if($credito == "") $credito = 0;
+        if($debito == "") $debito = 0;
+        if($pix == "") $pix = 0;
+        if($crediario == "") $crediario = 0;
+
+        $dinheiro = str_replace('.', '', $dinheiro);
+        $dinheiro = str_replace(',', '.', $dinheiro);
+        $credito = str_replace('.', '', $credito);
+        $credito = str_replace(',', '.', $credito);
+        $debito = str_replace('.', '', $debito);
+        $debito = str_replace(',', '.', $debito);
+        $pix = str_replace('.', '', $pix);
+        $pix = str_replace(',', '.', $pix);
+        $crediario = str_replace('.', '', $crediario);
+        $crediario = str_replace(',', '.', $crediario);
+
+        $troco = 0;
+
+        $valor = $dinheiro + $credito + $debito + $pix + $crediario;
+
+        //$valor = number_format($valor, 2, ',', '.');
+
+        $model = new Vendas_Model();
+        
         if($valor > $valorTotal) {
-
+            (float)$troco = (float)$valor - (float)$valorTotal;
+            $valorTotal = $valorTotal + $desconto;
+            $retorno = $model->cadastrar($dadosCliente->id, $orcamento, $valorTotal, $dinheiro, $debito, $credito, $crediario, $pix, $troco, $valor, $desconto);
         }else if($valor < $valorTotal){
             $retorno = [
                 "status" => false,
                 "error" => "Valor declarado não pode ser menor do que o valor da conta!"
             ];
+        }else{
+            $valorTotal = $valorTotal + $desconto;
+            $retorno = $model->cadastrar($dadosCliente->id, $orcamento, $valorTotal, $dinheiro, $debito, $credito, $crediario, $pix, $troco, $valor, $desconto);
         }
 
-        echo json_encode($retorno);
-    }
+        if(isset($retorno["id"])){
+            $json = file_get_contents(__DIR__."/../../temp/produtos.json");
+            $data = json_decode($json, true);
 
-    public function finalizarCartao(){
-        $dados = (object)$_POST;
-
-        $dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
-
-        $dados->valorPago = $dados->valorPedido - $dados->desconto;
-
-        switch ($dados->modoPagamento){
-            case 'credito':
-                $dados->modoPagamento = "CARTÃO DE CRÉDITO";
-                break;
-            case 'debito':
-                $dados->modoPagamento = "CARTÃO DE DÉBITO";
-                break;
-        }
-
-        $model = new Vendas_Model();
-        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, 0, $dados->valorPedido, $dados->modoPagamento, (float)$dados->desconto);
-
-        $this->faturarOrcamento();
-
-        if($retorno["status"] == true){
-            $this->saidaProdutos();
-            $retorno = [
-                "status" => true
-            ];
-        }
-
-        echo json_encode($retorno);
-    }
-
-    public function finalizarPIX(){
-        $dados = (object)$_POST;
-
-        var_dump($dados);
-
-        (float)$dados->valorPedido = str_replace(",", ".", $dados->valorPedido);
-
-        (float)$dados->valorPago = (float)$dados->valorPedido - (float)$dados->desconto;
-
-        var_dump($dados->valorPago, $dados->valorPedido);
-
-        $dados->modoPagamento = "PIX";
-
-        $model = new Vendas_Model();
-        $retorno = $model->cadastrar($_SESSION["clienteCaixa"], $_SESSION["caixa"], $dados->valorPedido, 0, $dados->valorPago, $dados->modoPagamento, (float)$dados->desconto);
-
-        $this->faturarOrcamento();
-
-        if($retorno["status"] == true){
-            $this->saidaProdutos();
-            $retorno = [
-                "status" => true
-            ];
+            foreach ($data["produtos"] as $produto) {
+                $model = new Vendas_Produtos_Model();
+                $model->cadastrar($retorno["id"], $produto["produto"], $produto["quantidade"]);
+            }
         }
 
         echo json_encode($retorno);
@@ -302,22 +267,20 @@ class Caixa extends Controller
         }
     }
 
-    public function trueDinheiro(){
-        unset($_SESSION["clienteCaixa"]);
-        unset($_SESSION["produtos"]);
-
+    public function trueVenda($data){
         $model = new Vendas_Model();
-        $retorno = $model->listaUltimo();
+        $retorno = $model->dadosID($data["id"]);
 
-        $retorno->troco = number_format($retorno->troco, 2, ",", ".");
+        $troco = number_format($retorno->troco, 2, ",", ".");
 
         parent::render("caixaTrue", [
-            "troco" => $retorno->troco
+            "id" => $data["id"],
+            "troco" => $troco
         ]);
     }
 
-    public function falseDinheiro(){
-        Alert::error("Venda não concluída!", "Contate o suporte.", "/pdv/vendas/relacao");
+    public function falseVenda(){
+        Alert::error("Venda não concluída!", "Contate o suporte.", "/pdv/vendas");
     }
 
     public function imprimirCupom(){

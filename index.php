@@ -60,14 +60,11 @@ $router->get("/orcamento/excluirSender/{id}", "Orcamento:excluirSender");
 $router->post("/orcamento/excluir/produto", "Orcamento:excluirProduto");
 $router->get("/orcamento/pdf/{id}", "Orcamento:exportarPDF");
 $router->post("/caixa/pesquisar/produto", "Caixa:pesquisarProduto");
-$router->post("/caixa/finalizar/dinheiro", "Caixa:finalizarDinheiro");
-$router->get("/caixa/finalizar/dinheiro/true", "Caixa:trueDinheiro");
-$router->get("/caixa/finalizar/dinheiro/false", "Caixa:falseDinheiro");
-$router->post("/caixa/finalizar/cartao", "Caixa:finalizarCartao");
-$router->post("/caixa/finalizar/pix", "Caixa:finalizarPIX");
+$router->get("/caixa/finalizar/true/{id}", "Caixa:trueVenda");
+$router->get("/caixa/finalizar/false", "Caixa:falseVenda");
 $router->post("/caixa/pagamento", "Caixa:pagamento");
 $router->get("/imprimir/cupom", "Caixa:imprimirCupom");
-$router->get("/imprimir/cupom/{orcamento}/{venda}", "Vendas:imprimirCupomID");
+$router->get("/imprimir/cupom/{venda}", "Vendas:imprimirCupomID");
 
 //VENDAS
 $router->get("/vendas", "Vendas:home");

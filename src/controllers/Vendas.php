@@ -6,6 +6,7 @@ use Model\Clientes_Model;
 use Model\OrcamentosPedido_Model;
 use Model\Produtos_Model;
 use Model\Vendas_Model;
+use Model\Vendas_Produtos_Model;
 
 class Vendas extends Controller
 {
@@ -21,14 +22,14 @@ class Vendas extends Controller
     }
 
     public function imprimirCupomID($data){
-        $model = new OrcamentosPedido_Model();
-        $produtos = $model->retornoProdutos($data["orcamento"]);
-
         $modelVendas = new Vendas_Model();
         $dadosVenda = $modelVendas->dadosID($data["venda"]);
 
         $modelCliente = new Clientes_Model();
         $dadosCliente = $modelCliente->dadosClienteID($dadosVenda->cliente);
+
+        $modelVendasProdutos = new Vendas_Produtos_Model();
+        $produtos = $modelVendasProdutos->produtosVenda($data["venda"]);
 
         $dados = null;
         foreach ($produtos as $produto){

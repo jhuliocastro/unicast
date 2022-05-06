@@ -15,7 +15,7 @@
                 cancelButtonText: 'Voltar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.open("/pdv/imprimir/cupom", '_blanck');
+                    window.open("/pdv/imprimir/cupom/" + <?= $id ?>, '_blanck');
                     window.location.href = "/pdv/vendas";
                 }else{
                     window.location.href = "/pdv/vendas"
