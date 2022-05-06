@@ -229,6 +229,8 @@ class Caixa extends Controller
             $retorno = $model->cadastrar($dadosCliente->id, $orcamento, $valorTotal, $dinheiro, $debito, $credito, $crediario, $pix, $troco, $valor, $desconto);
         }
 
+        $valorCaixa = $dinheiro - $troco;
+
         if(isset($retorno["id"])){
             $json = file_get_contents(__DIR__."/../../temp/produtos.json");
             $data = json_decode($json, true);
@@ -236,6 +238,10 @@ class Caixa extends Controller
             foreach ($data["produtos"] as $produto) {
                 $model = new Vendas_Produtos_Model();
                 $model->cadastrar($retorno["id"], $produto["produto"], $produto["quantidade"]);
+            }
+
+            if($dinheiro != 0){
+                $this->gravaCaixaDiario($valorCaixa, "VENDA Nº ".$retorno["id"], "Entrada");
             }
         }
 

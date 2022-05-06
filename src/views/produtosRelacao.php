@@ -187,6 +187,7 @@ $this->data["empresa"] = EMPRESA;
         tabela = $('#tabela').DataTable({
             "paging": true,
             "order": [[2, "asc"]],
+            'iDisplayLength': 50,
             'ajax': '/produtos/tabela',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"

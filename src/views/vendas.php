@@ -46,7 +46,7 @@ $this->data["empresa"] = EMPRESA;
 <script>
     $(document).ready(function () {
         $('#tabela').DataTable({
-            "paging": false,
+            "paging": true,
             "order": [[0, "desc"]],
             'ajax': '/pdv/vendas/relacao',
             "language": {
@@ -56,7 +56,7 @@ $this->data["empresa"] = EMPRESA;
     });
 
     function cupom(orcamento, venda){
-        window.open("/pdv/imprimir/cupom/" + orcamento + "/" + venda, '_blanck');
+        window.open("/pdv/imprimir/cupom/" + venda, '_blanck');
     }
 
     //INICIO BOTAO CADASTRAR PRODUTO

@@ -42,7 +42,7 @@ $this->data["empresa"] = EMPRESA;
         });
 
         $('#tabela').DataTable({
-            "paging": false,
+            "paging": true,
             "aaSorting": [[0, "desc"]],
             'ajax': '/pdv/orcamento/tabela',
             "language": {
