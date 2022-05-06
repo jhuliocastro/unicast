@@ -25,7 +25,11 @@ $this->data["empresa"] = EMPRESA;
                                 <td>Valor Pago</td>
                                 <td>Desconto</td>
                                 <td>Troco</td>
-                                <td>Forma Pagamento</td>
+                                <td>Dinheiro</td>
+                                <td>Crédito</td>
+                                <td>Débito</td>
+                                <td>Crediário</td>
+                                <td>Pix</td>
                                 <td>Data/Hora</td>
                                 <td>Ações</td>
                             </tr>

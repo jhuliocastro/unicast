@@ -91,7 +91,11 @@ class Vendas extends Controller
                 "R$ " . number_format($venda->valorPago, 2, ',', '.'),
                 "R$ " . number_format($venda->desconto, 2, ',', '.'),
                 "R$ " . number_format($venda->troco, 2, ',', '.'),
-                $venda->formaPagamento,
+                "R$ " . number_format($venda->dinheiro, 2, ',', '.'),
+                "R$ " . number_format($venda->credito, 2, ',', '.'),
+                "R$ " . number_format($venda->debito, 2, ',', '.'),
+                "R$ " . number_format($venda->crediario, 2, ',', '.'),
+                "R$ " . number_format($venda->pix, 2, ',', '.'),
                 date("d/m/Y H:i:s", strtotime($venda->created_at)),
                 $opcoes
             ];
