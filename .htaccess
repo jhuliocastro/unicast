@@ -1,3 +1,4 @@
+SetEnv TZ America/Recife
 RewriteEngine On
 #Options All -Indexes
 

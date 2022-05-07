@@ -65,6 +65,8 @@ $router->get("/caixa/finalizar/false", "Caixa:falseVenda");
 $router->post("/caixa/pagamento", "Caixa:pagamento");
 $router->get("/imprimir/cupom", "Caixa:imprimirCupom");
 $router->get("/imprimir/cupom/{venda}", "Vendas:imprimirCupomID");
+$router->post("/md5", "Caixa:json");
+$router->post("/caixa/cancelar/item", "Caixa:cancelarItem");
 
 //VENDAS
 $router->get("/vendas", "Vendas:home");

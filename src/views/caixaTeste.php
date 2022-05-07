@@ -81,6 +81,9 @@ $this->data["empresa"] = EMPRESA;
                                 <div class="col-md-4 opcoes">
                                     F4 - QUANTIDADE
                                 </div>
+                                <div class="col-md-4 opcoes">
+                                    F5 - CANCELAR ITEM
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -125,6 +128,20 @@ $this->data["empresa"] = EMPRESA;
             <div class="form-group">
                 <label>Informe a quantidade do produto:</label>
                 <input type="number" name="quantidadeProxProduto" id="quantidadeProxProduto" data-role="input">
+            </div>
+            <hr>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+<!--INICIO DIALOG CANCELAR PRODUTO -->
+<div id="quantidadeProduto" title="Cancelar Produto">
+    <form>
+        <fieldset>
+            <div class="form-group">
+                <label>Informe o ID do produto:</label>
+                <input type="number" name="idCancelarProduto" id="idCancelarProduto" data-role="input">
             </div>
             <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
@@ -198,17 +215,18 @@ $this->data["empresa"] = EMPRESA;
     var valorTotalCompra = 0;
     var desconto = 0;
     var quantidadeGeral = 0;
-    var lista = null;
+    var lista = {};
     var troco = 0;
     var valorRestante = 0;
     var valorContagemPagamento = 0;
     var orcamento = null;
+    var md5 = '<?= $this->data["md5"] ?>';
 
     var audio = new Audio("/assets/sons/beep.mp3");
 
     var tabela = $('#tabela').DataTable({
         "paging": false,
-        'ajax': '',
+        'ajax': '/temp/' + md5 + '.json',
         'searching': false,
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
@@ -238,9 +256,23 @@ $this->data["empresa"] = EMPRESA;
         }
     });
 
-    var formQuantiadeProduto = dialogQuantidadeProduto.find( "form" ).on( "submit", function( event ) {
+    var formQuantidadeProduto = dialogQuantidadeProduto.find( "form" ).on( "submit", function( event ) {
         event.preventDefault();
         quantidadeProduto();
+    });
+
+    var dialogCancelarProduto = $("#quantidadeProduto").dialog({
+        autoOpen: false,
+        width: 300,
+        modal: true,
+        buttons: {
+            "Confirmar": cancelarProduto
+        }
+    });
+
+    var formCancelarProduto = dialogCancelarProduto.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        cancelarProduto();
     });
 
     var dialogDesconto = $("#janelaDesconto").dialog({
@@ -270,6 +302,24 @@ $this->data["empresa"] = EMPRESA;
         event.preventDefault();
         pagamento();
     });
+
+    function cancelarProduto(){
+        $.ajax({
+                        url: "/pdv/caixa/cancelar/item",
+                        type: 'post',
+                        dataType: 'html',
+                        data: {
+                            idProduto: $("#idCancelarProduto").val(),
+                            md5: md5
+                        }
+                    })
+                        .done(function (retorno) {
+                            console.log(retorno);
+                        })
+                        .fail(function (jqXHR, textStatus, msg) {
+                            console.log(msg);
+                        });
+    }
 
     function pagamento(){
         let lista2 = '{ "produtos" : [' + lista + ']}';
@@ -372,19 +422,26 @@ $this->data["empresa"] = EMPRESA;
                     console.log(valorUN);
                     let valorTotal = valorUN * quantidade;
 
-                    tabela.row.add([
-                        retorno.id,
-                        retorno.produto,
-                        quantidade,
-                        "R$ " + valorUN,
-                        "R$ " + Number(valorTotal).toFixed(2)
-                    ]).draw(false);
+                    $.ajax({
+                        url: "/pdv/md5",
+                        type: 'post',
+                        dataType: 'html',
+                        data: {
+                            idProduto: retorno.id,
+                            nomeProduto: retorno.produto,
+                            quantidade: quantidade,
+                            valorUN: valorUN,
+                            valorTotal: Number(valorTotal).toFixed(2),
+                            md5: md5
+                        }
+                    })
+                        .done(function (retorno) {
+                            console.log(retorno);
+                        })
+                        .fail(function (jqXHR, textStatus, msg) {
+                            console.log(msg);
+                        });
 
-                    if(lista === null){
-                        lista = '{"produto": ' + retorno.id + ', "quantidade": ' + quantidade + '}';
-                    }else{
-                        lista = lista + ', {"produto": ' + retorno.id + ', "quantidade": ' + quantidade + '}';
-                    }
 
                     $("#produto").val("");
                     $("#produto").focus();
@@ -400,6 +457,7 @@ $this->data["empresa"] = EMPRESA;
                     $("#valorTotal").html("R$ "+ valorTotalCompra.toFixed(2));
 
                     audio.play();
+
                 }
 
             })
@@ -411,6 +469,7 @@ $this->data["empresa"] = EMPRESA;
                 });
                 $("#produto").val("");
             });
+
         return false;
     });
 
@@ -495,6 +554,18 @@ $this->data["empresa"] = EMPRESA;
     });
     //FIM ATALHO INFORMA QUANTIDADE PRODUTO
 
+    //INICIO ATALHO CANCELAMENTO DE ITEM
+    $('#produto').on('keydown', null, 'f5', function () {
+        dialogCancelarProduto.dialog('open');
+        return false;
+    });
+
+    $(document).on('keydown', null, 'f5', function () {
+        dialogCancelarProduto.dialog('open');
+        return false;
+    });
+    //FIM ATALHO CANCELAMENTO DE ITEM
+
     //INICIO ATALHO DESCONTO
     $('#produto').on('keydown', null, 'f1', function () {
         dialogDesconto.dialog('open');
@@ -538,6 +609,10 @@ $this->data["empresa"] = EMPRESA;
         $("#creditoPagamento").mask('#.##0,00', {reverse: true});
         $("#debitoPagamento").mask('#.##0,00', {reverse: true});
         $("#pixPagamento").mask('#.##0,00', {reverse: true});
+
+        setInterval( function () {
+            tabela.ajax.reload();
+        }, 300 );
     });
 </script>
 

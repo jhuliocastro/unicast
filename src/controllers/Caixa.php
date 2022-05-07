@@ -19,6 +19,64 @@ class Caixa extends Controller
         parent::__construct();
     }
 
+    public function md5() : string{
+        $md5 = md5(time() . rand(0, 9999) . time());
+        return $md5;
+    }
+
+    private function criaJSON($md5){
+        $nomeArquivo = __DIR__."/../../temp/".$md5.".json";
+        if(!file_exists($nomeArquivo)){
+            $arquivo = fopen($nomeArquivo, 'w+');
+        }
+
+        $data["data"] = [];
+
+        file_put_contents($nomeArquivo, json_encode($data));
+    }
+
+    public function cancelarItem(){
+        $nomeArquivo = __DIR__."/../../temp/".$_POST["md5"].".json";
+        $arquivo = file_get_contents($nomeArquivo);
+        $arquivo = json_decode($arquivo, true);
+        $i = 0;
+        foreach($arquivo["data"] as $produto){
+            if($produto[0] == $_POST["idProduto"]){
+                unset($arquivo["data"][$i]);
+                for($a = $i; $a <1000; $a++){
+                    $arquivo["data"][$a] = $arquivo["data"][$a--];
+                }
+            }
+            $i++;
+        }
+        $arquivo = json_encode($arquivo);
+        file_put_contents($nomeArquivo, $arquivo);
+    }
+
+    public function json(){
+        $nomeArquivo = __DIR__."/../../temp/".$_POST["md5"].".json";
+        if(!file_exists($nomeArquivo)){
+            $arquivo = fopen($nomeArquivo, 'w+');
+        }
+
+        $arquivo = file_get_contents($nomeArquivo);
+
+        $arquivo = json_decode($arquivo, true);
+        $arquivo["data"][] = [
+            $_POST["idProduto"],
+            $_POST["nomeProduto"],
+            $_POST["quantidade"],
+            "R$ ".$_POST["valorUN"],
+            "R$ ".$_POST["valorTotal"]
+        ];
+
+        var_dump($arquivo);
+
+        $arquivo = json_encode($arquivo);
+
+        $arquivo = file_put_contents($nomeArquivo, $arquivo);
+    }
+
     public function home()
     {
         $selectClientes = null;
@@ -46,9 +104,14 @@ class Caixa extends Controller
             ";
         }
 
+        $md5 = $this->md5();
+
+        $this->criaJSON($md5);
+
         parent::render("caixaTeste", [
             "clientes" => $selectClientes,
-            "listaProdutos" => $produtosLista
+            "listaProdutos" => $produtosLista,
+            "md5" => $md5
         ]);
 
         /*
