@@ -43,14 +43,37 @@ class Caixa extends Controller
         foreach($arquivo["data"] as $produto){
             if($produto[0] == $_POST["idProduto"]){
                 unset($arquivo["data"][$i]);
-                for($a = $i; $a <1000; $a++){
-                    $arquivo["data"][$a] = $arquivo["data"][$a--];
-                }
+
+                $retorno = [
+                    "quantidade" => $produto[2],
+                    "valorTotal" => $produto[4]
+                ];
             }
+            
             $i++;
         }
-        $arquivo = json_encode($arquivo);
-        file_put_contents($nomeArquivo, $arquivo);
+
+        foreach($arquivo["data"] as $produto){
+            $dados["data"][] = $produto;
+        }
+
+        if($dados == null){
+            $dados["data"][] = []; 
+        }
+
+        $arquivo = json_encode($dados);
+
+        if($arquivo == null){
+            $dados["data"][] = [];
+            file_put_contents($nomeArquivo, $dados);
+        }else{
+            file_put_contents($nomeArquivo, $arquivo);
+        }
+
+        //echo $arquivo;
+        
+
+        echo json_encode($retorno);
     }
 
     public function json(){

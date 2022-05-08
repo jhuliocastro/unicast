@@ -136,7 +136,7 @@ $this->data["empresa"] = EMPRESA;
     </form>
 </div>
 <!--INICIO DIALOG CANCELAR PRODUTO -->
-<div id="quantidadeProduto" title="Cancelar Produto">
+<div id="cancelarProduto" title="Cancelar Produto">
     <form>
         <fieldset>
             <div class="form-group">
@@ -261,7 +261,7 @@ $this->data["empresa"] = EMPRESA;
         quantidadeProduto();
     });
 
-    var dialogCancelarProduto = $("#quantidadeProduto").dialog({
+    var dialogCancelarProduto = $("#cancelarProduto").dialog({
         autoOpen: false,
         width: 300,
         modal: true,
@@ -304,17 +304,33 @@ $this->data["empresa"] = EMPRESA;
     });
 
     function cancelarProduto(){
+        let id = $("#idCancelarProduto").val();
+
         $.ajax({
                         url: "/pdv/caixa/cancelar/item",
                         type: 'post',
-                        dataType: 'html',
+                        dataType: 'json',
                         data: {
-                            idProduto: $("#idCancelarProduto").val(),
+                            idProduto: id,
                             md5: md5
                         }
                     })
                         .done(function (retorno) {
                             console.log(retorno);
+                            dialogCancelarProduto.dialog('close');
+                            $("#idCancelarProduto").val("");
+                            
+                            var notify = Metro.notify;
+                            notify.create("Produto " + id + " excluído!", "", {
+                                cls: "success"
+                            });
+
+                            retorno.valorTotal = retorno.valorTotal.replace('R$ ', '');
+                            valorTotalCompra = valorTotalCompra - retorno.valorTotal;
+                            $("#valorTotal").html("R$ " + Number(valorTotalCompra).toFixed(2));
+
+                            quantidadeGeral = quantidadeGeral - retorno.quantidade;
+                            $("#totalItens").html(quantidadeGeral);
                         })
                         .fail(function (jqXHR, textStatus, msg) {
                             console.log(msg);
