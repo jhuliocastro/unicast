@@ -36,6 +36,7 @@ class Caixa extends Controller
     }
 
     public function cancelarItem(){
+        error_reporting(0);
         $nomeArquivo = __DIR__."/../../temp/".$_POST["md5"].".json";
         $arquivo = file_get_contents($nomeArquivo);
         $arquivo = json_decode($arquivo, true);
@@ -58,7 +59,7 @@ class Caixa extends Controller
         }
 
         if($dados == null){
-            $dados["data"][] = []; 
+            $dados["data"] = []; 
         }
 
         $arquivo = json_encode($dados);
