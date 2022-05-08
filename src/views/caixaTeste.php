@@ -338,10 +338,6 @@ $this->data["empresa"] = EMPRESA;
     }
 
     function pagamento(){
-        let lista2 = '{ "produtos" : [' + lista + ']}';
-        lista2 = JSON.parse(lista2);
-        lista2 = JSON.stringify(lista2);
-        
         $.ajax({
             url: "/pdv/caixa/pagamento",
             type: 'post',
@@ -356,7 +352,7 @@ $this->data["empresa"] = EMPRESA;
                 desconto: desconto,
                 cliente: $("#cliente").val(),
                 orcamento: orcamento,
-                produtos: lista2
+                produtos: md5
             }
         })
             .done(function (retorno) {

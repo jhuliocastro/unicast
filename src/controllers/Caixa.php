@@ -262,13 +262,6 @@ class Caixa extends Controller
         $desconto = $_POST["desconto"];
         $cliente = $_POST["cliente"];
         $orcamento = $_POST["orcamento"];
-        $produtos = json_decode($_POST["produtos"]);
-
-        $arquivo = 'produtos.json';
-        $json = json_encode($produtos);
-        $file = fopen(__DIR__ . '/../../temp/' . $arquivo,'w');
-        fwrite($file, $json);
-        fclose($file);
 
         if($orcamento == ""){
             $orcamento = null;
@@ -319,12 +312,12 @@ class Caixa extends Controller
         $valorCaixa = $dinheiro - $troco;
 
         if(isset($retorno["id"])){
-            $json = file_get_contents(__DIR__."/../../temp/produtos.json");
+            $json = file_get_contents(__DIR__."/../../temp/".$_POST['produtos'].".json");
             $data = json_decode($json, true);
 
-            foreach ($data["produtos"] as $produto) {
+            foreach ($data["data"] as $produto) {
                 $model = new Vendas_Produtos_Model();
-                $model->cadastrar($retorno["id"], $produto["produto"], $produto["quantidade"]);
+                $model->cadastrar($retorno["id"], $produto[0], $produto[2]);
             }
 
             if($dinheiro != 0){
