@@ -462,7 +462,7 @@ $this->data["empresa"] = EMPRESA;
                     $("#produto").val("");
                     $("#produto").focus();
 
-                    quantidadeGeral++;
+                    quantidadeGeral = quantidadeGeral + parseInt(quantidade);
 
                     $("#totalItens").html(quantidadeGeral);
 
