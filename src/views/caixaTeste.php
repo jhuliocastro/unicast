@@ -408,6 +408,7 @@ $this->data["empresa"] = EMPRESA;
     function quantidadeProduto(){
         quantidade = $("#quantidadeProxProduto").val();
         dialogQuantidadeProduto.dialog('close');
+        $("#quantidadeProxProduto").val("");
         $("#produto").focus();
     }
 
