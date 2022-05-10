@@ -78,6 +78,14 @@ $this->data["empresa"] = EMPRESA;
             </div>
             <div class="row">
                 <div class="col-md-3 infos">
+                    <label>Estoque: </label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" data-role="input" class="input-small" id="estoqueCadastrar" name="estoqueCadastrar">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 infos">
                     <label>Código de Barras*: </label>
                 </div>
                 <div class="col-md-8">
@@ -279,6 +287,7 @@ $this->data["empresa"] = EMPRESA;
        let precoVenda = $("#valorVendaCadastrar").val();
        let precoCompra = $("#valorCompraCadastrar").val();
        let unidadeMedida = $("#unidadeMedidaCadastrar").val();
+       let estoque = $("#estoqueCadastrar").val();
 
        if(nome === "" || codigoBarras === "" || unidadeMedida === ""){
            Swal.fire(
@@ -296,7 +305,8 @@ $this->data["empresa"] = EMPRESA;
                    codigoBarras: codigoBarras,
                    precoVenda: precoVenda,
                    precoCompra: precoCompra,
-                   unidadeMedida: unidadeMedida
+                   unidadeMedida: unidadeMedida,
+                   estoque: estoque
                },
                success: function(retorno) {
                    console.log(retorno);

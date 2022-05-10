@@ -19,6 +19,7 @@ class Produtos_Model extends DataLayer{
         $this->estoqueMinimo = 1;
         $this->estoqueAtual = 0;
         $this->codigoBarras = $dados->codigoBarras;
+        $this->estoqueAtual = $dados->estoque;
         $retorno = $this->save();
         if($this->fail()){
             $controller = new Controller();
