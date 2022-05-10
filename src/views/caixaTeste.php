@@ -44,7 +44,7 @@ $this->data["empresa"] = EMPRESA;
                                 </div>
                             </div>
                             <div class="row" style="background-color: lightblue;">
-                                <div class="col-md-3" style="">
+                                <div class="col-md-3">
                                     Total de Itens
                                 </div>
                                 <div class="col-md-3" style="text-align: right; border-right: 1px solid white;">
@@ -412,6 +412,8 @@ $this->data["empresa"] = EMPRESA;
     $("#formProdutoCodigo").submit(function(){
         let codigoBarras = $("#produto").val();
 
+        if(codigoBarras !== ""){
+
         $.ajax({
             url: "/produtos/dados",
             type: 'post',
@@ -482,6 +484,8 @@ $this->data["empresa"] = EMPRESA;
                 });
                 $("#produto").val("");
             });
+
+        }
 
         return false;
     });
