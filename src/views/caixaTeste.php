@@ -426,7 +426,8 @@ $this->data["empresa"] = EMPRESA;
                 console.log(retorno);
                 $("#procurarProdutosLista").val("");
 
-                if(retorno.status === false){
+                if(retorno.id !== null){
+                    if(retorno.status === false){
                     var notify = Metro.notify;
                     notify.create(retorno.erro, "Erro", {
                         cls: "alert"
@@ -474,6 +475,14 @@ $this->data["empresa"] = EMPRESA;
                     audio.play();
 
                 }
+                }else{
+                    var notify = Metro.notify;
+                    notify.create("Produto não encontrado! Verique o log.", "Erro", {
+                        cls: "alert"
+                    });
+                }
+
+                
 
             })
             .fail(function (jqXHR, textStatus, msg) {
