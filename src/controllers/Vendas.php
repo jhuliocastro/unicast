@@ -42,14 +42,11 @@ class Vendas extends Controller
 
 
             $dados .= "
-            <tr class=\"top\">
-                <td colspan=\"3\">$dadosProduto->nome</td>
-            </tr>
-            <tr>
-                <td>R$ $dadosProduto->precoVenda</td>
-                <td>$produto->quantidade</td>
-                <td>R$ $valorTotalProduto</td>
-            </tr>
+            <div class='row'>
+                <div class='col-12'>$dadosProduto->nome</div>
+                <div class='col-6'>$produto->quantidade X R$ $dadosProduto->precoVenda | $dadosProduto->unidadeMedida</div>
+                <div class='col-6' style='text-align: right;'>R$ $valorTotalProduto</div>
+            </div>
             ";
         }
 
