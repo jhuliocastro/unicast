@@ -55,6 +55,25 @@ $this->data["empresa"] = EMPRESA;
         <div class="col-6">
             Total: 
         </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["total"] ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            Desconto: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["desconto"] ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            Total Pago: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["valorPago"] ?>
+        </div>
     </div>
 </div>       
 
