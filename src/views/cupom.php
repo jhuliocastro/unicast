@@ -11,7 +11,6 @@ $this->data["empresa"] = EMPRESA;
     }
     .corpo{
         width: 80mm;
-        background-color: yellowgreen;
     }
 
     .linha{
@@ -78,7 +77,7 @@ $this->data["empresa"] = EMPRESA;
 </div>       
 
 <script>
-   // window.print();
-   // window.addEventListener("afterprint", function(event) { window.close(); });
-    //window.onafterprint();
+    window.print();
+    window.addEventListener("afterprint", function(event) { window.close(); });
+    window.onafterprint();
 </script>
