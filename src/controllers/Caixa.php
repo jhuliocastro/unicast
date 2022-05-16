@@ -137,45 +137,6 @@ class Caixa extends Controller
             "listaProdutos" => $produtosLista,
             "md5" => $md5
         ]);
-
-        /*
-        unset($_SESSION["caixaProdutos"]);
-        unset($_SESSION["clienteCaixa"]);
-        $_SESSION["clienteCaixa"] = 1;
-
-        $model = new Orcamentos_Model();
-        $orcamentos = $model->listaNaoFaturados();
-        $tabelaOrcamento = null;
-        foreach ($orcamentos as $orcamento) {
-            if ($orcamento->aberto == 0) {
-                $modelCliente = new Clientes_Model();
-                $cliente = $modelCliente->dadosClienteID($orcamento->cliente);
-                $orcamento->cliente = $cliente->nome;
-
-                $valor = number_format($orcamento->valor, 2, ",", ".");
-                $tabelaOrcamento .= "
-                <tr>
-                    <td>$orcamento->id</td>
-                    <td>$orcamento->cliente</td>
-                    <td>R$ $valor</td>
-                </tr>
-            ";
-            }
-        }
-
-        $model = new Produtos_Model();
-        $produtos = $model->lista();
-        $produtosLista = null;
-        foreach($produtos as $produto){
-            $produtosLista .= "
-                <option>$produto->nome</option>
-            ";
-        }
-
-        parent::render("caixa", [
-            "orcamentos" => $tabelaOrcamento,
-            "produtos" => $produtosLista
-        ]);*/
     }
 
     public function pesquisarProduto(){
@@ -318,6 +279,12 @@ class Caixa extends Controller
             foreach ($data["data"] as $produto) {
                 $model = new Vendas_Produtos_Model();
                 $model->cadastrar($retorno["id"], $produto[0], $produto[2]);
+
+                $modelProduto = new Produtos_Model();
+                $dadosProduto = $modelProduto->retornoPorID($produto[0]);
+                $quantidadeNova = $dadosProduto->estoqueAtual - $produto[2];
+                $modelProduto = new Produtos_Model();
+                $modelProduto->atualizarEstoque($produto[0], $quantidadeNova);
             }
 
             if($dinheiro != 0){
@@ -337,20 +304,6 @@ class Caixa extends Controller
         $orcamento = $_SESSION["caixa"];
         $model = new Orcamentos_Model();
         $model->faturar($orcamento);
-    }
-
-    private function saidaProdutos(){
-        $orcamento = $_SESSION["caixa"];
-        $model = new OrcamentosPedido_Model();
-        $produtos = $model->retornoProdutos($orcamento);
-        foreach ($produtos as $produto){
-            $modelProduto = new Produtos_Model();
-            $dadosProduto = $modelProduto->retornoPorID($produto->produto);
-
-            $quantidadeNova = $dadosProduto->estoqueAtual - $produto->quantidade;
-
-            $modelProduto->atualizarEstoque($produto->produto, $quantidadeNova);
-        }
     }
 
     public function trueVenda($data){
