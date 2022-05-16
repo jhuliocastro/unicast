@@ -9,13 +9,16 @@ $this->data["empresa"] = EMPRESA;
         font-size: 12px;
         
     }
-    .corpo{
-        width: 80mm;
-    }
-
     .linha{
         border: 1px dashed #000;
     }
+
+    @media print {
+    .corpo { 
+        page-break-after: always; 
+        width: 80mm;
+    }
+}
 </style>
 
 <div class="container-fluid corpo">
@@ -74,6 +77,14 @@ $this->data["empresa"] = EMPRESA;
             R$ <?= $this->data["valorPago"] ?>
         </div>
     </div>
+    <hr size="1" class="linha">
+    <div class="row">
+        <div class="col-12" style="text-align: center; font-weight: bold;">
+            ID VENDA: <?= $this->data["numeroVenda"] ?><br/>
+            <?= $this->data["dataHora"] ?>
+        </div>
+    </div>
+
 </div>       
 
 <script>
