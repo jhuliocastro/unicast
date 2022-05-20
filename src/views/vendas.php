@@ -42,10 +42,26 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
+<div id="janelaEstorno" title="Estornar Venda">
+        <form>
+            <fieldset>
+                <div class="form-group">
+                    <label>Informe o Motivo</label>
+                    <textarea data-role="textarea" id="motivoEstorno" name="motivoEstorno"></textarea>
+                </div>
+                <hr>
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
 <?= $this->start("scripts"); ?>
 <script>
+    var idVendaEstorno = null;
+    var tabela;
     $(document).ready(function () {
-        $('#tabela').DataTable({
+        tabela = $('#tabela').DataTable({
             "paging": true,
             "order": [[0, "desc"]],
             'ajax': '/pdv/vendas/relacao',
@@ -57,6 +73,57 @@ $this->data["empresa"] = EMPRESA;
 
     function cupom(orcamento, venda){
         window.open("/pdv/imprimir/cupom/" + venda, '_blanck');
+    }
+
+    var dialog = $("#janelaEstorno").dialog({
+        autoOpen: false,
+        width: 800,
+        buttons: {
+            "Estornar": estornoSender
+        }
+    });
+
+    var form = dialog.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        estornoSender();
+    });
+
+    function estorno(venda){
+        idVendaEstorno = venda;
+        $("#ui-id-1").html('Estornar Venda :: ' + venda);
+        dialog.dialog('open');
+    }
+
+    function estornoSender(){
+        $.ajax({
+                url: "/pdv/vendas/estornar",
+                type: 'post',
+                dataType: 'JSON',
+                data: {
+                    idVenda: idVendaEstorno
+                }
+            })
+                .done(function (retorno) {
+                    console.log(retorno);
+                    dialog.dialog('close');
+                    if(retorno.status === true){
+                        tabela.ajax.reload();
+                        Swal.fire({
+                            title: 'Venda Estornada!',
+                            icon: 'success'
+                        });
+                    }else{
+                        Swal.fire({
+                            title: 'Erro ao estornar venda!',
+                            text: retorno.error,
+                            icon: 'error'
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, msg) {
+                    console.log(msg);
+
+                });
     }
 
     //INICIO BOTAO CADASTRAR PRODUTO

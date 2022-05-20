@@ -288,7 +288,7 @@ class Caixa extends Controller
             }
 
             if($dinheiro != 0){
-                $this->gravaCaixaDiario($valorCaixa, "VENDA Nº ".$retorno["id"], "Entrada");
+                $this->gravaCaixaDiario($valorCaixa, "VENDA ".$retorno["id"], "Entrada");
             }
         }
 

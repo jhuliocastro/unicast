@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use Model\CaixaDiario_Model;
 use Model\Clientes_Model;
 use Model\OrcamentosPedido_Model;
 use Model\Produtos_Model;
@@ -71,6 +72,46 @@ class Vendas extends Controller
         ]);
     }
 
+    public function estornar(){
+        $model = new Vendas_Model();
+        $dadosVenda = $model->dadosID($_POST["idVenda"]);
+        if($dadosVenda->dinheiro == 0){
+            
+        }else{
+            $modelCaixa = new CaixaDiario_Model();
+            $descricao = "VENDA ".$_POST["idVenda"];
+            $retorno = $modelCaixa->excluirPorDescricao($descricao);
+            if($retorno["status"] == false){
+                echo json_encode($retorno);
+                exit();
+            }
+        }
+        $model = new Vendas_Model();
+        $retorno = $model->excluir($_POST["idVenda"]);
+        if($retorno["status"] == false){
+            echo json_encode($retorno);
+            exit();
+        }else{
+            $modelVendasProdutos = new Vendas_Produtos_Model();
+            $produtos = $modelVendasProdutos->produtosVenda($_POST["idVenda"]);
+            foreach($produtos as $produto){
+                $modelProduto = new Produtos_Model();
+                $dadosProduto = $modelProduto->retornoPorID($produto->produto);
+                $quantidadeNova = $dadosProduto->estoqueAtual + $produto->quantidade;
+                $retorno = $modelProduto->atualizarEstoque($dadosProduto->id, $quantidadeNova);
+                if($retorno["status"] == false){
+                    echo json_encode($retorno);
+                    exit();
+                }
+            }
+            $retorno = [
+                "status" => true
+            ];
+            echo json_encode($retorno);
+        }
+        
+    }
+
     public function relacao()
     {
         $model = new Vendas_Model();
@@ -80,6 +121,7 @@ class Vendas extends Controller
             $modelCliente = new Clientes_Model();
             $dadosCliente = $modelCliente->dadosClienteID($venda->cliente);
             $opcoes = "<a data-role='hint' data-hint-text='Imprimir Cupom' onclick='cupom(\"$venda->orcamento\", \"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>";
+            $opcoes .= "<a data-role='hint' data-hint-text='Estornar' onclick='estorno(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/estornar.png'></a>";
             $tabela["data"][] = [
                 $venda->id,
                 $dadosCliente->nome,

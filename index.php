@@ -71,6 +71,7 @@ $router->post("/caixa/cancelar/item", "Caixa:cancelarItem");
 //VENDAS
 $router->get("/vendas", "Vendas:home");
 $router->get("/vendas/relacao", "Vendas:relacao");
+$router->post("/vendas/estornar", "Vendas:estornar");
 
 //OBRAS
 $router->group("/obras");

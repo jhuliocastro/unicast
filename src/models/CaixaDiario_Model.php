@@ -53,6 +53,20 @@ class CaixaDiario_Model extends DataLayer{
         return $retorno;
     }
 
+    public function excluirPorDescricao($descricao){
+        $model = ($this)->find("descricao=:descricao", "descricao=$descricao")->fetch();
+        $model->destroy();
+        if($model->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $model->fail()->getMessage()
+            ];
+        }else{
+            $retorno = ["status"=>true];
+        }
+        return $retorno;
+    }
+
     public function dadosID($id){
         return $this->findById($id);
     }

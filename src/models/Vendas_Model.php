@@ -49,4 +49,18 @@ class Vendas_Model extends DataLayer{
     public function dadosID($id){
         return $this->findById($id);
     }
+
+    public function excluir(int $id){
+        $model = ($this)->findById($id);
+        $model->destroy();
+        if($model->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $model->fail()->getMessage()
+            ];
+        }else{
+            $retorno = ["status"=>true];
+        }
+        return $retorno;
+    }
 }
