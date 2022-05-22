@@ -6,6 +6,7 @@ use Controller\Controller;
 class TPage extends Controller implements IPage{
     private int $type;
     private string $page;
+    private $button;
 
     /** 0 = Table
      *  1 = Form
@@ -31,24 +32,25 @@ class TPage extends Controller implements IPage{
         ";
     }
 
-    public function addButton(string $id, string $title, string $functionJS, ?string $shortcut){
-        $content = "
-            <button id='$id'>$title</button>
+    /**
+     * ADD BUTTON
+     *
+     * @param string $id ID DO BOTAO
+     * @param string $title TITULO DO BOTAO
+     * @param string|null $url URL PARA ONDE O BOTAO VAI REDIRECIONAR (ACEITA NULL)
+     * @param string|null $idModal
+     * @param string|null $functionJS
+     * @param string|null $shortcut
+     * @return void
+     */
+
+
+    public function addButton($botao){
+        $botao = "
+            $botao
             <hr id='linha'>
         ";
-        $this->page = str_replace("<hr id='linha'>", $content, $this->page);
-
-        $this->page .= "
-        <script>
-        $(function() {
-            $(\"#$id\").button();
-            
-            $(\"#$id\").click(function(){
-                $functionJS
-            });
-        });
-        </script>
-        ";
+        $this->page = str_replace("<hr id='linha'>", $botao, $this->page);        
     }
 
     public function addJS(string $file)

@@ -25,12 +25,16 @@ class TForm{
      * @param string|null $placeholder
      * @return void
      */
+
+
     public function addInput(string $id, string $label, string $type, bool $required, ?string $placeholder){
         $input = "
             <div class='row'>
-                <div class='form-group'>
-                    <label>$label</label>
-                    <input type='$type' name='$id' id='$id' placeholder='$placeholder'>
+                <div class='col-md-12'>
+                    <div class='form-group'>
+                        <label>$label</label>
+                        <input type='$type' data-role='input' name='$id' id='$id' placeholder='$placeholder'>
+                    </div>
                 </div>
             </div>
         ";
@@ -56,12 +60,12 @@ class TForm{
             </form>
             </div>
             <script>
-            var dialog_$id = $('#$id').dialog({
+            var $id = $('#$id').dialog({
                 autoOpen: $autoopen,
                 width: $width
             });
             
-            var form4 = dialog_$id.find( 'form' ).on( 'submit', function( event ) {
+            var form4 = $id.find( 'form' ).on( 'submit', function( event ) {
                 event.preventDefault();
                 
             });
