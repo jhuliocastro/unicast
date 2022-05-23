@@ -469,5 +469,38 @@ $this->data["empresa"] = EMPRESA;
 
         $("#janelaAlterarValor").dialog('open');
     }
+
+    function excluir(id){
+        Swal.fire({
+            icon: 'question',
+            title: 'Confirma Exclusão do Produto?',
+            text: 'ID: ' + id,
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+            type: 'POST',
+            url: '/produtos/excluir',
+            dataType: "JSON",
+            data: {
+                id: id
+            },
+            success: function(retorno) {
+                console.log(retorno);
+                if(retorno.status === true){
+                    tabela.ajax.reload();
+                    Swal.fire('Produto Excluído!', '', 'success'); 
+                }else{ 
+                    Swal.fire('Operação não realizada!', retorno.erro, 'error'); 
+                }
+            }
+        });
+        }else{
+            Swal.fire('Operação cancelada pelo usuário!!', '', 'info');
+        }
+        });
+    }
 </script>
 <?= $this->end("scripts"); ?>

@@ -76,6 +76,23 @@ class Produtos_Model extends DataLayer{
         return $this->find("codigoBarras=:codigoBarras", "codigoBarras=$codigoBarras")->fetch();
     }
 
+    public function excluir(int $id){
+        $excluir = $this->findById($id);
+        $excluir->destroy();
+
+        if($excluir->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $excluir->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true
+            ];
+        }
+        return $retorno;
+    }
+
     public function atualizarEstoque(int $produto, int $quantidade){
         $atualizar = $this->findById($produto);
         $atualizar->estoqueAtual = $quantidade;

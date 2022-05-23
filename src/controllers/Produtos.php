@@ -21,6 +21,12 @@ class Produtos extends Controller{
         parent::render("produtosRelacao");
     }
 
+    public function excluir(){
+        $model = new Produtos_Model();
+        $retorno = $model->excluir($_POST["id"]);
+        echo json_encode($retorno);
+    }
+
     public function tabela(){
         $produtos = new Produtos_Model();
         $listaProdutos = $produtos->lista();
@@ -31,6 +37,7 @@ class Produtos extends Controller{
             <a href='javascript:void(0)' onclick='abrirJanelaAlterarValor($produto->id)'><img src='/assets/images/valor.png' data-role='hint' data-hint-text='Alterar Valor' class='imagem-acao'></a>
             <a href='javascript:void(0)' onclick='entradaEstoque($produto->id)'><img src='/assets/images/entradaEstoque.png' data-role='hint' data-hint-text='Entrada Estoque' class='imagem-acao'></a>
             <a href='javascript:void(0)' onclick='saidaEstoque($produto->id)'><img id='saidaEstoque' src='/assets/images/saidaEstoque.png' data-role='hint' data-hint-text='Saída Estoque' class='imagem-acao'></a>
+            <a href='javascript:void(0)' onclick='excluir($produto->id)'><img id='excluir' src='/assets/images/excluir.png' data-role='hint' data-hint-text='Excluir' class='imagem-acao'></a>
             ";
 
             if($produto->estoqueAtual <= 0){

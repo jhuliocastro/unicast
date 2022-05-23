@@ -32,6 +32,7 @@ $router->post("/pesquisar", "Produtos:pesquisa");
 $router->get("/editar/{id}", "Produtos:editar");
 $router->post("/editar", "Produtos:editarSender");
 $router->post("/alterar/valor", "Produtos:alterarValor");
+$router->post("/excluir", "Produtos:excluir");
 
 //ESTOQUE
 $router->group("estoque");
