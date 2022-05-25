@@ -77,6 +77,14 @@ $this->data["empresa"] = EMPRESA;
             R$ <?= $this->data["valorPago"] ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-6">
+            Troco: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["troco"] ?>
+        </div>
+    </div>
     <hr size="1" class="linha">
     <div class="row">
         <div class="col-12" style="text-align: center; font-weight: bold;">
