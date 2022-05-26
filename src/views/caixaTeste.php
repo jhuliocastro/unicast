@@ -17,16 +17,34 @@ $this->data["empresa"] = EMPRESA;
         font-weight: bold;
         border: 1px solid black;
     }
+
+    .cs{
+        border: 2px solid black;
+        border-radius: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding: 10px;
+        margin: 10px;
+    }
 </style>
 
 <div class="pcoded-content">
     <div class="card">
-        <div class="card-header">
-            Caixa PDV :: <?= $this->data["empresa"] ?>
-        </div>
         <div class="card-body p-2">
             <div class="card-block">
                 <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-7 cs" id="produtoAtual">
+                            INICIANDO NOVA VENDA
+                        </div>
+                        <div class="col-md-2 cs" id="quantidadeProdutoAtual">
+                            0 UN
+                        </div>
+                        <div class="col-md-2 cs" id="valorProdutoAtual">
+                            R$ 0,00
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-4" id="div1">
                             <div class="row">
@@ -465,6 +483,12 @@ $this->data["empresa"] = EMPRESA;
                     quantidadeGeral = quantidadeGeral + parseInt(quantidade);
 
                     $("#totalItens").html(quantidadeGeral);
+
+                    console.log(retorno);
+
+                    $("#produtoAtual").html(retorno.produto);
+                    $("#quantidadeProdutoAtual").html(quantidade + " " + retorno.unidadeMedida);
+                    $("#valorProdutoAtual").html("R$ "+ Number(valorTotal).toFixed(2));
 
                     quantidade = 1;
 

@@ -102,7 +102,8 @@ class Produtos extends Controller{
         $dados = [
             "id" => $produto->id,
             "produto" => $produto->nome,
-            "valor" => $produto->precoVenda
+            "valor" => $produto->precoVenda,
+            "unidadeMedida" => $produto->unidadeMedida
         ];
 
         echo json_encode($dados);
