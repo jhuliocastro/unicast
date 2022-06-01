@@ -2,6 +2,7 @@
 namespace Controller;
 
 use Alertas\Alert;
+use Core\TButton;
 use Core\TPage;
 use Core\TTable;
 use Model\Clientes_Model;
@@ -57,7 +58,14 @@ class Clientes extends Controller{
 
         $pagina = new TPage(0, "Clientes");
 
-        $pagina->addButton("botaoCadastrar", "Cadastrar", "cadastrar()", "F1");
+        $botaoCadastrar = new TButton();
+        $botaoCadastrar->id("botaoCadastrar");
+        $botaoCadastrar->title("Cadastrar");
+        $botaoCadastrar->action(2);
+        $botaoCadastrar->url("/clientes/cadastrar");
+        $botaoCadastrar = $botaoCadastrar->show();
+
+        $pagina->addButton($botaoCadastrar);
 
         $pagina->addTable($tabela);
         $pagina->close();
