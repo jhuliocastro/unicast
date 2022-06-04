@@ -1,9 +1,15 @@
 <?php
 namespace Controller;
 
+use CoffeeCode\Uploader\Send;
+use Core\TButton;
+use Core\TForm;
+use Core\TPage;
+use Core\TTable;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\Common\Soap\SoapCurl;
+use Alertas\Alert;
 
 class NFE extends Controller{
     public function __construct($router)
@@ -13,7 +19,54 @@ class NFE extends Controller{
     }
 
     public function home(){
-        parent::render("nfe");
+        $page = new TPage(0, "NFE");
+
+        $table = new TTable("tabela");
+        $table->addColumn("ID");
+        $table->addColumn("Nº NFe");
+        $table->addColumn("Empresa");
+        $table->addColumn("Data Emissão");
+        $table->addColumn("Ações");
+        $table = $table->close();
+
+        $botaoImportar = new TButton();
+        $botaoImportar->title("Importar XML");
+        $botaoImportar->id("botaoImportarXML");
+        $botaoImportar->action(2);
+        $botaoImportar->url("/nfe/importar/xml");
+        $botaoImportar = $botaoImportar->show();
+
+        $page->addButton($botaoImportar);
+        $page->addTable($table);
+
+        $page->close();
+    }
+
+    public function importarXML(){
+        $page = new TPage(1, "Importar XML");
+
+        $form = new TForm("formImportar", "post", "/nfe/exibir/xml", true);
+        $form->addInput("xml", "Selecione o XML", "file", true, null);
+        $form->addSubmit("botaoImportar", "Importar");
+
+        $page->addForm($form->show());
+        $page->close();
+    }
+
+    public function exibirXML(){
+        $files = $_FILES;
+        if(empty($files["xml"])){
+            Alert::error("Arquivo não enviado!", "Verifique e tente novamente.", "/nfe/importar/xml");
+        }else{
+            //var_dump($files["xml"]);
+
+            if($files["xml"]["type"] != "text/xml"){
+                Alert::error("Selecione um XML válido!", "", "/nfe/importar/xml");
+            }else{
+                $xml = simplexml_load_file($files["xml"]["tmp_name"]);
+                var_dump($xml->NFe->infNFe->emit);
+            }
+        }
     }
 
     public function manifestacao(){

@@ -82,6 +82,8 @@ $router->get("/relacao", "Obras:relacao");
 //NFE
 $router->group("nfe");
 $router->get("/", "NFE:home");
+$router->get("/importar/xml", "NFE:importarXML");
+$router->post("/exibir/xml", "NFE:exibirXML");
 $router->get("/manifestacao", "NFE:manifestacao");
 
 //LOG
