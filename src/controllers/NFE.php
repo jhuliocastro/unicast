@@ -1,9 +1,15 @@
 <?php
 namespace Controller;
 
+use CoffeeCode\Uploader\Send;
+use Core\TButton;
+use Core\TForm;
+use Core\TPage;
+use Core\TTable;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\Common\Soap\SoapCurl;
+use Alertas\Alert;
 
 class NFE extends Controller{
     public function __construct($router)
@@ -13,7 +19,94 @@ class NFE extends Controller{
     }
 
     public function home(){
-        parent::render("nfe");
+        $page = new TPage(0, "NFE");
+
+        $table = new TTable("tabela");
+        $table->addColumn("ID");
+        $table->addColumn("Nº NFe");
+        $table->addColumn("Empresa");
+        $table->addColumn("Data Emissão");
+        $table->addColumn("Ações");
+        $table = $table->close();
+
+        $botaoImportar = new TButton();
+        $botaoImportar->title("Importar XML");
+        $botaoImportar->id("botaoImportarXML");
+        $botaoImportar->action(2);
+        $botaoImportar->url("/nfe/importar/xml");
+        $botaoImportar = $botaoImportar->show();
+
+        $page->addButton($botaoImportar);
+        $page->addTable($table);
+
+        $page->close();
+    }
+
+    public function importarXML(){
+        $page = new TPage(1, "Importar XML");
+
+        $form = new TForm("formImportar", "post", "/nfe/exibir/xml", true);
+        $form->addInput("xml", "Selecione o XML", "file", true, null);
+        $form->addSubmit("botaoImportar", "Importar");
+
+        $page->addForm($form->show());
+        $page->close();
+    }
+
+    public function exibirXML(){
+        $files = $_FILES;
+        if(empty($files["xml"])){
+            Alert::error("Arquivo não enviado!", "Verifique e tente novamente.", "/nfe/importar/xml");
+        }else{
+            //var_dump($files["xml"]);
+
+            if($files["xml"]["type"] != "text/xml"){
+                Alert::error("Selecione um XML válido!", "", "/nfe/importar/xml");
+            }else{
+                $xml = simplexml_load_file($files["xml"]["tmp_name"]);
+                //var_dump($xml->NFe->infNFe->det);
+
+                //PRODUTOS
+                $produtos = [];
+                foreach($xml->NFe->infNFe->det as $d){
+                    var_dump($d);
+                    $produtos[] = [
+                        "codigoBarras" => $d->prod->cEAN,
+                        "produto" => $d->prod->xProd,
+                        "valorProduto" => $d->prod->vUnCom,
+                        "quantidade" => $d->prod->qCom,
+                        "unidade" => $d->prod->uCom
+                    ];
+                }
+
+                //VALOR TOTAL DA NFE
+                $valorNFe = $xml->NFe->infNFe->total->ICMSTot->vNF;
+
+                //DADOS DO EMITENTE
+                $emitente["cnpj"] = $xml->NFe->infNFe->emit->CNPJ;
+                $emitente["razaoSocial"] = $xml->NFe->infNFe->emit->xNome;
+                $emitente["nomeFantasia"] = $xml->NFe->infNFe->emit->xFant;
+                $emitente["logradouro"] = $xml->NFe->infNFe->emit->enderEmit->xLgr;
+                $emitente["numero"] = $xml->NFe->infNFe->emit->enderEmit->nro;
+                $emitente["bairro"] = $xml->NFe->infNFe->emit->enderEmit->xBairro;
+                $emitente["cidade"] = $xml->NFe->infNFe->emit->enderEmit->xMun;
+                $emitente["estado"] = $xml->NFe->infNFe->emit->enderEmit->UF;
+                $emitente["cep"] = $xml->NFe->infNFe->emit->enderEmit->CEP;
+
+                //DADOS DO DESTINATARIO
+                $destinatario["cnpj"] = $xml->NFe->infNFe->dest->CNPJ;
+                $destinatario["razaoSocial"] = $xml->NFe->infNFe->dest->xNome;
+                $destinatario["nomeFantasia"] = $xml->NFe->infNFe->dest->xFant;
+                $destinatario["logradouro"] = $xml->NFe->infNFe->dest->enderDest->xLgr;
+                $destinatario["numero"] = $xml->NFe->infNFe->dest->enderDest->nro;
+                $destinatario["bairro"] = $xml->NFe->infNFe->dest->enderDest->xBairro;
+                $destinatario["cidade"] = $xml->NFe->infNFe->dest->enderDest->xMun;
+                $destinatario["estado"] = $xml->NFe->infNFe->dest->enderDest->UF;
+                $destinatario["cep"] = $xml->NFe->infNFe->dest->enderDest->CEP;
+            }
+        }
+
+        var_dump($xml);
     }
 
     public function manifestacao(){

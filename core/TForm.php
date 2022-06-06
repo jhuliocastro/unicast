@@ -8,13 +8,18 @@ class TForm{
     /**
      * @param string $id
      * @param string $method
+     * @param string $url
+     * @param bool $encrypte
      */
-    public function __construct(string $id, string $method)
+    public function __construct(string $id, string $method, string $url, bool $encrypte = false)
     {
-        $this->form = "
-            <form method='$method' id='$id'>
-        ";
+        $this->form = "<form method='$method' id='$id' action='$url'";
+        
+        if($encrypte == true){
+            $this->form .= " enctype=\"multipart/form-data\"";
+        }
 
+        $this->form .= ">";
     }
 
     /**
@@ -44,6 +49,27 @@ class TForm{
         }
 
         $this->input .= $input;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $id
+     * @param string $title
+     * @return void
+     */
+    public function addSubmit(string $id, string $title){
+        $input = "
+            <div class='row'>
+                <div class='col-md-12'>
+                    <div class='form-group'>
+                        <button id='$id'>$title</button>
+                        <script>$(\"#$id\").button();</script>
+                    </div>
+                </div>
+            </div>
+        ";
+        $this->form .= $input;
     }
 
     public function modal(string $id, string $title, int $width, bool $autoopen = false){
@@ -76,6 +102,7 @@ class TForm{
     }
 
     public function show(){
+        $this->form .= $this->input."</form>";
         return $this->form;
     }
 }
