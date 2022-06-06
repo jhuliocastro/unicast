@@ -64,9 +64,49 @@ class NFE extends Controller{
                 Alert::error("Selecione um XML válido!", "", "/nfe/importar/xml");
             }else{
                 $xml = simplexml_load_file($files["xml"]["tmp_name"]);
-                var_dump($xml->NFe->infNFe->emit);
+                //var_dump($xml->NFe->infNFe->det);
+
+                //PRODUTOS
+                $produtos = [];
+                foreach($xml->NFe->infNFe->det as $d){
+                    var_dump($d);
+                    $produtos[] = [
+                        "codigoBarras" => $d->prod->cEAN,
+                        "produto" => $d->prod->xProd,
+                        "valorProduto" => $d->prod->vUnCom,
+                        "quantidade" => $d->prod->qCom,
+                        "unidade" => $d->prod->uCom
+                    ];
+                }
+
+                //VALOR TOTAL DA NFE
+                $valorNFe = $xml->NFe->infNFe->total->ICMSTot->vNF;
+
+                //DADOS DO EMITENTE
+                $emitente["cnpj"] = $xml->NFe->infNFe->emit->CNPJ;
+                $emitente["razaoSocial"] = $xml->NFe->infNFe->emit->xNome;
+                $emitente["nomeFantasia"] = $xml->NFe->infNFe->emit->xFant;
+                $emitente["logradouro"] = $xml->NFe->infNFe->emit->enderEmit->xLgr;
+                $emitente["numero"] = $xml->NFe->infNFe->emit->enderEmit->nro;
+                $emitente["bairro"] = $xml->NFe->infNFe->emit->enderEmit->xBairro;
+                $emitente["cidade"] = $xml->NFe->infNFe->emit->enderEmit->xMun;
+                $emitente["estado"] = $xml->NFe->infNFe->emit->enderEmit->UF;
+                $emitente["cep"] = $xml->NFe->infNFe->emit->enderEmit->CEP;
+
+                //DADOS DO DESTINATARIO
+                $destinatario["cnpj"] = $xml->NFe->infNFe->dest->CNPJ;
+                $destinatario["razaoSocial"] = $xml->NFe->infNFe->dest->xNome;
+                $destinatario["nomeFantasia"] = $xml->NFe->infNFe->dest->xFant;
+                $destinatario["logradouro"] = $xml->NFe->infNFe->dest->enderDest->xLgr;
+                $destinatario["numero"] = $xml->NFe->infNFe->dest->enderDest->nro;
+                $destinatario["bairro"] = $xml->NFe->infNFe->dest->enderDest->xBairro;
+                $destinatario["cidade"] = $xml->NFe->infNFe->dest->enderDest->xMun;
+                $destinatario["estado"] = $xml->NFe->infNFe->dest->enderDest->UF;
+                $destinatario["cep"] = $xml->NFe->infNFe->dest->enderDest->CEP;
             }
         }
+
+        var_dump($xml);
     }
 
     public function manifestacao(){
