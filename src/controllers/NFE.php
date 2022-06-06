@@ -6,6 +6,7 @@ use Core\TButton;
 use Core\TForm;
 use Core\TPage;
 use Core\TTable;
+use Model\NFE_Model;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\Common\Soap\SoapCurl;
@@ -69,7 +70,7 @@ class NFE extends Controller{
                 //PRODUTOS
                 $produtos = [];
                 foreach($xml->NFe->infNFe->det as $d){
-                    var_dump($d);
+                    //var_dump($d);
                     $produtos[] = [
                         "codigoBarras" => $d->prod->cEAN,
                         "produto" => $d->prod->xProd,
@@ -79,8 +80,10 @@ class NFE extends Controller{
                     ];
                 }
 
-                //VALOR TOTAL DA NFE
-                $valorNFe = $xml->NFe->infNFe->total->ICMSTot->vNF;
+                //DADOS DA NFE
+                $nfe["valor"] = $xml->NFe->infNFe->total->ICMSTot->vNF;
+                $nfe["dataEmissao"] = date('Y-m-d', strtotime($xml->NFe->infNFe->ide->dhEmi));
+                $nfe["chave"] = $xml->protNFe->infProt->chNFe;
 
                 //DADOS DO EMITENTE
                 $emitente["cnpj"] = $xml->NFe->infNFe->emit->CNPJ;
@@ -104,9 +107,20 @@ class NFE extends Controller{
                 $destinatario["estado"] = $xml->NFe->infNFe->dest->enderDest->UF;
                 $destinatario["cep"] = $xml->NFe->infNFe->dest->enderDest->CEP;
             }
+
+            //GRAVA DOS DADOS DA NFE
+            $nfeModel = new NFE_Model();
+            $retorno = $nfeModel->cadastrar($nfe["chave"], 0, 0, (float)$nfe["valor"], $nfe["dataEmissao"]);
+
+            var_dump($nfe);
+            if($retorno["status"] == false){
+                $retorno["error"] = str_replace("'", "", $retorno["error"]);
+                Alert::error("Erro ao cadastrar NFE", $retorno["error"], "/nfe");
+                exit();
+            }
         }
 
-        var_dump($xml);
+        //var_dump($nfe);
     }
 
     public function manifestacao(){
