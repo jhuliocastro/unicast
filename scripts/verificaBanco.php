@@ -128,7 +128,7 @@ foreach($vendas as $venda){
 }
 if($retorno == false){
     print("CRIANDO COLUNA '$coluna'\n");
-    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` date NOT NULL;");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` datetime NOT NULL;");
 }
 
 print("COLUNA '$coluna' OK\n");
@@ -297,6 +297,122 @@ print("COLUNA '$coluna' OK\n");
 
 print("-------------------------\n");
 //FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "logradouro";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` VARCHAR(255) NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "numero";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` int NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "bairro";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` VARCHAR(255) NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "cidade";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` VARCHAR(255) NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "estado";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` VARCHAR(255) NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "cep";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` VARCHAR(255) NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+
+
 
 
 
