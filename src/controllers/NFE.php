@@ -59,13 +59,10 @@ class NFE extends Controller{
         if(empty($files["xml"])){
             Alert::error("Arquivo não enviado!", "Verifique e tente novamente.", "/nfe/importar/xml");
         }else{
-            //var_dump($files["xml"]);
-
             if($files["xml"]["type"] != "text/xml"){
                 Alert::error("Selecione um XML válido!", "", "/nfe/importar/xml");
             }else{
                 $xml = simplexml_load_file($files["xml"]["tmp_name"]);
-                //var_dump($xml->NFe->infNFe->det);
 
                 //PRODUTOS
                 $produtos = [];
@@ -110,14 +107,31 @@ class NFE extends Controller{
 
             //GRAVA DOS DADOS DA NFE
             $nfeModel = new NFE_Model();
+
+            //VERIFICA SE A NOTA JA ESTA CADASTRADA
+            $retorno = $nfeModel->verificaExiste($nfe["chave"]);
+
+            //CONDICAO NA BUSCA DA NOTA NO BANCO DE DADOS
+            if($retorno["status"] == false){
+                $retorno["error"] = str_replace("'", "", $retorno["error"]);
+                Alert::error("Erro ao realizar buscar da nota.", $retorno["error"], "/nfe");
+                exit();
+            }else{
+                if($retorno["existe"] == true){
+                    Alert::warning("Nota já está cadastrada!", "Verifique os dados.", "/nfe");
+                    exit();
+                }
+            }
+
             $retorno = $nfeModel->cadastrar($nfe["chave"], 0, 0, (float)$nfe["valor"], $nfe["dataEmissao"]);
 
-            var_dump($nfe);
             if($retorno["status"] == false){
                 $retorno["error"] = str_replace("'", "", $retorno["error"]);
                 Alert::error("Erro ao cadastrar NFE", $retorno["error"], "/nfe");
                 exit();
             }
+
+            //var_dump($emitente);
         }
 
         //var_dump($nfe);

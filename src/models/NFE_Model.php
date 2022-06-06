@@ -39,4 +39,32 @@ class NFE_Model extends DataLayer{
 
         return $retorno;
     }
+
+    /**
+     * @param string $chave
+     * @return array
+     */
+    public function verificaExiste(string $chave){
+        $retorno = $this->find("chave=:chave", "chave=$chave")->count();
+        if($this->fail()){
+            $retorno = [
+                "status" => false,
+                "error" => $this->fail()->getMessage()
+            ];
+        }else{
+            if($retorno > 0){
+                $retorno = [
+                    "status" => true,
+                    "existe" => true
+                ];
+            }else{
+                $retorno = [
+                    "status" => true,
+                    "existe" => false
+                ];
+            }
+        }
+
+        return $retorno;
+    }
 }
