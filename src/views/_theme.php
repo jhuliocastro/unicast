@@ -54,6 +54,7 @@ $this->data["empresa"] = EMPRESA;
         <li class="static"><a href="/dashboard">Dashboard</a></li>
         <li><a href="#inicio">Início</a></li>
         <li><a href="#fiscal">Fiscal</a></li>
+        <li><a href="#financeiro">Financeiro</a></li>
         <li><a href="#relatorios">Relatórios</a></li>
         <li><a href="#pdv">PDV</a></li>
         <li><a href="#configuracoes">Configurações</a></li>
@@ -146,6 +147,14 @@ $this->data["empresa"] = EMPRESA;
                     <img src="/assets/images/vendas.png">
                 </span>
                 <span class="caption">Vendas</span>
+            </button>
+        </div>
+        <div class="section" id="financeiro">
+            <button class="ribbon-button" onclick="window.location.href='/financeiro/boletos'">
+                <span class="icon">
+                    <img src="/assets/images/boleto.png">
+                </span>
+                <span class="caption">Boletos</span>
             </button>
         </div>
         <div class="section" id="configuracoes">
