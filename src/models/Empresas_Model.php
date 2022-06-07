@@ -7,16 +7,40 @@ use Core\IModel;
 class Empresas_Model extends DataLayer implements IModel {
     public function __construct()
     {
-        parent::__construct("empresas", ["razaoSocial"], "id", true);
+        parent::__construct("empresas", [], "id", true);
     }
 
     /**
      * @param array $data
-     * @return mixed
+     * @return array
      */
-    public function register(array $data)
+    public function register(array $data):array
     {
-        // TODO: Implement register() method.
+        $data = (object) $data;
+        $this->cnpj = $data->cnpj;
+        $this->razaoSocial = $data->razaoSocial;
+        $this->nomeFantasia = $data->nomeFantasia;
+        $this->logradouro = $data->logradouro;
+        $this->numero = $data->numero;
+        $this->bairro = $data->bairro;
+        $this->cidade = $data->cidade;
+        $this->estado = $data->estado;
+        $this->cep = $data->cep;
+        $this->save();
+
+        if($this->fail()){
+            $retorno = [
+                "status" => false,
+                "error" => $this->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true,
+                "id" => $this->id
+            ];
+        }
+
+        return $retorno;
     }
 
     /**
@@ -38,24 +62,6 @@ class Empresas_Model extends DataLayer implements IModel {
     }
 
     /**
-     * @param int $id
-     * @return mixed
-     */
-    public function dataID(int $id)
-    {
-        // TODO: Implement dataID() method.
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function dataName(string $name)
-    {
-        // TODO: Implement dataName() method.
-    }
-
-    /**
      * @return mixed
      */
     public function list()
@@ -73,5 +79,39 @@ class Empresas_Model extends DataLayer implements IModel {
         // TODO: Implement listColumn() method.
         $dados = null;
         return $this->find(null, null, $column)->fetch(true);
+    }
+
+    public function checkExist($column, $data)
+    {
+        $retorno = $this->find("$column=:$column", "$column=$data")->count();
+        if($this->fail()){
+            $retorno = [
+                "status" => false,
+                "error" => $this->fail()->getMessage()
+            ];
+        }else{
+            if($retorno > 0){
+                $retorno = [
+                    "status" => true,
+                    "exist" => true
+                ];
+            }else{
+                $retorno = [
+                    "status" => true,
+                    "exist" => false
+                ];
+            }
+        }
+
+        return $retorno;
+    }
+
+    public function search($column, $data)
+    {
+        return $this->find("$column=:$column", "$column=$data")->fetch();
+    }
+
+    public function dados(string $cnpj){
+        return $this->find("cnpj=:cnpj", "cnpj=$cnpj")->fetch();
     }
 }

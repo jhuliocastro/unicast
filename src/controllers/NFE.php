@@ -6,6 +6,8 @@ use Core\TButton;
 use Core\TForm;
 use Core\TPage;
 use Core\TTable;
+use Model\Empresas_Model;
+use Model\Fornecedor_Model;
 use Model\NFE_Model;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
@@ -105,6 +107,46 @@ class NFE extends Controller{
                 $destinatario["cep"] = $xml->NFe->infNFe->dest->enderDest->CEP;
             }
 
+            //VERIFICA SE O EMITENTE JA EXISTE
+            $fornecedorModel = new Fornecedor_Model();
+            $retorno = $fornecedorModel->verificaExiste($emitente["cnpj"]);
+            if($retorno["status"] == false){
+                $retorno["error"] = str_replace("'", "", $retorno["error"]);
+                Alert::error("Erro ao realizar busca do fornecedor.", $retorno["error"], "/nfe");
+                exit();
+            }else{
+                if($retorno["existe"] == false){
+                    $retorno = $fornecedorModel->cadastrar($emitente);
+                    if($retorno["status"] == false){
+                        $retorno["error"] = str_replace("'", "", $retorno["error"]);
+                        Alert::error("Erro ao cadastrar fornecedor.", $retorno["error"], "/nfe");
+                        exit();
+                    }
+                }
+                $retorno = $fornecedorModel->dados($emitente["cnpj"]);
+                $emitente["id"] = $retorno->id;
+            }
+
+            //VERIFICA SE DESTINARIO EXISTE E GRAVA NO BANCO
+            $empresasModel = new Empresas_Model();
+            $retorno = $empresasModel->checkExist("cnpj", $destinatario["cnpj"]);
+            if($retorno["status"] == false){
+                $retorno["error"] = str_replace("'", "", $retorno["error"]);
+                Alert::error("Erro ao realizar busca da empresa.", $retorno["error"], "/nfe");
+                exit();
+            }else{
+                if($retorno["exist"] == false){
+                    $retorno = $empresasModel->register($destinatario);
+                    if($retorno["status"] == false){
+                        $retorno["error"] = str_replace("'", "", $retorno["error"]);
+                        Alert::error("Erro ao cadastrar empresa.", $retorno["error"], "/nfe");
+                        exit();
+                    }
+                }
+                $retorno = $empresasModel->dados($destinatario["cnpj"]);
+                $destinatario["id"] = $retorno->id;
+            }
+
             //GRAVA DOS DADOS DA NFE
             $nfeModel = new NFE_Model();
 
@@ -114,7 +156,7 @@ class NFE extends Controller{
             //CONDICAO NA BUSCA DA NOTA NO BANCO DE DADOS
             if($retorno["status"] == false){
                 $retorno["error"] = str_replace("'", "", $retorno["error"]);
-                Alert::error("Erro ao realizar buscar da nota.", $retorno["error"], "/nfe");
+                Alert::error("Erro ao realizar busca da nota.", $retorno["error"], "/nfe");
                 exit();
             }else{
                 if($retorno["existe"] == true){
@@ -123,7 +165,7 @@ class NFE extends Controller{
                 }
             }
 
-            $retorno = $nfeModel->cadastrar($nfe["chave"], 0, 0, (float)$nfe["valor"], $nfe["dataEmissao"]);
+            $retorno = $nfeModel->cadastrar($nfe["chave"], $destinatario["id"], $emitente["id"], (float)$nfe["valor"], $nfe["dataEmissao"]);
 
             if($retorno["status"] == false){
                 $retorno["error"] = str_replace("'", "", $retorno["error"]);
