@@ -28,6 +28,7 @@
     "ext-json": "*",
     "dompdf/dompdf": "^1.2",
     "coffeecode/uploader": "^2.0",
-    "ext-simplexml": "*"
+    "ext-simplexml": "*",
+    "nfephp-org/sped-da": "^1.1"
   }
 }
