@@ -6,6 +6,7 @@ use Core\TButton;
 use Core\TForm;
 use Core\TPage;
 use Core\TTable;
+use InvalidArgumentException;
 use Model\Clientes_Model;
 use Model\Empresas_Model;
 use Model\Fornecedor_Model;
@@ -14,6 +15,7 @@ use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\Common\Soap\SoapCurl;
 use Alertas\Alert;
+use NFePHP\DA\NFe\Danfe;
 
 class NFE extends Controller{
     public function __construct($router)
@@ -67,11 +69,58 @@ class NFE extends Controller{
                 $fornecedor->razaoSocial,
                 "R$ ".number_format($nfe->valor, 2, ",", "."),
                 date("d/m/Y", strtotime($nfe->emissao)),
-                ""
+                "<a href='/nfe/danfe/$nfe->id' target='_blanck'><img src='/assets/images/pdf.png' class='imagem-acao' data-role='hint' data-hint-text='DANFE'></a>"
             ];
         }
 
         echo json_encode($tabela);
+    }
+
+    public function danfe($data){
+        $nfeModel = new NFE_Model();
+        $dadosNFE = $nfeModel->dados($data["id"]);
+
+        $xml = file_get_contents(__DIR__."/../../files/nfe/xml/".$dadosNFE->chave.".xml");
+        $logo = "";
+
+        try {
+            $danfe = new Danfe($xml);
+            $danfe->exibirTextoFatura = false;
+            $danfe->exibirPIS = false;
+            $danfe->exibirIcmsInterestadual = false;
+            $danfe->exibirValorTributos = false;
+            $danfe->descProdInfoComplemento = false;
+            $danfe->setOcultarUnidadeTributavel(true);
+            $danfe->obsContShow(false);
+            $danfe->printParameters(
+                $orientacao = 'P',
+                $papel = 'A4',
+                $margSup = 2,
+                $margEsq = 2
+            );
+            $danfe->logoParameters($logo, $logoAlign = 'C', $mode_bw = false);
+            $danfe->setDefaultFont($font = 'times');
+            $danfe->setDefaultDecimalPlaces(4);
+            $danfe->debugMode(false);
+            $danfe->creditsIntegratorFooter('ERPCASTRO - http://www.erpcastro.com.br');
+            //$danfe->epec('891180004131899', '14/08/2018 11:24:45'); //marca como autorizada por EPEC
+
+            // Caso queira mudar a configuracao padrao de impressao
+            /*  $this->printParameters( $orientacao = '', $papel = 'A4', $margSup = 2, $margEsq = 2 ); */
+            // Caso queira sempre ocultar a unidade tributável
+            /*  $this->setOcultarUnidadeTributavel(true); */
+            //Informe o numero DPEC
+            /*  $danfe->depecNumber('123456789'); */
+            //Configura a posicao da logo
+            /*  $danfe->logoParameters($logo, 'C', false);  */
+            //Gera o PDF
+            $pdf = $danfe->render($logo);
+            header('Content-Type: application/pdf');
+            echo $pdf;
+        } catch (InvalidArgumentException $e) {
+            Alert::error("Ocorreu um erro durante o processamento", $e->getMessage(), "");
+            exit();
+        }
     }
 
     public function importarXML(){
@@ -96,7 +145,7 @@ class NFE extends Controller{
                 $xml = simplexml_load_file($files["xml"]["tmp_name"]);
 
                 //PRODUTOS
-                $produtos = [];
+                /*$produtos = [];
                 foreach($xml->NFe->infNFe->det as $d){
                     //var_dump($d);
                     $produtos[] = [
@@ -106,7 +155,7 @@ class NFE extends Controller{
                         "quantidade" => $d->prod->qCom,
                         "unidade" => $d->prod->uCom
                     ];
-                }
+                }*/
 
                 //DADOS DA NFE
                 $nfe["valor"] = $xml->NFe->infNFe->total->ICMSTot->vNF;

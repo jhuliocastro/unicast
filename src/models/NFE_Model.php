@@ -67,4 +67,13 @@ class NFE_Model extends DataLayer{
 
         return $retorno;
     }
+
+    public function lista()
+    {
+        return $this->find()->fetch(true);
+    }
+
+    public function dados(int $id){
+        return $this->findById($id);
+    }
 }
