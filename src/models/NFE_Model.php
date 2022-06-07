@@ -76,4 +76,20 @@ class NFE_Model extends DataLayer{
     public function dados(int $id){
         return $this->findById($id);
     }
+
+    public function excluir(string $chave){
+        $excluir = $this->find("chave=:chave", "chave=$chave")->fetch();
+        $excluir->destroy();
+        if($excluir->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $excluir->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true
+            ];
+        }
+        return $retorno;
+    }
 }

@@ -71,11 +71,25 @@ class NFE extends Controller{
                 $fornecedor->razaoSocial,
                 "R$ ".number_format($nfe->valor, 2, ",", "."),
                 date("d/m/Y", strtotime($nfe->emissao)),
-                "<a href='' onclick='danfe(\"/nfe/danfe/$nfe->id\")'><img src='/assets/images/pdf.png' class='imagem-acao' data-role='hint' data-hint-text='DANFE'></a>"
+                "<a href='javascript:void(0)' onclick='danfe(\"/nfe/danfe/$nfe->id\")'><img src='/assets/images/pdf.png' class='imagem-acao' data-role='hint' data-hint-text='DANFE'></a>
+                 <a href='javascript:void(0)' onclick='excluir(\"$nfe->chave\")'><img id='excluir' src='/assets/images/excluir.png' data-role='hint' data-hint-text='Excluir Nota' class='imagem-acao'></a>
+                "
             ];
         }
 
         echo json_encode($tabela);
+    }
+
+    public function excluir(){
+        $chave = $_POST["chave"];
+        $nfeModel = new NFE_Model();
+        $retorno = $nfeModel->excluir($chave);
+        if($retorno["status"] == false){
+            echo json_encode($retorno);
+        }else{
+            unlink(__DIR__."/../../files/nfe/xml/".$chave.".xml");
+            echo json_encode($retorno);
+        }
     }
 
     public function danfe($data){

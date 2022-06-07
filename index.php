@@ -87,6 +87,7 @@ $router->post("/importar/xml", "NFE:importarXMLSender");
 $router->get("/manifestacao", "NFE:manifestacao");
 $router->get("/tabela", "NFE:tabela");
 $router->get("/danfe/{id}", "NFE:danfe");
+$router->post("/excluir", "NFE:excluir");
 
 //LOG
 $router->group("log");
