@@ -200,6 +200,14 @@ class NFE extends Controller{
                 $retorno["error"] = str_replace("'", "", $retorno["error"]);
                 Alert::error("Erro ao cadastrar NFE", $retorno["error"], "/nfe");
                 exit();
+            }else{
+                //UPLOAD DO XML
+                $arquivo = __DIR__."/../../files/nfe/xml/".$nfe["chave"].".xml";
+                $retorno = move_uploaded_file($files["xml"]["tmp_name"], $arquivo);
+                if($retorno == false){
+                    Alert::warning("Nota foi cadastrada mas o upload do xml falhou!", "Contato o suporte.", "/nfe");
+                    exit();
+                }
             }
         }
 
