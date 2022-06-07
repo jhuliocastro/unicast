@@ -5,8 +5,8 @@ interface IModel{
     public function register(array $data);
     public function edit(array $data);
     public function exclude(int $id);
-    public function dataID(int $id);
-    public function dataName(string $name);
+    public function search($column, $data);
     public function list();
     public function listColumn(string $column);
+    public function checkExist($column, $data);
 }
