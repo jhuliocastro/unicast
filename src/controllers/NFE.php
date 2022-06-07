@@ -48,7 +48,7 @@ class NFE extends Controller{
     public function importarXML(){
         $page = new TPage(1, "Importar XML");
 
-        $form = new TForm("formImportar", "post", "/nfe/exibir/xml", true);
+        $form = new TForm("formImportar", "post", "/nfe/importar/xml", true);
         $form->addInput("xml", "Selecione o XML", "file", true, null);
         $form->addSubmit("botaoImportar", "Importar");
 
@@ -56,7 +56,7 @@ class NFE extends Controller{
         $page->close();
     }
 
-    public function exibirXML(){
+    public function importarXMLSender(){
         $files = $_FILES;
         if(empty($files["xml"])){
             Alert::error("Arquivo não enviado!", "Verifique e tente novamente.", "/nfe/importar/xml");
@@ -172,11 +172,9 @@ class NFE extends Controller{
                 Alert::error("Erro ao cadastrar NFE", $retorno["error"], "/nfe");
                 exit();
             }
-
-            //var_dump($emitente);
         }
 
-        //var_dump($nfe);
+        Alert::success("Nota Importada!", "", "/nfe");
     }
 
     public function manifestacao(){
