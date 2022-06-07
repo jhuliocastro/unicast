@@ -49,6 +49,8 @@ class NFE extends Controller{
         $page->addButton($botaoImportar);
         $page->addTable($table);
 
+        $page->addJS("nfe");
+
         $page->close();
     }
 
@@ -69,7 +71,7 @@ class NFE extends Controller{
                 $fornecedor->razaoSocial,
                 "R$ ".number_format($nfe->valor, 2, ",", "."),
                 date("d/m/Y", strtotime($nfe->emissao)),
-                "<a href='/nfe/danfe/$nfe->id' target='_blanck'><img src='/assets/images/pdf.png' class='imagem-acao' data-role='hint' data-hint-text='DANFE'></a>"
+                "<a href='' onclick='danfe(\"/nfe/danfe/$nfe->id\")'><img src='/assets/images/pdf.png' class='imagem-acao' data-role='hint' data-hint-text='DANFE'></a>"
             ];
         }
 
