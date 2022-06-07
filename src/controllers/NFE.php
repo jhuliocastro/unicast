@@ -6,6 +6,7 @@ use Core\TButton;
 use Core\TForm;
 use Core\TPage;
 use Core\TTable;
+use Model\Clientes_Model;
 use Model\Empresas_Model;
 use Model\Fornecedor_Model;
 use Model\NFE_Model;
@@ -28,8 +29,12 @@ class NFE extends Controller{
         $table->addColumn("ID");
         $table->addColumn("Nº NFe");
         $table->addColumn("Empresa");
+        $table->addColumn("Fornecedor");
+        $table->addColumn("Valor");
         $table->addColumn("Data Emissão");
         $table->addColumn("Ações");
+        $table->urlData("/nfe/tabela");
+        $table->order(5, "desc");
         $table = $table->close();
 
         $botaoImportar = new TButton();
@@ -43,6 +48,30 @@ class NFE extends Controller{
         $page->addTable($table);
 
         $page->close();
+    }
+
+    public function tabela(){
+        $model = new NFE_Model();
+        $lista = $model->lista();
+        foreach($lista as $nfe){
+            $fornecedor = new Fornecedor_Model();
+            $fornecedor = $fornecedor->findById($nfe->fornecedor);
+
+            $empresa = new Empresas_Model();
+            $empresa = $empresa->findById($nfe->empresa);
+
+            $tabela["data"][] = [
+                $nfe->id,
+                $nfe->chave,
+                $empresa->razaoSocial,
+                $fornecedor->razaoSocial,
+                "R$ ".number_format($nfe->valor, 2, ",", "."),
+                date("d/m/Y", strtotime($nfe->emissao)),
+                ""
+            ];
+        }
+
+        echo json_encode($tabela);
     }
 
     public function importarXML(){
