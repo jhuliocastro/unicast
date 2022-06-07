@@ -112,9 +112,9 @@ $this->data["empresa"] = EMPRESA;
                 <span class="icon">
                     <img src="/assets/images/nfe.svg">
                 </span>
-                <span class="caption">Importar NFe</span>
+                <span class="caption">NFe</span>
             </button>
-            <button class="ribbon-button" onclick="window.location.href='/nfe/manifestacao'">
+            <button class="ribbon-button" disabled onclick="window.location.href='/nfe/manifestacao'">
                 <span class="icon">
                     <img src="/assets/images/nfe.svg">
                 </span>
