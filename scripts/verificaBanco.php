@@ -136,6 +136,44 @@ print("COLUNA '$coluna' OK\n");
 print("-------------------------\n");
 //FIM COLUNA ----------------------------------------------------------------------------------------------
 //INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "quantidade";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` int NOT NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
+$coluna = "unidade";
+
+print("PROCURANDO COLUNA '$coluna'\n");
+$retorno = false;
+foreach($vendas as $venda){
+    if($venda->Field == $coluna){
+        $retorno = true;
+    }
+}
+if($retorno == false){
+    print("CRIANDO COLUNA '$coluna'\n");
+    $id = $connect->query("ALTER TABLE `$tabela` ADD `$coluna` varchar(255) NOT NULL;");
+}
+
+print("COLUNA '$coluna' OK\n");
+
+print("-------------------------\n");
+//FIM COLUNA ----------------------------------------------------------------------------------------------
+//INICIO COLUNA -------------------------------------------------------------------------------------------
 $coluna = "created_at";
 
 print("PROCURANDO COLUNA '$coluna'\n");
