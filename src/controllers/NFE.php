@@ -16,6 +16,7 @@ use NFePHP\Common\Certificate;
 use NFePHP\Common\Soap\SoapCurl;
 use Alertas\Alert;
 use NFePHP\DA\NFe\Danfe;
+use Model\NFE_Produtos_Model;
 
 class NFE extends Controller{
     public function __construct($router)
@@ -161,17 +162,19 @@ class NFE extends Controller{
                 $xml = simplexml_load_file($files["xml"]["tmp_name"]);
 
                 //PRODUTOS
-                /*$produtos = [];
+                $produtos = [];
                 foreach($xml->NFe->infNFe->det as $d){
                     //var_dump($d);
-                    $produtos[] = [
+                    $nfeProdutos = new NFE_Produtos_Model();
+                    $nfeProdutos->cadastrar($xml->protNFe->infProt->chNFe, $d->prod->xProd, (float)$d->prod->vUnCom, $d->prod->cEAN, (int)$d->prod->qCom, $d->prod->uCom);
+                   /* $produtos[] = [
                         "codigoBarras" => $d->prod->cEAN,
                         "produto" => $d->prod->xProd,
                         "valorProduto" => $d->prod->vUnCom,
                         "quantidade" => $d->prod->qCom,
                         "unidade" => $d->prod->uCom
-                    ];
-                }*/
+                    ];*/
+                }
 
                 //DADOS DA NFE
                 $nfe["valor"] = $xml->NFe->infNFe->total->ICMSTot->vNF;
