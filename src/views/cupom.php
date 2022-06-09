@@ -58,7 +58,7 @@ $this->data["empresa"] = EMPRESA;
             Total: 
         </div>
         <div class="col-6" style="text-align: right; font-weight: bold;">
-            R$ <?= $this->data["total"] ?>
+            R$ <?= $this->data["subTotal"] ?>
         </div>
     </div>
     <div class="row">
