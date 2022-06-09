@@ -68,7 +68,12 @@ class Vendas extends Controller
             "modoPagamento" => $dadosVenda->formaPagamento,
             "troco" => number_format($dadosVenda->troco, 2, ",", "."),
             "valorPago" => number_format($dadosVenda->valorPago, 2, ",", "."),
-            "numeroVenda" => $dadosVenda->id
+            "numeroVenda" => $dadosVenda->id,
+            "pix" => number_format($dadosVenda->pix, 2, ",", "."),
+            "dinheiro" => number_format($dadosVenda->dinheiro, 2, ",", "."),
+            "credito" => number_format($dadosVenda->credito, 2, ",", "."),
+            "debito" => number_format($dadosVenda->debito, 2, ",", "."),
+            "crediario" => number_format($dadosVenda->crediario, 2, ",", ".")
         ]);
     }
 

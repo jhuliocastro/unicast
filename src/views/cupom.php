@@ -86,6 +86,53 @@ $this->data["empresa"] = EMPRESA;
         </div>
     </div>
     <hr size="1" class="linha">
+    <div class="row" style="text-align: center; font-size: 12px;">
+            <div class="col">
+                FORMA DE PAGAMENTO
+            </div>
+        </div>
+    <div class="row">
+        <div class="col-6">
+            DINHEIRO: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["dinheiro"] ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            PIX: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["pix"] ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            CARTÃO DE CRÉDITO: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["credito"] ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            CARTÃO DE DÉBITO: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["debito"] ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            CREDIARIO: 
+        </div>
+        <div class="col-6" style="text-align: right; font-weight: bold;">
+            R$ <?= $this->data["crediario"] ?>
+        </div>
+    </div>
+
+    <hr size="1" class="linha">
     <div class="row">
         <div class="col-12" style="text-align: center; font-weight: bold;">
             ID VENDA: <?= $this->data["numeroVenda"] ?><br/>
