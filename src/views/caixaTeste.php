@@ -231,6 +231,7 @@ $this->data["empresa"] = EMPRESA;
 <script>
     var quantidade = 1;
     var valorTotalCompra = 0;
+    var valorAposDesconto = 0;
     var desconto = 0;
     var quantidadeGeral = 0;
     var lista = {};
@@ -411,7 +412,11 @@ $this->data["empresa"] = EMPRESA;
     function descontoSubmit(){
         desconto = $("#descontoCampoValor").val();
         desconto = desconto.replace(',', '.');
-        valorTotalCompra = valorTotalCompra - desconto;
+        if(valorAposDesconto === 0){
+            valorAposDesconto = valorTotalCompra;
+        }
+        valorTotalCompra = valorAposDesconto - desconto;
+
         $("#descontoCampoValor").val("");
         $("#porcentagemDesconto").val("");
         $("#desconto").html("R$ " + desconto);
