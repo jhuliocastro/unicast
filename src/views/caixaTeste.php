@@ -395,30 +395,32 @@ $this->data["empresa"] = EMPRESA;
             });
     }
 
-    $("#descontoCampoValor").keypress(function(){
-        let valor = $("#descontoCampoValor").val();
-        valor = valor.replace(",", ".");
-        let porcentagem = (valor * 100) / valorTotalCompra;
-        $("#porcentagemDesconto").val(porcentagem.toFixed(2));
+    $("#descontoCampoValor").focus(function(){
+        $("#porcentagemDesconto").val('');
     });
 
-    $("#porcentagemDesconto").keyup(function(){
-        let porcetagem = $("#porcentagemDesconto").val();
-        porcentagem = porcentagem.replace(".", ",");
-        let valor = (porcetagem * valorTotalCompra) / 100;
-        $("#descontoCampoValor").val(valor.toFixed(2));
+    $("#porcentagemDesconto").focus(function(){
+        $("#descontoCampoValor").val('');
     });
 
     function descontoSubmit(){
-        desconto = $("#descontoCampoValor").val();
-        desconto = desconto.replace(',', '.');
+        let valorDesconto = $("#descontoCampoValor").val();
+        let porcentagemDesconto = $("#porcentagemDesconto").val();
+
         if(valorAposDesconto === 0){
             valorAposDesconto = valorTotalCompra;
         }
+
+        if(valorDesconto === ''){
+            desconto = porcentagemDesconto;
+            desconto = (valorAposDesconto * desconto) / 100;
+        }else if(porcentagemDesconto === ''){
+            desconto = valorDesconto;
+            desconto = desconto.replace(',', '.');
+        }
+
         valorTotalCompra = valorAposDesconto - desconto;
 
-        $("#descontoCampoValor").val("");
-        $("#porcentagemDesconto").val("");
         $("#desconto").html("R$ " + desconto);
         $("#valorTotal").html("R$ " + Number(valorTotalCompra).toFixed(2));
         dialogDesconto.dialog('close');
