@@ -21,6 +21,10 @@ $this->data["empresa"] = EMPRESA;
     <link rel="stylesheet" type="text/css" href="/assets/css/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.11.5/datatables.min.js"></script>
 
+    <script type="text/javascript" src="https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.css" />
+    <script src="https://kit.fontawesome.com/40a3a65976.js" crossorigin="anonymous"></script>
+
     <style>
         .card-header {
             font-weight: bold;
@@ -49,7 +53,7 @@ $this->data["empresa"] = EMPRESA;
 </head>
 
 <body>
-<nav data-role="ribbonmenu">
+<!--<nav data-role="ribbonmenu">
     <ul class="tabs-holder">
         <li class="static"><a href="/dashboard">Dashboard</a></li>
         <li><a href="#inicio">Início</a></li>
@@ -61,66 +65,7 @@ $this->data["empresa"] = EMPRESA;
     </ul>
 
     <div class="content-holder">
-        <div class="section" id="inicio">
-            <button class="ribbon-button" onclick="window.location.href='/produtos/relacao'">
-                <span class="icon">
-                    <img src="/assets/images/produtos.png">
-                </span>
-                <span class="caption">Produtos</span>
-            </button>
-            <button disabled class="ribbon-button" onclick="window.location.href='/obras'">
-                <span class="icon">
-                    <img src="/assets/images/obras.png">
-                </span>
-                <span class="caption">Obras</span>
-            </button>
-            <button class="ribbon-button" onclick="window.location.href='/clientes/relacao'">
-                <span class="icon">
-                    <img src="/assets/images/clientes.png">
-                </span>
-                <span class="caption">Clientes</span>
-            </button>
-            <button class="ribbon-button" onclick="window.location.href='/empresas'">
-                <span class="icon">
-                    <img src="/assets/images/empresas.png">
-                </span>
-                <span class="caption">Empresas</span>
-            </button>
-            <button class="ribbon-button" onclick="window.location.href='/caixaDiario'">
-                <span class="icon">
-                    <img src="/assets/images/caixa.png">
-                </span>
-                <span class="caption">Caixa Diário</span>
-            </button>
-            <button class="ribbon-button" onclick="window.location.href='/consultaPreco'">
-                <span class="icon">
-                    <img src="/assets/images/consultaPreco.png">
-                </span>
-                <span class="caption">Consulta de Preços</span>
-            </button>
-        </div>
-        <div class="section" id="estoque">
-            <button class="ribbon-button" onclick="window.location.href='/estoque/entrada'">
-                <span class="icon">
-                    <img src="/assets/images/entradaEstoque.png">
-                </span>
-                <span class="caption">Entrada</span>
-            </button>
-        </div>
-        <div class="section" id="fiscal">
-            <button class="ribbon-button" onclick="window.location.href='/nfe'">
-                <span class="icon">
-                    <img src="/assets/images/nfe.svg">
-                </span>
-                <span class="caption">NFe</span>
-            </button>
-            <button class="ribbon-button" disabled onclick="window.location.href='/nfe/manifestacao'">
-                <span class="icon">
-                    <img src="/assets/images/nfe.svg">
-                </span>
-                <span class="caption">Manifestação</span>
-            </button>
-        </div>
+
         <div class="section" id="relatorios">
             <button class="ribbon-button" onclick="window.location.href='/relatorios/caixaDiario'">
                 <span class="icon">
@@ -129,44 +74,11 @@ $this->data["empresa"] = EMPRESA;
                 <span class="caption">Caixa Diário</span>
             </button>
         </div>
-        <div class="section" id="pdv">
-            <button class="ribbon-button" onclick="window.location.href='/pdv/caixa'">
-                <span class="icon">
-                    <img src="/assets/images/caixa.png">
-                </span>
-                <span class="caption">Caixa</span>
-            </button>
-            <button class="ribbon-button" onclick="window.location.href='/pdv/orcamento'">
-                <span class="icon">
-                    <img src="/assets/images/orcamento.png">
-                </span>
-                <span class="caption">Orçamento</span>
-            </button>
-            <button class="ribbon-button" onclick="window.location.href='/pdv/vendas'">
-                <span class="icon">
-                    <img src="/assets/images/vendas.png">
-                </span>
-                <span class="caption">Vendas</span>
-            </button>
-        </div>
-        <div class="section" id="financeiro">
-            <button class="ribbon-button" onclick="window.location.href='/financeiro/boletos'">
-                <span class="icon">
-                    <img src="/assets/images/boleto.png">
-                </span>
-                <span class="caption">Boletos</span>
-            </button>
-        </div>
-        <div class="section" id="configuracoes">
-            <button class="ribbon-button" onclick="window.location.href='/produtos/relacao'">
-                <span class="icon">
-                    <img src="/assets/images/relacao.png">
-                </span>
-                <span class="caption">Log</span>
-            </button>
-        </div>
+
     </div>
-</nav>
+</nav>-->
+<div id="toolbar"></div>
+<div style="height: 20px"></div>
 <div id="carrega">
     <div id="loader" data-role="activity" data-type="atom" data-style="color"></div>
 </div>
@@ -186,6 +98,90 @@ $this->data["empresa"] = EMPRESA;
         $("#loader").delay(100).fadeIn("slow");
         $("#carrega").delay(100).fadeIn("slow");
     }
+
+    query(() => {
+        new w2toolbar({
+            box: query('#toolbar')[0],
+            name: 'toolbar',
+            items: [
+                { type: 'menu', id: 'inicio', text: 'Início',
+                    items: [
+                        { id: 'produtos', text: 'Produtos', icon: 'fa-solid fa-barcode' },
+                        { id: 'clientes', text: 'Clientes', icon: 'fa-solid fa-users' },
+                        { id: 'empresas', text: 'Empresas', icon: `fa-solid fa-building` },
+                        { id: 'caixaDiario', text: 'Caixa Diário', icon: 'fa-solid fa-cash-register' },
+                        { id: 'consultaPreco', text: 'Consultar Preços', icon: 'fa-solid fa-search' }
+                    ]
+                },
+                { type: 'break' },
+                { type: 'menu', id: 'fiscal', text: 'Fiscal',
+                    items: [
+                        { id: 'nfe', text: 'NFe', icon: 'fa-solid fa-file-invoice' }
+                    ]
+                },
+                { type: 'break' },
+                { type: 'menu', id: 'pdv', text: 'PDV',
+                    items: [
+                        { id: 'caixa', text: 'Caixa', icon: 'fa-solid fa-cash-register' },
+                        { id: 'orcamento', text: 'Orcamento', icon: 'fa-solid fa-chart-line' }
+                    ]
+                },
+                { type: 'break' },
+                { type: 'menu', id: 'financeiro', text: 'Financeiro',
+                    items: [
+                        { id: 'boletos', text: 'Boletos', icon: 'fa-solid fa-barcode' }
+                    ]
+                },
+                { type: 'break' },
+                { type: 'menu', id: 'relatorios', text: 'Relatórios',
+                    items: [
+                        { id: 'relCaixaDiario', text: 'Caixa Diário', icon: 'fa-solid fa-cash-register' },
+                        { id: 'vendas', text: 'Vendas', icon: 'fa-solid fa-file-invoice' }
+                    ]
+                },
+            ],
+            onClick(event) {
+                event.done(() => {
+                    switch (event.detail.item.selected){
+                        case 'produtos':
+                            window.location.href = "/produtos/relacao";
+                            break;
+                        case 'clientes':
+                            window.location.href = "/clientes/relacao";
+                            break;
+                        case 'empresas':
+                            window.location.href = "/empresas";
+                            break;
+                        case 'caixaDiario':
+                            window.location.href = "/caixaDiario";
+                            break;
+                        case 'consultaPreco':
+                            window.location.href = "/consultaPreco";
+                            break;
+                        case 'nfe':
+                            window.location.href = "/nfe";
+                            break;
+                        case 'caixa':
+                            window.location.href = "/pdv/caixa";
+                            break;
+                        case 'orcamento':
+                            window.location.href = "/pdv/orcamento";
+                            break;
+                        case 'vendas':
+                            window.location.href = "/pdv/vendas";
+                            break;
+                        case 'boletos':
+                            window.location.href = "/boletos";
+                            break;
+                        case 'relCaixaDiario':
+                            window.location.href = "/relatorios/caixaDiario";
+                            break;
+                    }
+                });
+            }
+        });
+    });
+
 </script>
 <?= $this->section("scripts") ?>
 </html>
