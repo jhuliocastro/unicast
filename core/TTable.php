@@ -3,82 +3,109 @@ namespace Core;
 
 class TTable{
     private string $table;
-    private string $id;
-    private string $column;
-    private string $data;
-    private ?string $url = null;
-    private bool $paginacao = true;
-    private int $numberPaging = 10;
-    private int $numberColumnOrder = 0;
-    private string $orderTable = "asc";
+    private string $header;
+    private string $url;
+    private string $method;
+    private bool $reorderRows = true;
+    private bool $showHeader = true;
+    private bool $showFooter = true;
+    private bool $toolbar = true;
+    private bool $lineNumbers = true;
+    private ?string $columns = null;
+    private ?string $searches = null;
 
-    public function __construct(string $id)
-    {
-        $this->id = $id;
-        $this->table = "
-            <table id='$id' class='display compact' style='width: 100%;'>
-        ";
-
-        $this->column = "
-        <thead>
-            <tr></tr>
-        </thead>
-        ";
-
-        $this->data = "
-        <tbody>
-        </tbody>
-        ";
-
+    /**
+     * @param string $header
+     */
+    public function header(string $header){
+        $this->header = $header;
     }
 
-    public function paging(bool $paging, int $count){
-        $this->paginacao = $paging;
-        $this->numberPaging = $count;
-    }
-
-    public function addColumn(string $column){
-        $column = "<td>$column</td></tr>";
-        $this->column = str_replace("</tr>", $column, $this->column);
-    }
-
-    public function urlData(string $url){
+    /**
+     * @param string $url URL OF JSON WITH DATA
+     */
+    public function url(string $url){
         $this->url = $url;
     }
 
     /**
-     * @param int $column (Number of column)
-     * @param string $order (asc or desc)
+     * @param string $method
      */
+    public function method(string $method){
+        $this->method = $method;
+    }
 
-    public function order(int $column, string $order){
-        $this->numberColumnOrder = $column;
-        $this->orderTable = $order;
+    /**
+     * @param bool $reoderRows TRUE OR FALSE
+     */
+    public function reoderRows(bool $reoderRows){
+        $this->reorderRows = $reoderRows;
+    }
+
+    /**
+     * @param bool $showHeader TRUE OR FALSE
+     */
+    public function showHeader(bool $showHeader){
+        $this->showHeader = $showHeader;
+    }
+
+    /**
+     * @param bool $toolbar TRUE OR FALSE
+     */
+    public function toolbar(bool $toolbar){
+        $this->toolbar = $toolbar;
+    }
+
+    /**
+     * @param bool $lineNumbers TRUE OR FALSE
+     */
+    public function lineNumbers(bool $lineNumbers){
+        $this->lineNumbers = $lineNumbers;
+    }
+
+    /**
+     * @param string $field COLUMN ID
+     * @param string $text
+     * @param string $size % OR px
+     */
+    public function addColumn(string $field, string $text, string $size){
+        $this->columns .= "{ field: '$field', text: '$text', size: '$size' },";
+    }
+
+    /**
+     * @param string $type INT | TEXT | DATE
+     * @param string $field
+     * @param string $label
+     */
+    public function addSearch(string $type, string $field, string $label){
+        $this->searches .= "{ type: '$type',  field: '$field', label: '$label' },";
     }
 
     public function close(){
-        if($this->paginacao == 1){
-           $paginacao = "true";
-        }else{
-            $paginacao = "false";
-        }
+        return "<script type=\"text/javascript\">
+            query(() => {
+                new w2grid({
+                    name: 'grid',
+                    box: query('#grid')[0],
+                    header: '$this->header',
+                    url: '$this->url',
+                    method: '$this->method', // need this to avoid 412 error on Safari
+                    reorderRows: $this->reorderRows,
+                    show: {
+                        header: $this->showHeader,
+                        footer: $this->showFooter,
+                        toolbar: $this->toolbar,
+                        lineNumbers: $this->lineNumbers
+                    },
+                    columns: [
+                        $this->columns
+                    ],
+                    searches: [
+                        $this->searches
+                    ]
+                })
+            })
+        </script>";
 
-        $this->table .= $this->column;
-        $this->table .= "</table>";
-        $this->table .= "
-        <script>
-            var tabela = $('#$this->id').DataTable({
-                'paging': $paginacao,
-                'order': [[$this->numberColumnOrder, '$this->orderTable']],
-                'iDisplayLength': $this->numberPaging,
-                'ajax': '$this->url',
-                'language': {
-                    'url': '//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
-                }
-            });
-        </script>
-        ";
-
-        return $this->table;
     }
 }
