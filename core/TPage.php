@@ -14,21 +14,12 @@ class TPage extends Controller implements IPage{
      * @param string $title
      */
 
-    public function __construct(int $type, string $title)
+    public function __construct(int $type)
     {
         $this->type = $type;
         $this->page = "
         <div class='pcoded-content'>
-        <div class='card'>
-        <div class='card-header'>
-            $title :: ".EMPRESA."
-        </div>
-        <div class='card-body p-2'>
-        <div class='card-block''>
-        <div class='container-fluid'>
-        <div>
-            <hr id='linha'>
-        </div>
+ <div id=\"grid\" style=\"width: 100%; height: 95vh; overflow: hidden;\"></div>
         ";
     }
 
@@ -71,13 +62,9 @@ class TPage extends Controller implements IPage{
         $this->page .= $form;
     }
 
-    public function close()
+    public function show()
     {
         $this->page .= "
-        </div>
-        </div>
-        </div>
-        </div>
         </div>
         ";
 
