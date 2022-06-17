@@ -1,6 +1,8 @@
 <?php
 namespace Controller;
 
+use Core\TPage;
+use Core\TTable;
 use Model\CaixaDiario_Model;
 use Model\CaixaDiario_Situacao_Model;
 
@@ -12,7 +14,22 @@ class Relatorios extends Controller{
     }
 
     public function caixaDiario(){
-        parent::render("caixaDiarioRelatorio");
+        //parent::render("caixaDiarioRelatorio");
+        $page = new TPage(0);
+
+        $table = new TTable();
+        $table->method("get");
+        $table->header("Relatório Caixa Diário");
+        $table->addColumn("id", "ID", "10%");
+        $table->addColumn("data", "Data", "45%");
+        $table->addColumn("valor", "Valor", "45%");
+        $table->addColumn("opcoes", "", "10%");
+        $table->url('/relatorios/caixaDiario/tabela');
+        $table->addSearch("date", "data", "Data");
+
+        $page->addTable($table->close());
+        $page->addJS('caixaDiario');
+        $page->show();
     }
 
     public function imprimirCaixaDiario($data){

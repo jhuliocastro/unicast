@@ -41,4 +41,8 @@ class CaixaDiario_Situacao_Model extends DataLayer{
     public function lista(){
         return $this->find()->fetch(true);
     }
+
+    public function listaDescData(){
+        return $this->find()->order("dataCaixa desc")->fetch(true);
+    }
 }

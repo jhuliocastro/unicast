@@ -81,12 +81,13 @@ class CaixaDiario extends Controller
         echo json_encode($retorno);
     }
 
-    public function relatorioDiario(){
+    public static function jsonRelatorio(){
         $tabela = null;
         $valor = 0;
 
         $model = new CaixaDiario_Situacao_Model();
-        $dados = $model->lista();
+        $dados = $model->listaDescData();
+        $totalRegistros = 0;
         foreach($dados as $d){
             if($d->situacao == "FECHADO"){
                 $valor = 0;
@@ -99,14 +100,17 @@ class CaixaDiario extends Controller
                         }
                     }
                 }
-                $tabela["data"][] = [
-                    $d->id,
-                    date("d/m/Y", strtotime($d->dataCaixa)),
-                    "R$ ".number_format($valor, 2, ",", "."),
-                    "<a data-role='hint' data-hint-text='Imprimir Relátorio' onclick='relatorio(\"$d->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>"
+                $totalRegistros++;
+                $tabela["records"][] = [
+                    'id' => $d->id,
+                    'data' => date("d/m/Y", strtotime($d->dataCaixa)),
+                    'valor' => "R$ ".number_format($valor, 2, ",", "."),
+                    'opcoes' => "<a onclick='imprimir($d->id)' href='#'><i class='fa-solid fa-print fa-2x'></i></a>"
                 ];
             }            
-        }      
+        }
+
+        $tabela["total"] = $totalRegistros;
         
         echo json_encode($tabela);
     }
