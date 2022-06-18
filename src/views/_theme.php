@@ -5,9 +5,7 @@ $this->data["empresa"] = EMPRESA;
 <html lang="pt-br">
 <head>
     <title>ERPCASTRO :: <?= $this->data["empresa"] ?></title>
-    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
     <link rel="stylesheet" href="/assets/css/jquery-ui.css">
-    <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script
             src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"
@@ -18,14 +16,17 @@ $this->data["empresa"] = EMPRESA;
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/assets/js/hotkeys.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" type="text/css" href="/assets/css/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.11.5/datatables.min.js"></script>
 
-    <script type="text/javascript" src="https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.css" />
+    <script type="text/javascript" src="/assets/js/w2ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/w2ui.css" />
     <script src="https://kit.fontawesome.com/40a3a65976.js" crossorigin="anonymous"></script>
 
     <style>
+        html, body{
+            margin: 0;
+            padding: 0;
+        }
+
         .card-header {
             font-weight: bold;
             background-color: #0a6aa1;
@@ -53,32 +54,7 @@ $this->data["empresa"] = EMPRESA;
 </head>
 
 <body>
-<!--<nav data-role="ribbonmenu">
-    <ul class="tabs-holder">
-        <li class="static"><a href="/dashboard">Dashboard</a></li>
-        <li><a href="#inicio">Início</a></li>
-        <li><a href="#fiscal">Fiscal</a></li>
-        <li><a href="#financeiro">Financeiro</a></li>
-        <li><a href="#relatorios">Relatórios</a></li>
-        <li><a href="#pdv">PDV</a></li>
-        <li><a href="#configuracoes">Configurações</a></li>
-    </ul>
-
-    <div class="content-holder">
-
-        <div class="section" id="relatorios">
-            <button class="ribbon-button" onclick="window.location.href='/relatorios/caixaDiario'">
-                <span class="icon">
-                    <img src="/assets/images/caixa.png">
-                </span>
-                <span class="caption">Caixa Diário</span>
-            </button>
-        </div>
-
-    </div>
-</nav>-->
 <div id="toolbar"></div>
-<div style="height: 20px"></div>
 <div id="carrega">
     <div id="loader" data-role="activity" data-type="atom" data-style="color"></div>
 </div>
@@ -182,6 +158,7 @@ $this->data["empresa"] = EMPRESA;
         });
     });
 
+    w2utils.locale('/assets/locale/pt-br.json');
 </script>
 <?= $this->section("scripts") ?>
 </html>

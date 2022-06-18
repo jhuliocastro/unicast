@@ -14,6 +14,14 @@ $router->get("/sair", "Login:sair");
 $router->group("dashboard");
 $router->get("/", "Dashboard:home");
 
+
+//BOLETOS
+$router->group("boletos");
+$router->get("/", "Boletos:home");
+$router->get("/cadastrar", "Boletos:cadastrar");
+$router->post("/cadastrar", "Boletos:cadastrarSender");
+
+
 //CLIENTES
 $router->group("clientes");
 $router->get("/cadastrar", "Clientes:cadastrar");
@@ -112,7 +120,7 @@ $router->get("/tabela", "Empresas:tabela");
 //RELATORIOS
 $router->group("/relatorios");
 $router->get("/caixaDiario", "Relatorios:caixaDiario");
-$router->get("/caixaDiario/tabela", "CaixaDiario:relatorioDiario");
+$router->get("/caixaDiario/tabela", "CaixaDiario:jsonRelatorio");
 $router->get("/caixaDiario/imprimir/{id}", "Relatorios:imprimirCaixaDiario");
 
 //CONSULTA DE PRECOS
