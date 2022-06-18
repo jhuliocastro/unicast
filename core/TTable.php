@@ -6,13 +6,15 @@ class TTable{
     private string $header;
     private string $url;
     private string $method;
-    private bool $reorderRows = true;
+    private bool $reorderRows = false;
     private bool $showHeader = true;
     private bool $showFooter = true;
     private bool $toolbar = true;
-    private bool $lineNumbers = true;
+    private bool $lineNumbers = false;
     private ?string $columns = null;
     private ?string $searches = null;
+    private ?string $sort = "";
+    private string $itemToolbar = "";
 
     /**
      * @param string $header
@@ -22,7 +24,7 @@ class TTable{
     }
 
     /**
-     * @param string $url URL OF JSON WITH DATA
+     * @param string $url URL JSON
      */
     public function url(string $url){
         $this->url = $url;
@@ -57,6 +59,16 @@ class TTable{
     }
 
     /**
+     * @param string $type
+     * @param string $id
+     * @param string $text
+     * @param string $image
+     */
+    public function addItemToolbar(string $type, string $id, string $text, string $image){
+        $this->itemToolbar .= "{ type: '$type', id: '$id', text: '$text', img: 'fa-solid $image' },";
+    }
+
+    /**
      * @param bool $lineNumbers TRUE OR FALSE
      */
     public function lineNumbers(bool $lineNumbers){
@@ -64,12 +76,26 @@ class TTable{
     }
 
     /**
+     * @param string $column
+     * @param string $direction ASC OR DESC
+     */
+    public function sort(string $column, string $direction){
+        $this->sort = " {'field':'$column', 'direction':'$direction'}";
+    }
+
+    /**
      * @param string $field COLUMN ID
      * @param string $text
      * @param string $size % OR px
+     * @param bool $sortable TRUE OR FALSE
      */
-    public function addColumn(string $field, string $text, string $size){
-        $this->columns .= "{ field: '$field', text: '$text', size: '$size' },";
+    public function addColumn(string $field, string $text, string $size, bool $sortable = false){
+        if($sortable == false){
+            $sortable = 'false';
+        }else{
+            $sortable = 'true';
+        }
+        $this->columns .= "{ field: '$field', text: '$text', size: '$size', sortable: $sortable },";
     }
 
     /**
@@ -82,20 +108,29 @@ class TTable{
     }
 
     public function close(){
-        return "<script type=\"text/javascript\">
+        $retorno = "
             query(() => {
                 new w2grid({
                     name: 'grid',
                     box: query('#grid')[0],
-                    header: '$this->header',
                     url: '$this->url',
-                    method: '$this->method', // need this to avoid 412 error on Safari
-                    reorderRows: $this->reorderRows,
+                    header: '$this->header',
+                    method: '$this->method',
+                    reorderRows: '$this->reorderRows',
+                     toolbar: {
+                        items: [
+                            { type: 'break' },
+                            $this->itemToolbar
+                        ],
+                        onClick: function (target, data) {
+                            console.log(target);
+                        }
+                    },
                     show: {
-                        header: $this->showHeader,
-                        footer: $this->showFooter,
-                        toolbar: $this->toolbar,
-                        lineNumbers: $this->lineNumbers
+                        header: '$this->showHeader',
+                        footer: '$this->showFooter',
+                        toolbar: '$this->toolbar',
+                        lineNumbers: '$this->lineNumbers'
                     },
                     columns: [
                         $this->columns
@@ -105,7 +140,10 @@ class TTable{
                     ]
                 })
             })
-        </script>";
+        ";
+
+        $retorno = "<script type=\"text/javascript\">".$retorno."</script>";
+        return $retorno;
 
     }
 }

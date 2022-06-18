@@ -6,5 +6,5 @@ interface IPage{
     public function addForm(string $form);
     public function addButton($botao);
     public function addJS(string $file);
-    public function close();
+    public function show();
 }

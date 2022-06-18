@@ -22,32 +22,8 @@ class TForm{
         $this->form .= ">";
     }
 
-    /**
-     * @param string $id
-     * @param string $label
-     * @param string $type
-     * @param bool $required (true or false)
-     * @param string|null $placeholder
-     * @return void
-     */
 
-
-    public function addInput(string $id, string $label, string $type, bool $required, ?string $placeholder){
-        $input = "
-            <div class='row'>
-                <div class='col-md-12'>
-                    <div class='form-group'>
-                        <label>$label</label>
-                        <input type='$type' data-role='input' name='$id' id='$id' placeholder='$placeholder'>
-                    </div>
-                </div>
-            </div>
-        ";
-
-        if($required == true){
-            $input = str_replace("<input", "<input required ", $input);
-        }
-
+    public function addInput(string $input){
         $this->input .= $input;
     }
 
