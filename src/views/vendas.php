@@ -43,9 +43,8 @@ $this->data["empresa"] = EMPRESA;
             <fieldset>
                 <div class="form-group">
                     <label>Informe o Motivo</label>
-                    <textarea data-role="textarea" id="motivoEstorno" name="motivoEstorno"></textarea>
+                    <textarea class="form-control" id="motivoEstorno" name="motivoEstorno"></textarea>
                 </div>
-                <hr>
                 <!-- Allow form submission with keyboard without duplicating the dialog button -->
                 <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
             </fieldset>
@@ -61,6 +60,7 @@ $this->data["empresa"] = EMPRESA;
             "paging": true,
             "order": [[0, "desc"]],
             'autoFill': true,
+            'responsive': true,
             'ajax': '/vendas/relacao',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
@@ -76,6 +76,7 @@ $this->data["empresa"] = EMPRESA;
     var dialog = $("#janelaEstorno").dialog({
         autoOpen: false,
         width: 800,
+        modal: true,
         buttons: {
             "Estornar": estornoSender
         }
@@ -94,7 +95,7 @@ $this->data["empresa"] = EMPRESA;
 
     function estornoSender(){
         $.ajax({
-                url: "/pdv/vendas/estornar",
+                url: "/vendas/estornar",
                 type: 'post',
                 dataType: 'JSON',
                 data: {
@@ -120,7 +121,6 @@ $this->data["empresa"] = EMPRESA;
                 })
                 .fail(function (jqXHR, textStatus, msg) {
                     console.log(msg);
-
                 });
     }
 

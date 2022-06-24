@@ -80,13 +80,9 @@ class Vendas extends Controller
     }
 
     public function estornar(){
-        $json = file_get_contents(__DIR__.'/../../temp/vendas.json');
-        $json = json_decode($json);
-        var_dump($json);
-
         $model = new Vendas_Model();
         $dadosVenda = $model->dadosID($_POST["idVenda"]);
-        if($dadosVenda->dinheiro == 0){
+        if($dadosVenda->dinheiro == 0 || $dadosVenda->dinheiro == null){
             
         }else{
             $modelCaixa = new CaixaDiario_Model();
@@ -105,16 +101,19 @@ class Vendas extends Controller
         }else{
             $modelVendasProdutos = new Vendas_Produtos_Model();
             $produtos = $modelVendasProdutos->produtosVenda($_POST["idVenda"]);
-            foreach($produtos as $produto){
-                $modelProduto = new Produtos_Model();
-                $dadosProduto = $modelProduto->retornoPorID($produto->produto);
-                $quantidadeNova = $dadosProduto->estoqueAtual + $produto->quantidade;
-                $retorno = $modelProduto->atualizarEstoque($dadosProduto->id, $quantidadeNova);
-                if($retorno["status"] == false){
-                    echo json_encode($retorno);
-                    exit();
+            if($produtos != null){
+                foreach($produtos as $produto){
+                    $modelProduto = new Produtos_Model();
+                    $dadosProduto = $modelProduto->retornoPorID($produto->produto);
+                    $quantidadeNova = $dadosProduto->estoqueAtual + $produto->quantidade;
+                    $retorno = $modelProduto->atualizarEstoque($dadosProduto->id, $quantidadeNova);
+                    if($retorno["status"] == false){
+                        echo json_encode($retorno);
+                        exit();
+                    }
                 }
             }
+
             $retorno = [
                 "status" => true
             ];
@@ -132,8 +131,8 @@ class Vendas extends Controller
             foreach ($listaVendas as $venda) {
                 $modelCliente = new Clientes_Model();
                 $dadosCliente = $modelCliente->dadosClienteID($venda->cliente);
-                $opcoes = "<a data-role='hint' data-hint-text='Imprimir Cupom' onclick='cupom(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>";
-                $opcoes .= "<a data-role='hint' data-hint-text='Estornar' onclick='estorno(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/estornar.png'></a>";
+                $opcoes = "<a data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Imprimir Cupom' onclick='cupom(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>";
+                $opcoes .= "<a data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Estornar Venda' onclick='estorno(\"$venda->id\");' href='javascript:void(0)'><img class='imagem-acao' src='/assets/images/estornar.png'></a>";
                 $tabela["data"][] = [
                     $venda->id,
                     $dadosCliente->nome,
