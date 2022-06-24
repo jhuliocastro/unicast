@@ -26,58 +26,35 @@ class NFE extends Controller{
     }
 
     public function home(){
-        $page = new TPage(0, "NFE");
-
-        $table = new TTable("tabela");
-        $table->addColumn("ID");
-        $table->addColumn("Nº NFe");
-        $table->addColumn("Empresa");
-        $table->addColumn("Fornecedor");
-        $table->addColumn("Valor");
-        $table->addColumn("Data Emissão");
-        $table->addColumn("Ações");
-        $table->urlData("/nfe/tabela");
-        $table->order(5, "desc");
-        $table = $table->close();
-
-        $botaoImportar = new TButton();
-        $botaoImportar->title("Importar XML");
-        $botaoImportar->id("botaoImportarXML");
-        $botaoImportar->action(2);
-        $botaoImportar->url("/nfe/importar/xml");
-        $botaoImportar = $botaoImportar->show();
-
-        $page->addButton($botaoImportar);
-        $page->addTable($table);
-
-        $page->addJS("nfe");
-
-        $page->close();
+        parent::render("nfe");
     }
 
     public function tabela(){
         $model = new NFE_Model();
         $lista = $model->lista();
-        foreach($lista as $nfe){
-            $fornecedor = new Fornecedor_Model();
-            $fornecedor = $fornecedor->findById($nfe->fornecedor);
+        if($lista == null){
+            $tabela["data"] = [];
+        }else{
+            foreach($lista as $nfe){
+                $fornecedor = new Fornecedor_Model();
+                $fornecedor = $fornecedor->findById($nfe->fornecedor);
 
-            $empresa = new Empresas_Model();
-            $empresa = $empresa->findById($nfe->empresa);
+                $empresa = new Empresas_Model();
+                $empresa = $empresa->findById($nfe->empresa);
 
-            $tabela["data"][] = [
-                $nfe->id,
-                $nfe->chave,
-                $empresa->razaoSocial,
-                $fornecedor->razaoSocial,
-                "R$ ".number_format($nfe->valor, 2, ",", "."),
-                date("d/m/Y", strtotime($nfe->emissao)),
-                "<a href='javascript:void(0)' onclick='danfe(\"/nfe/danfe/$nfe->id\")'><img src='/assets/images/pdf.png' class='imagem-acao' data-role='hint' data-hint-text='DANFE'></a>
+                $tabela["data"][] = [
+                    $nfe->id,
+                    $nfe->chave,
+                    $empresa->razaoSocial,
+                    $fornecedor->razaoSocial,
+                    "R$ ".number_format($nfe->valor, 2, ",", "."),
+                    date("d/m/Y", strtotime($nfe->emissao)),
+                    "<a href='javascript:void(0)' onclick='danfe(\"/nfe/danfe/$nfe->id\")'><img src='/assets/images/pdf.png' class='imagem-acao' data-role='hint' data-hint-text='DANFE'></a>
                  <a href='javascript:void(0)' onclick='excluir(\"$nfe->chave\")'><img id='excluir' src='/assets/images/excluir.png' data-role='hint' data-hint-text='Excluir Nota' class='imagem-acao'></a>
                 "
-            ];
+                ];
+            }
         }
-
         echo json_encode($tabela);
     }
 
@@ -140,19 +117,9 @@ class NFE extends Controller{
         }
     }
 
-    public function importarXML(){
-        $page = new TPage(1, "Importar XML");
-
-        $form = new TForm("formImportar", "post", "/nfe/importar/xml", true);
-        $form->addInput("xml", "Selecione o XML", "file", true, null);
-        $form->addSubmit("botaoImportar", "Importar");
-
-        $page->addForm($form->show());
-        $page->close();
-    }
-
     public function importarXMLSender(){
         $files = $_FILES;
+
         if(empty($files["xml"])){
             Alert::error("Arquivo não enviado!", "Verifique e tente novamente.", "/nfe/importar/xml");
         }else{
