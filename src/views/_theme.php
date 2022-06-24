@@ -20,22 +20,21 @@ $this->data["empresa"] = EMPRESA;
     <script type="text/javascript" src="/assets/js/w2ui.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/assets/css/w2ui.css" />
     <script src="https://kit.fontawesome.com/40a3a65976.js" crossorigin="anonymous"></script>
-
+    <link rel="stylesheet" type="text/css" href="/vendor/datatables/datatables/media/css/jquery.dataTables.css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="/vendor/datatables/datatables/media/js/jquery.dataTables.js"></script>
+    <link href="/vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         html, body{
             margin: 0;
             padding: 0;
         }
 
-        .card-header {
-            font-weight: bold;
-            background-color: #0a6aa1;
-            color: white;
-        }
-
         .imagem-acao{
             width: 30px;
         }
+
         #carrega{
             position: fixed;
             left: 0px;
@@ -58,6 +57,7 @@ $this->data["empresa"] = EMPRESA;
 <div id="carrega">
     <div id="loader" data-role="activity" data-type="atom" data-style="color"></div>
 </div>
+<br/>
 <?= $this->section("content") ?>
 </body>
 <script>
@@ -144,7 +144,7 @@ $this->data["empresa"] = EMPRESA;
                             window.location.href = "/pdv/orcamento";
                             break;
                         case 'vendas':
-                            window.location.href = "/pdv/vendas";
+                            window.location.href = "/vendas";
                             break;
                         case 'boletos':
                             window.location.href = "/boletos";

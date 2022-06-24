@@ -2,6 +2,8 @@
 
 namespace Controller;
 
+use Core\TPage;
+use Core\TTable;
 use Model\CaixaDiario_Model;
 use Model\Clientes_Model;
 use Model\OrcamentosPedido_Model;
@@ -78,6 +80,10 @@ class Vendas extends Controller
     }
 
     public function estornar(){
+        $json = file_get_contents(__DIR__.'/../../temp/vendas.json');
+        $json = json_decode($json);
+        var_dump($json);
+
         $model = new Vendas_Model();
         $dadosVenda = $model->dadosID($_POST["idVenda"]);
         if($dadosVenda->dinheiro == 0){
@@ -122,27 +128,31 @@ class Vendas extends Controller
         $model = new Vendas_Model();
         $listaVendas = $model->lista();
 
-        foreach ($listaVendas as $venda) {
-            $modelCliente = new Clientes_Model();
-            $dadosCliente = $modelCliente->dadosClienteID($venda->cliente);
-            $opcoes = "<a data-role='hint' data-hint-text='Imprimir Cupom' onclick='cupom(\"$venda->orcamento\", \"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>";
-            $opcoes .= "<a data-role='hint' data-hint-text='Estornar' onclick='estorno(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/estornar.png'></a>";
-            $tabela["data"][] = [
-                $venda->id,
-                $dadosCliente->nome,
-                $venda->orcamento,
-                "R$ " . number_format($venda->valorTotal, 2, ',', '.'),
-                "R$ " . number_format($venda->valorPago, 2, ',', '.'),
-                "R$ " . number_format($venda->desconto, 2, ',', '.'),
-                "R$ " . number_format($venda->troco, 2, ',', '.'),
-                "R$ " . number_format($venda->dinheiro, 2, ',', '.'),
-                "R$ " . number_format($venda->credito, 2, ',', '.'),
-                "R$ " . number_format($venda->debito, 2, ',', '.'),
-                "R$ " . number_format($venda->crediario, 2, ',', '.'),
-                "R$ " . number_format($venda->pix, 2, ',', '.'),
-                date("d/m/Y H:i:s", strtotime($venda->created_at)),
-                $opcoes
-            ];
+        if($listaVendas != null){
+            foreach ($listaVendas as $venda) {
+                $modelCliente = new Clientes_Model();
+                $dadosCliente = $modelCliente->dadosClienteID($venda->cliente);
+                $opcoes = "<a data-role='hint' data-hint-text='Imprimir Cupom' onclick='cupom(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>";
+                $opcoes .= "<a data-role='hint' data-hint-text='Estornar' onclick='estorno(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/estornar.png'></a>";
+                $tabela["data"][] = [
+                    $venda->id,
+                    $dadosCliente->nome,
+                    $venda->orcamento,
+                    "R$ " . number_format($venda->valorTotal, 2, ',', '.'),
+                    "R$ " . number_format($venda->valorPago, 2, ',', '.'),
+                    "R$ " . number_format($venda->desconto, 2, ',', '.'),
+                    "R$ " . number_format($venda->troco, 2, ',', '.'),
+                    "R$ " . number_format($venda->dinheiro, 2, ',', '.'),
+                    "R$ " . number_format($venda->credito, 2, ',', '.'),
+                    "R$ " . number_format($venda->debito, 2, ',', '.'),
+                    "R$ " . number_format($venda->crediario, 2, ',', '.'),
+                    "R$ " . number_format($venda->pix, 2, ',', '.'),
+                    date("d/m/Y H:i:s", strtotime($venda->created_at)),
+                    $opcoes
+                ];
+            }
+        }else{
+            $tabela["data"] = [];
         }
 
         echo json_encode($tabela);

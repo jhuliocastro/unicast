@@ -43,7 +43,7 @@ class Vendas_Model extends DataLayer{
     }
 
     public function lista(){
-        return $this->find()->fetch(true);
+        return $this->find()->order("created_at desc")->fetch(true);
     }
 
     public function dadosID($id){
