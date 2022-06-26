@@ -4,7 +4,7 @@ $this->data["empresa"] = EMPRESA;
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <title>ERPCASTRO :: <?= $this->data["empresa"] ?></title>
+    <title>UNICAST :: <?= $this->data["empresa"] ?></title>
     <link rel="stylesheet" href="/assets/css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script
@@ -43,6 +43,7 @@ $this->data["empresa"] = EMPRESA;
             height: 100%;
             z-index: 9999;
             background-color: white;
+            text-align: center;
         }
 
         #loader{
@@ -55,7 +56,7 @@ $this->data["empresa"] = EMPRESA;
 <body>
 <div id="toolbar"></div>
 <div id="carrega">
-    <div id="loader" data-role="activity" data-type="atom" data-style="color"></div>
+    <img src="/assets/images/carregamento.gif">
 </div>
 <br/>
 <?= $this->section("content") ?>
