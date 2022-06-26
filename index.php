@@ -78,9 +78,10 @@ $router->post("/md5", "Caixa:json");
 $router->post("/caixa/cancelar/item", "Caixa:cancelarItem");
 
 //VENDAS
-$router->get("/vendas", "Vendas:home");
-$router->get("/vendas/relacao", "Vendas:relacao");
-$router->post("/vendas/estornar", "Vendas:estornar");
+$router->group('vendas');
+$router->get("/relacao", "Vendas:relacao");
+$router->get("/", "Vendas:home");
+$router->post("/estornar", "Vendas:estornar");
 
 //OBRAS
 $router->group("/obras");
@@ -90,7 +91,6 @@ $router->get("/relacao", "Obras:relacao");
 //NFE
 $router->group("nfe");
 $router->get("/", "NFE:home");
-$router->get("/importar/xml", "NFE:importarXML");
 $router->post("/importar/xml", "NFE:importarXMLSender");
 $router->get("/manifestacao", "NFE:manifestacao");
 $router->get("/tabela", "NFE:tabela");
@@ -122,6 +122,7 @@ $router->group("/relatorios");
 $router->get("/caixaDiario", "Relatorios:caixaDiario");
 $router->get("/caixaDiario/tabela", "CaixaDiario:jsonRelatorio");
 $router->get("/caixaDiario/imprimir/{id}", "Relatorios:imprimirCaixaDiario");
+
 
 //CONSULTA DE PRECOS
 $router->group("consultaPreco");
