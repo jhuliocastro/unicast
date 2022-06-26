@@ -9,16 +9,16 @@ $this->data["empresa"] = EMPRESA;
     }
 </style>
 
-<div class="pcoded-content">
+<div class="pcoded-content container-fluid">
     <div class="card">
         <div class="card-header">
-            Produtos :: <?= $this->data["empresa"] ?>
+            Produtos
         </div>
         <div class="card-body p-2">
             <div class="card-block">
                 <div class="container-fluid">
                     <div>
-                        <button id="cadastrar">F1 - CADASTRAR</button>
+                        <button id="cadastrar">Cadastrar Produto</button>
                         <hr>
                     </div>
                     <table id="tabela" class="display compact" style="width: 100%;">
@@ -42,91 +42,88 @@ $this->data["empresa"] = EMPRESA;
 </div>
 
 <div id="janelaCadastrarProduto" title="Cadastrar Produto">
-    <form>
-        <fieldset>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Nome*: </label>
+    <div>
+        <form>
+            <fieldset>
+                <div class="row mb-3">
+                    <label for="nomeCadastrar" class="col-sm-3 col-form-label">Nome Produto</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm" id="nomeCadastrar" name="nomeCadastrar">
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" name="nomeCadastrar" id="nomeCadastrar">
+                <div class="row mb-3">
+                    <label for="unidadeMedidaCadastrar" class="col-sm-3 col-form-label">Unidade Medida</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm" name="unidadeMedidaCadastrar" id="unidadeMedidaCadastrar">
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Unidade Medida*: </label>
+                <div class="row mb-3">
+                    <label for="valorCompraCadastrar" class="col-sm-3 col-form-label">Valor Compra</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" class="form-control form-control-sm" name="valorCompraCadastrar" id="valorCompraCadastrar">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" name="unidadeMedidaCadastrar" id="unidadeMedidaCadastrar">
+                <div class="row mb-3">
+                    <label for="valorVendaCadastrar" class="col-sm-3 col-form-label">Valor Venda</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" class="form-control form-control-sm" name="valorVendaCadastrar" id="valorVendaCadastrar">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Valor Compra: </label>
+                <div class="row mb-3">
+                    <label for="estoqueCadastrar" class="col-sm-3 col-form-label">Estoque</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm" name="estoqueCadastrar" id="estoqueCadastrar">
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="valorCompraCadastrar" name="valorCompraCadastrar">
+                <div class="row mb-3">
+                    <label for="codigoBarrasCadastrar" class="col-sm-3 col-form-label">Código Barras</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm" name="codigoBarrasCadastrar" id="codigoBarrasCadastrar">
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Valor Venda: </label>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="valorVendaCadastrar" name="valorVendaCadastrar">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Estoque: </label>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" id="estoqueCadastrar" name="estoqueCadastrar">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Código de Barras*: </label>
-                </div>
-                <div class="col-md-8">
-                    <input type="number" data-role="input" class="input-small" name="codigoBarrasCadastrar" id="codigoBarrasCadastrar">
-                </div>
-            </div>
-            <hr>
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
+                <hr>
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
+        </form>
+    </div>
+
 </div>
 
 <div id="janelaAlterarValor" title="Alterar Valor">
     <form>
         <fieldset>
             <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Produto: </label>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control form-control-sm" disabled name="produtoAlterarValor" id="produtoAlterarValor">
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" disabled name="produtoAlterarValor" id="produtoAlterarValor">
-                </div>  
             </div>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Valor Compra: </label>
+            <div class="row mb-3">
+                <label for="valorCompraAlterarValor" class="col-sm-3 col-form-label">Valor Compra</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" class="form-control form-control-sm" name="valorCompraAlterarValor" id="valorCompraAlterarValor">
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="valorCompraAlterarValor" name="valorCompraAlterarValor">
-                </div>  
             </div>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Valor Venda: </label>
+            <div class="row mb-3">
+                <label for="valorVendaAlterarValor" class="col-sm-3 col-form-label">Valor Venda</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" class="form-control form-control-sm" name="valorVendaAlterarValor" id="valorVendaAlterarValor">
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="valorVendaAlterarValor" name="valorVendaAlterarValor">
-                </div>  
             </div>
-            <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -136,23 +133,17 @@ $this->data["empresa"] = EMPRESA;
 <div id="janelaEntradaEstoque" title="Entrada Estoque">
     <form>
         <fieldset>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Produto: </label>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" disabled name="produtoEntradaEstoque" id="produtoEntradaEstoque">
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <input type="text" class="form-control form-control-sm" disabled name="produtoEntradaEstoque" id="produtoEntradaEstoque">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Quantidade: </label>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" id="quantidadeEntrada" name="quantidadeEntrada">
+                <div class="form-floating">
+                    <input type="number" class="form-control form-control-sm" id="quantidadeEntrada" name="quantidadeEntrada">
+                    <label for="quantidadeEntrada">Informe a Quantidade</label>
                 </div>
             </div>
-            <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -162,23 +153,17 @@ $this->data["empresa"] = EMPRESA;
 <div id="janelaSaidaEstoque" title="Saída Estoque">
     <form>
         <fieldset>
-            <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Produto: </label>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" disabled name="produtoSaidaEstoque" id="produtoSaidaEstoque">
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <input type="text" class="form-control form-control-sm" disabled name="produtoSaidaEstoque" id="produtoSaidaEstoque">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 infos">
-                    <label>Quantidade: </label>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" data-role="input" class="input-small" id="quantidadeSaida" name="quantidadeSaida">
+                <div class="form-floating">
+                    <input type="number" class="form-control form-control-sm" id="quantidadeSaida" name="quantidadeSaida">
+                    <label for="quantidadeEntrada">Informe a Quantidade</label>
                 </div>
             </div>
-            <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -206,6 +191,11 @@ $this->data["empresa"] = EMPRESA;
         $("#valorVendaCadastrar").mask('#.##0,00', {reverse: true});
         $("#valorCompraAlterarValor").mask('#.##0,00', {reverse: true});
         $("#valorCompraCadastrar").mask('#.##0,00', {reverse: true});
+
+        $("#cadastrar").button();
+        $("#cadastrar").click(function(){
+            dialogCadastrar.dialog('open');
+        });
     });
 
     function saidaEstoque(id) {
@@ -243,28 +233,15 @@ $this->data["empresa"] = EMPRESA;
 
     }
 
-    //INICIO BOTAO CADASTRAR PRODUTO
-    $(document).on('keydown', null, 'f1', function () {
-        cadastrar();
-        return false;
-    });
-
-    $("#cadastrar").click(function(){
-       cadastrar();
-    });
-
-    function cadastrar(){
-        dialogCadastrar.dialog('open');
-    }
-    //FIM BOTAO CADASTRAR PRODUTO
-
     var dialog = $("#janelaAlterarValor").dialog({
         autoOpen: false,
+        modal: true,
         width: 600
     });
 
     var dialogCadastrar = $("#janelaCadastrarProduto").dialog({
         autoOpen: false,
+        modal: true,
         width: 600,
         buttons: {
             "Cadastrar": cadastrarSender
@@ -273,11 +250,13 @@ $this->data["empresa"] = EMPRESA;
 
     var dialogEntradaEstoque = $("#janelaEntradaEstoque").dialog({
         autoOpen: false,
+        modal: true,
         width: 600
     });
 
     var dialogSaidaEstoque = $("#janelaSaidaEstoque").dialog({
         autoOpen: false,
+        modal: true,
         width: 600
     });
 
