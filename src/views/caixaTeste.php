@@ -27,6 +27,11 @@ $this->data["empresa"] = EMPRESA;
         padding: 10px;
         margin: 10px;
     }
+
+    .acoes{
+        text-align: center;
+        font-weight: bold;
+    }
 </style>
 
 <div class="pcoded-content">
@@ -47,17 +52,18 @@ $this->data["empresa"] = EMPRESA;
                     </div>
                     <div class="row">
                         <div class="col-md-4" id="div1">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <select data-role="select" id="cliente" name="cliente">
+                            <br/>
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
+                                    <select class="form-control" id="cliente" name="cliente">
                                         <?= $this->data["clientes"] ?>
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
                                     <form id="formProdutoCodigo" method="post">
-                                        <input type="text" data-role="input" onkeypress="return somenteNumeros(event)" id="produto" name="produto" placeholder="Procute o produto pelo código, nome ou código de barras">
+                                        <input type="text" class="form-control" onkeypress="return somenteNumeros(event)" id="produto" name="produto" placeholder="Procute o produto pelo código, nome ou código de barras">
                                     </form>
                                 </div>
                             </div>
@@ -84,25 +90,39 @@ $this->data["empresa"] = EMPRESA;
                                 </div>
                             </div>
                             <br/>
+                            <div class="acoes">
                             <div class="row">
-                                <div class="col-md-4 opcoes primary">
-                                    F1 - DESCONTO
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F1 - DESCONTO
+                                    </div>
                                 </div>
-                                <div class="col-md-4 opcoes">
-                                    F2 - IMPORTAR
-                                </div>
-                                <div class="col-md-4 opcoes">
-                                    F3 - PAGAMENTO
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F2 - IMPORTAR
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4 opcoes">
-                                    F4 - QUANTIDADE
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F3 - PAGAMENTO
+                                    </div>
                                 </div>
-                                <div class="col-md-4 opcoes">
-                                    F5 - CANCELAR ITEM
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F4 - QUANTIDADE
+                                    </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F5 - CANCELAR ITEM
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                         <div class="col-md-8">
                             <table id="tabela" class="display compact" style="width: 100%;">
@@ -130,7 +150,7 @@ $this->data["empresa"] = EMPRESA;
         <fieldset>
             <div class="form-group">
                 <label>Informe o nome do produto:</label>
-                <input type="text" onkeyup="procurarProdutoLimpo()" list="listaProdutos" name="procurarProdutosLista" id="procurarProdutosLista" data-role="input">
+                <input type="text" onkeyup="procurarProdutoLimpo()" list="listaProdutos" name="procurarProdutosLista" id="procurarProdutosLista" class="form-control form-control-sm">
                 <datalist id="listaProdutos"><?= $this->data["listaProdutos"]  ?></datalist>
             </div>
             <hr>
@@ -145,9 +165,8 @@ $this->data["empresa"] = EMPRESA;
         <fieldset>
             <div class="form-group">
                 <label>Informe a quantidade do produto:</label>
-                <input type="number" name="quantidadeProxProduto" id="quantidadeProxProduto" data-role="input">
+                <input type="number" name="quantidadeProxProduto" id="quantidadeProxProduto" class="form-control form-control-sm">
             </div>
-            <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -159,9 +178,8 @@ $this->data["empresa"] = EMPRESA;
         <fieldset>
             <div class="form-group">
                 <label>Informe o ID do produto:</label>
-                <input type="number" name="idCancelarProduto" id="idCancelarProduto" data-role="input">
+                <input type="number" name="idCancelarProduto" id="idCancelarProduto" class="form-control form-control-sm">
             </div>
-            <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -173,13 +191,18 @@ $this->data["empresa"] = EMPRESA;
         <fieldset>
             <div class="form-group">
                 <label>Valor</label>
-                <input type="text" data-prepend="R$" name="descontoCampoValor" id="descontoCampoValor" data-role="input">
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">R$</span>
+                    <input type="text" name="descontoCampoValor" id="descontoCampoValor" class="form-control form-control-sm">
+                </div>
             </div>
             <div class="form-group">
                 <label>Porcentagem</label>
-                <input type="text" name="porcetagemDesconto" id="porcentagemDesconto" data-append="%" data-role="input">
+                <div class="input-group">
+                    <input type="text" name="porcetagemDesconto" id="porcentagemDesconto" class="form-control form-control-sm">
+                    <span class="input-group-text" id="basic-addon1">%</span>
+                </div>
             </div>
-            <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -192,31 +215,46 @@ $this->data["empresa"] = EMPRESA;
            <div class="row mb-2">
                <div class="cell-sm-3">Dinheiro</div>
                <div class="cell-sm-9">
-                   <input type="text" data-prepend="R$" name="dinheiroPagamento" id="dinheiroPagamento" data-role="input">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" name="dinheiroPagamento" id="dinheiroPagamento" class="form-control form-control-sm">
+                    </div>
                </div>
            </div>
             <div class="row mb-2">
                 <div class="cell-sm-3">Débito</div>
                 <div class="cell-sm-9">
-                    <input type="text" data-prepend="R$"  name="debitoPagamento" id="debitoPagamento" data-role="input">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" name="debitoPagamento" id="debitoPagamento" class="form-control form-control-sm">
+                    </div>
                 </div>
             </div>
             <div class="row mb-2">
                 <div class="cell-sm-3">Crédito</div>
                 <div class="cell-sm-9">
-                    <input type="text" data-prepend="R$"  name="creditoPagamento" id="creditoPagamento" data-role="input">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" name="creditoPagamento" id="creditoPagamento" class="form-control form-control-sm">
+                    </div>
                 </div>
             </div>
             <div class="row mb-2">
                 <div class="cell-sm-3">Crediário</div>
                 <div class="cell-sm-9">
-                    <input type="text" data-prepend="R$"  name="crediarioPagamento" id="crediarioPagamento" data-role="input">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" name="crediarioPagamento" id="crediarioPagamento" class="form-control form-control-sm">
+                    </div>
                 </div>
             </div>
             <div class="row mb-2">
                 <div class="cell-sm-3">Pix</div>
                 <div class="cell-sm-9">
-                    <input type="text" data-prepend="R$"  name="pixPagamento" id="pixPagamento" data-role="input">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" name="pixPagamento" id="pixPagamento" class="form-control form-control-sm">
+                    </div>
                 </div>
             </div>
             <hr>
@@ -246,6 +284,7 @@ $this->data["empresa"] = EMPRESA;
     var tabela = $('#tabela').DataTable({
         "paging": false,
         'ajax': '/temp/' + md5 + '.json',
+        "order": [],
         'searching': false,
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
@@ -658,6 +697,8 @@ $this->data["empresa"] = EMPRESA;
 <!-- END DIALOG PROCURAR PRODUTO -->
 <script>
     $(document).ready(function(){
+        $("#cliente").select2();
+
         $("#totalItens").html(quantidade);
         $("#produto").focus();
 

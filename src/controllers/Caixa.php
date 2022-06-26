@@ -319,7 +319,7 @@ class Caixa extends Controller
     }
 
     public function falseVenda(){
-        Alert::error("Venda não concluída!", "Contate o suporte.", "/pdv/vendas");
+        Alert::error("Venda não concluída!", "Contate o suporte.", "/vendas");
     }
 
     public function imprimirCupom(){

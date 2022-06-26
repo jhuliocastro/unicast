@@ -16,9 +16,9 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.open("/pdv/imprimir/cupom/" + <?= $id ?>, '_blanck');
-                    window.location.href = "/pdv/vendas";
+                    window.location.href = "/vendas";
                 }else{
-                    window.location.href = "/pdv/vendas"
+                    window.location.href = "/vendas"
                 }
             })
         </script>

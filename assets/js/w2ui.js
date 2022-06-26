@@ -3596,7 +3596,7 @@ function w2confirm(msg, title, callBack) {
         modal: true,
         cancelAction: 'no'
     })
-    w2utils.normButtons(options, { yes: 'Yes', no: 'No' })
+    w2utils.normButtons(options, { yes: 'Sim', no: 'Não' })
     if (query('#w2ui-popup').length > 0 && w2popup.status != 'closing') {
         prom = w2popup.message(options)
     } else {
