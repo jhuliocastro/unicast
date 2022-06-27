@@ -2,23 +2,17 @@
 $this->layout("_theme", $this->data);
 $this->data["empresa"] = EMPRESA;
 ?>
-<div class="pcoded-content">
+<div class="pcoded-content container-fluid">
     <div class="card">
         <div class="card-header">
-            Caixa Diario :: <?= $this->data["empresa"] ?>
+            Caixa Diario
         </div>
         <div class="card-body p-2">
             <div class="card-block">
                 <div class="container-fluid">
                     <div>
-                        <button type="button" id="sangria" class="shortcut primary">
-                            <span class="caption">Sangria</span>
-                            <span class="mif-arrow-drop-down icon"></span>
-                        </button>
-                        <button type="button" id="fecharCaixa" class="shortcut primary">
-                            <span class="caption">Fechar</span>
-                            <span class="mif-exit icon"></span>
-                        </button>
+                        <button id="sangria">Realizar Sangria</button>
+                        <button id="fecharCaixa">Fechar Caixa</button>
                         <hr>
                     </div>
                     <table id="tabela" class="display compact" style="width: 100%;">
@@ -42,23 +36,22 @@ $this->data["empresa"] = EMPRESA;
 <div id="janelaSangria" title="Sangria">
     <form>
         <fieldset>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-3 infos">
                     <label>Descrição: </label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" data-role="input" required class="input-small" name="descricaoSangria" id="descricaoSangria">
+                    <input type="text" required class="form-control form-control-sm" name="descricaoSangria" id="descricaoSangria">
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-md-3 infos">
                     <label>Valor: </label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" data-prepend="R$" data-role="input" class="input-small" id="valorSangria" name="valorSangria">
+                    <input type="text" class="form-control form-control-sm" id="valorSangria" name="valorSangria">
                 </div>
             </div>
-            <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -117,7 +110,7 @@ $this->data["empresa"] = EMPRESA;
     }
 
     function imprimirSaida(id){
-        window.open("/caixaDiario/cupom/sangria/" + id, '_blanck');
+        window.open("/caixaDiario/cupom/sangria/" + id, "janela2","width=850,height=700, directories=no, location=no, menubar=no, scrollbars=no, status=no, toolbar=no, resizable=no");
     }
 
     function sangria(){
@@ -195,6 +188,11 @@ $this->data["empresa"] = EMPRESA;
     });
 
     $(document).ready(function(){
+        $("#sangria").button();
+        $("#fecharCaixa").button();
+
+        $("#valorSangria").mask('#.##0,00', {reverse: true});
+
         tabela = $('#tabela').DataTable({
             "paging": false,
             'ajax': '/caixaDiario/tabela',

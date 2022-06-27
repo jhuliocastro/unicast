@@ -105,7 +105,7 @@ class CaixaDiario extends Controller
                     'id' => $d->id,
                     'data' => date("d/m/Y", strtotime($d->dataCaixa)),
                     'valor' => "R$ ".number_format($valor, 2, ",", "."),
-                    'opcoes' => "<a onclick='imprimir($d->id)' href='#'><i class='fa-solid fa-print fa-2x'></i></a>"
+                    'opcoes' => "<a onclick='imprimir($d->id)' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>"
                 ];
             }            
         }
@@ -156,6 +156,7 @@ class CaixaDiario extends Controller
     public function sangria(){
         $dados = (object) $_POST;
         $caixa = new CaixaDiario_Model();
+        $dados->valor = str_replace(",", ".", $dados->valor);
         $caixa->inserir($dados->valor, $dados->descricao, "Saida");
         $caixa->save();
         if($caixa->fail()){
