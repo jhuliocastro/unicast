@@ -122,6 +122,13 @@ class Vendas extends Controller
         
     }
 
+    private static function nuloPara0($valor){
+        if($valor == null){
+            $valor = 0;
+        }
+        return $valor;
+    }
+
     public function relacao()
     {
         $model = new Vendas_Model();
@@ -133,19 +140,20 @@ class Vendas extends Controller
                 $dadosCliente = $modelCliente->dadosClienteID($venda->cliente);
                 $opcoes = "<a data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Imprimir Cupom' onclick='cupom(\"$venda->id\");' href='#'><img class='imagem-acao' src='/assets/images/imprimir.png'></a>";
                 $opcoes .= "<a data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Estornar Venda' onclick='estorno(\"$venda->id\");' href='javascript:void(0)'><img class='imagem-acao' src='/assets/images/estornar.png'></a>";
+
                 $tabela["data"][] = [
                     $venda->id,
                     $dadosCliente->nome,
                     $venda->orcamento,
-                    "R$ " . number_format($venda->valorTotal, 2, ',', '.'),
-                    "R$ " . number_format($venda->valorPago, 2, ',', '.'),
-                    "R$ " . number_format($venda->desconto, 2, ',', '.'),
-                    "R$ " . number_format($venda->troco, 2, ',', '.'),
-                    "R$ " . number_format($venda->dinheiro, 2, ',', '.'),
-                    "R$ " . number_format($venda->credito, 2, ',', '.'),
-                    "R$ " . number_format($venda->debito, 2, ',', '.'),
-                    "R$ " . number_format($venda->crediario, 2, ',', '.'),
-                    "R$ " . number_format($venda->pix, 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->valorTotal), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->valorPago), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->desconto), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->troco), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->dinheiro), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->credito), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->debito), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->crediario), 2, ',', '.'),
+                    "R$ " . number_format($this->nuloPara0($venda->pix), 2, ',', '.'),
                     date("d/m/Y H:i:s", strtotime($venda->created_at)),
                     $opcoes
                 ];
