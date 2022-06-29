@@ -150,71 +150,79 @@ class Orcamento extends Controller{
     }
 
     public function aberto($data){
-        $valorTotalOrcamento = 0;
+        $selectClientes = null;
 
-        $orcamentos = new Orcamentos_Model();
-        $retorno = $orcamentos->dadosID($data["id"]);
-
-        $_SESSION["orcamento"] = $retorno->id;
-
-        $orcamentoAberto = new OrcamentosPedido_Model();
-        $produtos = $orcamentoAberto->retornoProdutos($retorno->id);
-        $tabela = null;
-
-        if($produtos == null){
-            $valorTotalOrcamentoJS = 0;
-        }else{
-            foreach ($produtos as $produto){
-                $model = new Produtos_Model();
-                $dadosProduto = $model->retornoPorID($produto->produto);
-
-                $valorUN = number_format($dadosProduto->precoVenda, 2, ",", ".");
-                $valorUN = "R$ ".$valorUN;
-
-                $valorTotal = $dadosProduto->precoVenda * $produto->quantidade;
-                $valorTotalOrcamento = (float)$valorTotalOrcamento + (float)$valorTotal;
-                $valorTotal = number_format($valorTotal, 2, ",", ".");
-                $valorTotal = "R$ ".$valorTotal;
-
-                $valorTotalOrcamentoJS = $valorTotalOrcamento;
-                //(float)$valorTotalOrcamento = str_replace(".", ",", (float)$valorTotalOrcamento);
-
-                //$valorTotalOrcamento = number_format($valorTotalOrcamento, 2, ",", ".");
-
-                $tabela .= "
-            <tr>
-                <td>$dadosProduto->id</td>
-                <td>$dadosProduto->nome</td>
-                <td>$produto->quantidade</td>
-                <td>$valorUN</td>
-                <td>$valorTotal</td>
-            </tr>
+        $clientesModel = new Clientes_Model();
+        $clientes = $clientesModel->listaClientes();
+        foreach($clientes as $cliente){
+            if($cliente->nome == "Consumidor"){
+                $selectClientes .= "
+                <option selected id='$cliente->id'>$cliente->nome</option>
+            ";
+            }else{
+                $selectClientes .= "
+                <option id='$cliente->id'>$cliente->nome</option>
             ";
             }
         }
 
-        //CONSULTA O NOME DO CLIENTE
-        $clientes = new Clientes_Model();
-        $cliente = $clientes->dadosClienteID($retorno->cliente);
-
-        //LISTA DE PRODUTOS
-        $modelProdutos = new Produtos_Model();
-        $produtos = $modelProdutos->lista();
-        $listaProdutos = null;
+        $model = new Produtos_Model();
+        $produtos = $model->lista();
+        $produtosLista = null;
         foreach($produtos as $produto){
-            $listaProdutos .= "
+            $produtosLista .= "
                 <option>$produto->nome</option>
             ";
         }
 
+        if(!file_exists(__DIR__."/../../temp/".$data["id"].".json")){
+            $this->criaJSON($data["id"]);
+        }
+
         parent::render("orcamentoPDV", [
-            "orcamento" => $data["id"],
-            "cliente" => $cliente->nome,
-            "tabela" => $tabela,
-            "valorTotal" => $valorTotalOrcamento,
-            "valorTotalJS" => $valorTotalOrcamentoJS,
-            "produtos" => $listaProdutos
+            "clientes" => $selectClientes,
+            "listaProdutos" => $produtosLista,
+            "md5" => $data["id"]
         ]);
+    }
+
+    public function json(){
+        $nomeArquivo = __DIR__."/../../temp/".$_POST["md5"].".json";
+        if(!file_exists($nomeArquivo)){
+            $arquivo = fopen($nomeArquivo, 'w+');
+        }
+
+        $arquivo = file_get_contents($nomeArquivo);
+
+        $arquivo = json_decode($arquivo, true);
+        $arquivo["data"][] = [
+            $_POST["idProduto"],
+            $_POST["nomeProduto"],
+            $_POST["quantidade"],
+            "R$ ".$_POST["valorUN"],
+            "R$ ".$_POST["valorTotal"]
+        ];
+
+        $arquivo["dados"] = [
+            "valorTotal" => $_POST["valorTotalCompra"]
+        ];
+
+        var_dump($arquivo);
+
+        $arquivo = json_encode($arquivo);
+
+        $arquivo = file_put_contents($nomeArquivo, $arquivo);
+    }
+
+    private function criaJSON($md5){
+        $nomeArquivo = __DIR__."/../../temp/".$md5.".json";
+        if(!file_exists($nomeArquivo)){
+            $arquivo = fopen($nomeArquivo, 'w+');
+        }
+
+        $data["data"] = [];
+
+        file_put_contents($nomeArquivo, json_encode($data));
     }
 
     public function fechado($data){

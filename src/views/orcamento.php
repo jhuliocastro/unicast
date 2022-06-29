@@ -3,7 +3,7 @@ $this->layout("_theme", $this->data);
 $this->data["empresa"] = EMPRESA;
 ?>
 
-<div class="pcoded-content">
+<div class="pcoded-content container-fluid">
     <div class="card">
         <div class="card-header">
             Orçamento :: <?= $this->data["empresa"] ?>
@@ -11,11 +11,8 @@ $this->data["empresa"] = EMPRESA;
         <div class="card-body p-2">
             <div class="card-block">
                 <div class="container-fluid">
-                    <button type="button" class="shortcut primary" id="botaoNovoOrcamento">
-                        <span class="badge">F1</span>
-                        <span class="caption">Novo</span>
-                        <span class="mif-add icon"></span>
-                    </button>
+                    <button id="botaoNovoOrcamento">Novo Orçamento</button>
+                    <hr>
                     <table id="tabela" class="display compact" style="width: 100%;">
                         <thead>
                         <tr>
@@ -37,6 +34,8 @@ $this->data["empresa"] = EMPRESA;
 <?= $this->start("scripts"); ?>
 <script>
     $(document).ready(function () {
+        $("#botaoNovoOrcamento").button();
+
         $("#botaoNovoOrcamento").click(function(){
             window.location.href = "/pdv/orcamento/novo";
         });

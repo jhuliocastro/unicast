@@ -2,95 +2,144 @@
 $this->layout("_theme", $this->data);
 $this->data["empresa"] = EMPRESA;
 ?>
-
 <style>
-    .valorTotal{
-        float: right;
-        color: darkgreen;
-        font-size: 26px;
+    #div1{
+        background-color: #f5f6f7;
+        border-radius: 5px;
+        min-height: 100%;
+        height: 100%;
+        margin-top: 21px;
+    }
+
+    .opcoes{
+        background-color: #ebebeb;
+        text-align: center;
+        font-weight: bold;
+        border: 1px solid black;
+    }
+
+    .cs{
+        border: 2px solid black;
+        border-radius: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .acoes{
+        text-align: center;
         font-weight: bold;
     }
 </style>
 
 <div class="pcoded-content">
     <div class="card">
-        <form method="post" id="formEstoque">
-            <div class="card-header">
-                Novo Orçamento :: <?= $this->data["empresa"] ?> :: <?= $this->data["cliente"] ?>
-            </div>
-            <div class="card-body p-2">
-                <div class="card-block">
-                    <span class="valorTotal">Valor Total: <span id="valorTotal"></span></span>
-                    <button type="button" class="shortcut primary">
-                        <span class="badge">F1</span>
-                        <span class="caption">Produto</span>
-                        <span class="mif-search icon"></span>
-                    </button>
-                    <button type="button" id="botaoQuantidade" class="shortcut primary">
-                        <span class="badge">F2</span>
-                        <span class="caption">Quantidade</span>
-                        <span class="mif-info icon"></span>
-                    </button>
-                    <button type="button" id="botaoFinalizar" class="shortcut primary">
-                        <span class="badge">F3</span>
-                        <span class="caption">Finalizar</span>
-                        <span class="mif-clipboard icon"></span>
-                    </button>
-                    <button type="button" id="botaoFinalizar" class="shortcut primary">
-                        <span class="badge">F4</span>
-                        <span class="caption">Excluir<br/> Produto</span>
-                        <span class="mif-cancel icon"></span>
-                    </button>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12" style="margin-top: 15px;">
-                                <div class="form-group">
-                                    <label>Código de Barras</label>
-                                    <input id="codigoBarras" name="codigoBarras" autocomplete="off" data-role="input">
-                                    <input type="hidden" name="quantidadeDados" id="quantidadeDados" value="1">
+        <div class="card-body p-2">
+            <div class="card-block">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-7 cs" id="produtoAtual">
+                            INICIANDO NOVO ORÇAMENTO
+                        </div>
+                        <div class="col-md-2 cs" id="quantidadeProdutoAtual">
+                            0 UN
+                        </div>
+                        <div class="col-md-2 cs" id="valorProdutoAtual">
+                            R$ 0,00
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" id="div1">
+                            <br/>
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
+                                    <select class="form-control" id="cliente" name="cliente">
+                                        <?= $this->data["clientes"] ?>
+                                    </select>
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
+                                    <form id="formProdutoCodigo" method="post">
+                                        <input type="text" class="form-control" onkeypress="return somenteNumeros(event)" id="produto" name="produto" placeholder="Procute o produto pelo código, nome ou código de barras">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row" style="background-color: lightblue;">
+                                <div class="col-md-3">
+                                    Total de Itens
+                                </div>
+                                <div class="col-md-3" style="text-align: right; border-right: 1px solid white;">
+                                    <span id="totalItens">0</span>
+                                </div>
+                                <div class="col-md-3">
+                                    Desconto
+                                </div>
+                                <div class="col-md-3" style="text-align: right;">
+                                    <span id="desconto">R$ 0,00</span>
+                                </div>
+                            </div>
+                            <div class="row" style="background-color: lightgreen;">
+                                <div class="col-md-6">
+                                    Valor Total
+                                </div>
+                                <div class="col-md-6" style="text-align: right;">
+                                    <span style="font-weight: bold; font-size: 20px;" id="valorTotal">R$ 0,00</span>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="acoes">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F4 - QUANTIDADE
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F5 - CANCELAR ITEM
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="alert alert-secondary" role="alert">
+                                        F6 - FINALIZAR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-md-8">
+                            <table id="tabela" class="display compact" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>PRODUTO</th>
+                                        <th>QUANTIDADE</th>
+                                        <th>VALOR UN</th>
+                                        <th>VALOR TOTAL</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-            <hr>
-            </form>
-            <table id="tabela" class="display compact" style="width: 100%;">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>PRODUTO</th>
-                    <th>QUANTIDADE</th>
-                    <th>VALOR UNT</th>
-                    <th>VALOR TOTAL</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        
+        </div>
     </div>
 </div>
 
-<div class="dialog" id="janelaQuantidade" data-role="dialog">
-    <form method="post" id="formQuantidade">
-        <div class="dialog-title">Insira a quantidade desejada</div>
-        <div class="dialog-content">
-            <input type="number" id="quantidadeProxProduto" name="quantidadeProxProduto" data-role="input">
-        </div>
-        <div class="dialog-actions">
-            <button class="button js-dialog-close">Cancelar</button>
-            <button type="submit" class="button primary">Ok</button>
-        </div>
-    </form>
-</div>
-
-<div id="janelaExcluirProduto" title="Excluir Produto">
+<!-- START DIALOG PROCURAR PRODUTO -->
+<div id="procurarProduto" title="Procurar Produto">
     <form>
         <fieldset>
             <div class="form-group">
-                <label>Informe o ID do produto:</label>
-                <input type="text" name="idExcluirProduto" id="idExcluirProduto" data-role="input">
+                <label>Informe o nome do produto:</label>
+                <input type="text" onkeyup="procurarProdutoLimpo()" list="listaProdutos" name="procurarProdutosLista" id="procurarProdutosLista" class="form-control form-control-sm">
+                <datalist id="listaProdutos"><?= $this->data["listaProdutos"]  ?></datalist>
             </div>
             <hr>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
@@ -98,264 +147,345 @@ $this->data["empresa"] = EMPRESA;
         </fieldset>
     </form>
 </div>
-
-<div class="dialog" id="janelaProduto" data-role="dialog">
-    <form method="post" id="formProduto">
-        <div class="dialog-title">Digite o nome do produto</div>
-        <div class="dialog-content">
-            <input autocomplete="off" type="search" list="listProdutos" id="nomeProduto" name="nomeProduto" data-role="input">
-            <datalist id="listProdutos"><?= $this->data["produtos"] ?></datalist>
-        </div>
-        <div class="dialog-actions">
-            <button class="button js-dialog-close">Cancelar</button>
-            <button type="submit" class="button primary">Ok</button>
-        </div>
+<!--INICIO DIALOG QUANTIDADE PRODUTO -->
+<div id="quantidadeProduto" title="Quantidade Produto">
+    <form>
+        <fieldset>
+            <div class="form-group">
+                <label>Informe a quantidade do produto:</label>
+                <input type="number" name="quantidadeProxProduto" id="quantidadeProxProduto" class="form-control form-control-sm">
+            </div>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+<!--INICIO DIALOG CANCELAR PRODUTO -->
+<div id="cancelarProduto" title="Cancelar Produto">
+    <form>
+        <fieldset>
+            <div class="form-group">
+                <label>Informe o ID do produto:</label>
+                <input type="number" name="idCancelarProduto" id="idCancelarProduto" class="form-control form-control-sm">
+            </div>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
     </form>
 </div>
 
-<?= $this->start("scripts"); ?>
 <script>
     var quantidade = 1;
+    var valorTotalCompra = 0;
+    var valorAposDesconto = 0;
+    var desconto = 0;
+    var quantidadeGeral = 0;
+    var lista = {};
+    var troco = 0;
+    var valorRestante = 0;
+    var valorContagemPagamento = 0;
+    var orcamento = null;
+    var md5 = '<?= $this->data["md5"] ?>';
 
-    <?php
-    if($this->data["valorTotalJS"] == null){
-        echo "var valorTotalOrcamento = 0;";
-    }else{
-        echo "valorTotalOrcamento = ".$this->data["valorTotalJS"].";";
+    var audio = new Audio("/assets/sons/beep.mp3");
+
+    var tabela = $('#tabela').DataTable({
+        "paging": false,
+        'ajax': '/temp/' + md5 + '.json',
+        "order": [],
+        'searching': false,
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
+        }
+    });
+
+    var dialogProcurarProduto = $("#procurarProduto").dialog({
+        autoOpen: false,
+        width: 800,
+        modal: true,
+        buttons: {
+            "Confirmar": procurarProduto
+        }
+    });
+
+    var formProcurarProduto = dialogProcurarProduto.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        procurarProduto();
+    });
+
+    var dialogQuantidadeProduto = $("#quantidadeProduto").dialog({
+        autoOpen: false,
+        width: 300,
+        modal: true,
+        buttons: {
+            "Confirmar": quantidadeProduto
+        }
+    });
+
+    var formQuantidadeProduto = dialogQuantidadeProduto.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        quantidadeProduto();
+    });
+
+    var dialogCancelarProduto = $("#cancelarProduto").dialog({
+        autoOpen: false,
+        width: 300,
+        modal: true,
+        buttons: {
+            "Confirmar": cancelarProduto
+        }
+    });
+
+    var formCancelarProduto = dialogCancelarProduto.find( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        cancelarProduto();
+    });
+
+
+    function cancelarProduto(){
+        let id = $("#idCancelarProduto").val();
+
+        $.ajax({
+                        url: "/pdv/caixa/cancelar/item",
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            idProduto: id,
+                            md5: md5
+                        }
+                    })
+                        .done(function (retorno) {
+                            console.log(retorno);
+                            dialogCancelarProduto.dialog('close');
+                            $("#idCancelarProduto").val("");
+                            
+                            var notify = Metro.notify;
+                            notify.create("Produto " + id + " excluído!", "", {
+                                cls: "success"
+                            });
+
+                            retorno.valorTotal = retorno.valorTotal.replace('R$ ', '');
+                            valorTotalCompra = valorTotalCompra - retorno.valorTotal;
+                            $("#valorTotal").html("R$ " + Number(valorTotalCompra).toFixed(2));
+
+                            quantidadeGeral = quantidadeGeral - retorno.quantidade;
+                            $("#totalItens").html(quantidadeGeral);
+                        })
+                        .fail(function (jqXHR, textStatus, msg) {
+                            console.log(msg);
+                        });
     }
-    ?>
 
-    valorTotalOrcamento = (Math.round(valorTotalOrcamento * 100) / 100).toFixed(2);
-    $("#valorTotal").html("R$ "+valorTotalOrcamento);
+    function quantidadeProduto(){
+        quantidade = $("#quantidadeProxProduto").val();
+        dialogQuantidadeProduto.dialog('close');
+        $("#quantidadeProxProduto").val("");
+        $("#produto").focus();
+    }
 
-    $('#codigoBarras').on('keydown', null, 'f1', function () {
-        Metro.dialog.open("#janelaProduto");
-        $("#nomeProduto").focus();
-        return false;
-    });
 
-    $(document).on('keydown', null, 'f1', function () {
-        Metro.dialog.open("#janelaProduto");
-        $("#nomeProduto").focus();
-        return false;
-    });
+    $("#formProdutoCodigo").submit(function(){
+        let codigoBarras = $("#produto").val();
 
-    $('#codigoBarras').on('keydown', null, 'f2', function () {
-        Metro.dialog.open("#janelaQuantidade");
-        $("#quantidadeProxProduto").focus();
-        return false;
-    });
+        if(codigoBarras !== ""){
 
-    $(document).on('keydown', null, 'f2', function () {
-        Metro.dialog.open("#janelaQuantidade");
-        $("#quantidadeProxProduto").focus();
-        return false;
-    });
+        $.ajax({
+            url: "/produtos/dados",
+            type: 'post',
+            dataType: 'json',
+            data: {
+                codigoBarras: codigoBarras
+            }
+        })
+            .done(function (retorno) {
+                console.log(retorno);
+                $("#procurarProdutosLista").val("");
 
-    $(document).on('keydown', null, 'f3', function () {
-        window.location.href = "/pdv/orcamento/finalizar";
-        return false;
-    });
+                if(retorno.id !== null){
+                    if(retorno.status === false){
+                    var notify = Metro.notify;
+                    notify.create(retorno.erro, "Erro", {
+                        cls: "alert"
+                    });
+                    $("#produto").val("");
+                }else{
+                    let valorUN = Number(retorno.valor).toFixed(2);
+                    console.log(valorUN);
+                    let valorTotal = valorUN * quantidade;
 
-    $("#codigoBarras").on('keydown', null, 'f3', function () {
-        window.location.href = "/pdv/orcamento/finalizar";
-        return false;
-    });
+                    $.ajax({
+                        url: "/pdv/orcamento/md5",
+                        type: 'post',
+                        dataType: 'html',
+                        data: {
+                            idProduto: retorno.id,
+                            nomeProduto: retorno.produto,
+                            quantidade: quantidade,
+                            valorUN: valorUN,
+                            valorTotal: Number(valorTotal).toFixed(2),
+                            md5: md5,
+                            valorTotalCompra: valorTotalCompra
+                        }
+                    })
+                        .done(function (retorno) {
+                            console.log(retorno);
+                        })
+                        .fail(function (jqXHR, textStatus, msg) {
+                            console.log(msg);
+                        });
 
-    $('#codigoBarras').on('keydown', null, 'f4', function () {
-        $("#janelaExcluirProduto").dialog('open');
-        $("#idProdutoExcluir").focus();
-        return false;
-    });
 
-    $(document).on('keydown', null, 'f4', function () {
-        $("#janelaExcluirProduto").dialog('open');
-        $("#idProdutoExcluir").focus();
-        return false;
-    });
+                    $("#produto").val("");
+                    $("#produto").focus();
 
-    $('#quantidadeProxProduto').on('keydown', null, 'esc', function () {
-        Metro.dialog.close("#janelaQuantidade");
-        $("#codigoBarras").focus();
-        return false;
-    });
+                    quantidadeGeral = quantidadeGeral + parseInt(quantidade);
 
-    $('#nomeProduto').on('keydown', null, 'esc', function () {
-        Metro.dialog.close("#janelaProduto");
-        $("#nomeProduto").val("");
-        $("#codigoBarras").focus();
-        return false;
-    });
+                    $("#totalItens").html(quantidadeGeral);
 
-    $("#botaoQuantidade").click(function(){
-        Metro.dialog.open("#janelaQuantidade");
-        $("#quantidadeProxProduto").focus();
+                    console.log(retorno);
+
+                    $("#produtoAtual").html(retorno.produto);
+                    $("#quantidadeProdutoAtual").html(quantidade + " " + retorno.unidadeMedida);
+                    $("#valorProdutoAtual").html("R$ "+ Number(valorTotal).toFixed(2));
+
+                    quantidade = 1;
+
+                    valorTotalCompra = valorTotalCompra + valorTotal;
+
+                    $("#valorTotal").html("R$ "+ valorTotalCompra.toFixed(2));
+
+                    audio.play();
+
+                }
+                }else{
+                    var notify = Metro.notify;
+                    notify.create("Produto não encontrado! Verique o log.", "Erro", {
+                        cls: "alert"
+                    });
+                }
+
+                
+
+            })
+            .fail(function (jqXHR, textStatus, msg) {
+                console.log(msg);
+                var notify = Metro.notify;
+                notify.create("Erro ao buscar dados do produto! Verique o log.", "Erro", {
+                    cls: "alert"
+                });
+                $("#produto").val("");
+            });
+
+        }
+
         return false;
     });
 
     $("#formQuantidade").submit(function(event){
         event.preventDefault();
         quantidade = $("#quantidadeProxProduto").val();
-        $("#quantidadeDados").val(quantidade);
         $("#quantidadeProxProduto").val("");
-        $("#codigoBarras").focus();
+        $("#produto").focus();
     });
 
-    var dialog = $("#janelaExcluirProduto").dialog({
-        autoOpen: false,
-        width: 800
-    });
-
-    var form = dialog.find( "form" ).on( "submit", function( event ) {
-        event.preventDefault();
-        excluirProduto();
-    });
-
-    function excluirProduto(){
-        $("#janelaExcluirProduto").dialog('close');
-        let produto = $("#idExcluirProduto").val();
-        $("#idExcluirProduto").val("");
+    function procurarProduto(){
+        let produto = $("#procurarProdutosLista").val();
         $.ajax({
-            url: "/pdv/orcamento/excluir/produto",
+            url: "/pdv/caixa/pesquisar/produto",
             type: 'post',
-            dataType: "json",
+            dataType: 'json',
             data: {
                 produto: produto
-            },
-            beforeSend: function () {
-                $("#resultado").html("ENVIANDO...");
             }
         })
-            .done(function (produto) {
-                console.log(produto);
-                if(produto.status == true){
-                    Metro.toast.create("Produto Excluído!", null, null, "info");
+            .done(function (retorno) {
+                console.log(retorno);
+                $("#procurarProdutosLista").val("");
+                dialogProcurarProduto.dialog('close');
+                if(retorno.status === false){
+                    var notify = Metro.notify;
+                    notify.create(retorno.erro, "Erro", {
+                        cls: "alert"
+                    });
                 }else{
-                    console.log(produto.erro);
-                    Metro.toast.create("Erro! Contate o administrador do sistema.", null, null, "alert");
+                    $("#produto").val(retorno.codigoBarras);
+                    $("#formProdutoCodigo").submit();
                 }
 
-                tabela.ajax.reload();
-
-                $("#nomeProduto").val("");
-                $("#codigoBarras").focus();
             })
             .fail(function (jqXHR, textStatus, msg) {
                 console.log(msg);
                 var notify = Metro.notify;
-                notify.create("Produto não cadastrado ou erro na pesquisa!", "Erro", {
+                notify.create("Erro ao buscar dados do produto! Verique o log.", "Erro", {
                     cls: "alert"
                 });
-                $("#nomeProduto").val("");
             });
     }
 
-    $("#formProduto").submit(function(event){
-       event.preventDefault();
-        $.ajax({
-            url: "/produtos/pesquisar",
-            type: 'post',
-            dataType: "JSON",
-            data: {
-                produto: $("#nomeProduto").val()
-            },
-            beforeSend: function () {
-                $("#resultado").html("ENVIANDO...");
+    function somenteNumeros(e) {
+        var charCode = e.charCode ? e.charCode : e.keyCode;
+        // charCode 8 = backspace
+        // charCode 9 = tab
+        if (charCode !== 8 && charCode !== 9 && charCode !== 13) {
+            // charCode 48 equivale a 0
+            // charCode 57 equivale a 9
+            console.log(charCode)
+            if (charCode < 48 || charCode > 57) {
+                $("#produto").val("");
+                dialogProcurarProduto.dialog('open');
+                $("#procurarProdutosLista").val(e.key);
+                $("#procurarProdutoLista").focus();
+                return false;
             }
-        })
-            .done(function (produto) {
-                console.log(produto);
-                if(produto.codigoBarras !== null){
-                    $("#codigoBarras").val(produto.codigoBarras);
-                }else{
-                    var notify = Metro.notify;
-                    notify.create("Erro ao buscar código de barras!", "Erro", {
-                        cls: "alert"
-                    });
-                }
+        }
+    }
 
-                $("#nomeProduto").val("");
-                $("#codigoBarras").focus();
-            })
-            .fail(function (jqXHR, textStatus, msg) {
-                console.log(msg);
-                var notify = Metro.notify;
-                notify.create("Produto não cadastrado ou erro na pesquisa!", "Erro", {
-                    cls: "alert"
-                });
-                $("#nomeProduto").val("");
-            });
+    function procurarProdutoLimpo(){
+        let v = $("#procurarProdutosLista").val();
+        if(v === ""){
+            dialogProcurarProduto.dialog('close');
+        }
+    }
 
-        $("#nomeProduto").val();
+    //ATALHOS
+   //INICIO ATALHO INFORMA QUANTIDADE PRODUTO
+    $('#produto').on('keydown', null, 'f4', function () {
+        dialogQuantidadeProduto.dialog('open');
+        $("#quantidadeProxProduto").focus();
+        return false;
     });
 
-    $(document).ready(function () {
-        $("#codigoBarras").focus();
+    $(document).on('keydown', null, 'f4', function () {
+        dialogQuantidadeProduto.dialog('open');
+        $("#quantidadeProxProduto").focus();
+        return false;
+    });
+    //FIM ATALHO INFORMA QUANTIDADE PRODUTO
 
-        var tabela = $('#tabela').DataTable({
-            "paging": false,
-            'ajax': '/pdv/orcamento/aberto/relacao/<?= $this->data["orcamento"] ?>',
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
-            }
-        });
+    //INICIO ATALHO CANCELAMENTO DE ITEM
+    $('#produto').on('keydown', null, 'f5', function () {
+        dialogCancelarProduto.dialog('open');
+        return false;
+    });
 
-        $("#formEstoque").submit(function (event) {
-            event.preventDefault();
-            let codigoBarras = $("#codigoBarras").val();
-            $.ajax({
-                url: "/produtos/dados",
-                type: 'post',
-                dataType: "JSON",
-                data: {
-                    codigoBarras: codigoBarras,
-                    quantidadeDados: $("#quantidadeDados").val()
-                },
-                beforeSend: function () {
-                    $("#resultado").html("ENVIANDO...");
-                }
-            })
-                .done(function (produto) {
-                    console.log(produto);
-                    let valorUN = Number(produto.valor).toFixed(2);
-                    let valorTotal = valorUN * quantidade;
-                    valorTotalOrcamento = parseFloat(valorTotalOrcamento);
-                    console.log(valorTotalOrcamento);
-                    console.log(valorTotal);
-                    valorTotalOrcamento = valorTotalOrcamento + valorTotal;
-                    valorTotalOrcamento = valorTotalOrcamento.toFixed(2);
+    $(document).on('keydown', null, 'f5', function () {
+        dialogCancelarProduto.dialog('open');
+        return false;
+    });
+    //FIM ATALHO CANCELAMENTO DE ITEM
 
-                    valorTotal = valorTotal.toFixed(2);
-                    valorTotal = "R$ " + valorTotal;
-                    valorUN = "R$ " + valorUN;
-                    valorTotal = valorTotal.replace(".", ",");
-                    valorUN = valorUN.replace(".", ",");
-                    $("#tabela>tbody").prepend("<tr>" +
-                        "<td>" + produto.id + "</td>" +
-                        "<td>" + produto.produto + "</td>" +
-                        "<td>" + quantidade + "</td>" +
-                        "<td>" + valorUN + "</td>" +
-                        "<td>" + valorTotal + "</td>" +
-                        "</tr>");
+</script>
 
-                    quantidade = 1;//VOLTA A QUANTIDADE PARA 1
-                    $("#quantidadeDados").val(quantidade);
-                    $("#codigoBarras").val("");
+<!-- END DIALOG PROCURAR PRODUTO -->
+<script>
+    $(document).ready(function(){
+        $("#cliente").select2();
 
+        $("#totalItens").html(quantidade);
+        $("#produto").focus();
 
-                    $("#valorTotal").html("R$ " + valorTotalOrcamento);
-                    $("#valorTotalCompraDinheiro").val(valorTotalOrcamento);
-
-                })
-                .fail(function (jqXHR, textStatus, msg) {
-                    console.log(msg);
-                    var notify = Metro.notify;
-                    notify.create("Produto não cadastrado ou erro no cadastro!", "Erro", {
-                        cls: "alert"
-                    });
-                    $("#codigoBarras").val("");
-                });
-        });
+        setInterval( function () {
+            tabela.ajax.reload();
+        }, 300 );
     });
 </script>
-<?= $this->end("scripts"); ?>
