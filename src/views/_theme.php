@@ -86,10 +86,10 @@ $this->data["empresa"] = EMPRESA;
                 { type: 'menu', id: 'inicio', text: 'Início',
                     items: [
                         { id: 'produtos', text: 'Produtos', icon: 'fa-solid fa-barcode' },
-                        { id: 'clientes', text: 'Clientes', icon: 'fa-solid fa-users' },
-                        { id: 'empresas', text: 'Empresas', icon: `fa-solid fa-building` },
+                        { id: 'clientes', text: 'Clientes', icon: 'fa-solid fa-users', disabled: true },
+                        { id: 'empresas', text: 'Empresas', icon: `fa-solid fa-building`, disabled: true },
                         { id: 'caixaDiario', text: 'Caixa Diário', icon: 'fa-solid fa-cash-register' },
-                        { id: 'consultaPreco', text: 'Consultar Preços', icon: 'fa-solid fa-search' }
+                        { id: 'consultaPreco', text: 'Consultar Preços', icon: 'fa-solid fa-search', disabled: true }
                     ]
                 },
                 { type: 'break' },
@@ -102,13 +102,13 @@ $this->data["empresa"] = EMPRESA;
                 { type: 'menu', id: 'pdv', text: 'PDV',
                     items: [
                         { id: 'caixa', text: 'Caixa', icon: 'fa-solid fa-cash-register' },
-                        { id: 'orcamento', text: 'Orcamento', icon: 'fa-solid fa-chart-line' }
+                        { id: 'orcamento', text: 'Orcamento', icon: 'fa-solid fa-chart-line', disabled: true }
                     ]
                 },
                 { type: 'break' },
                 { type: 'menu', id: 'financeiro', text: 'Financeiro',
                     items: [
-                        { id: 'boletos', text: 'Boletos', icon: 'fa-solid fa-barcode' }
+                        { id: 'boletos', text: 'Boletos', icon: 'fa-solid fa-barcode', disabled: true }
                     ]
                 },
                 { type: 'break' },
