@@ -29,6 +29,8 @@
     "dompdf/dompdf": "^1.2",
     "coffeecode/uploader": "^2.0",
     "ext-simplexml": "*",
-    "nfephp-org/sped-da": "^1.1"
+    "nfephp-org/sped-da": "^1.1",
+    "datatables/datatables": "^1.10",
+    "twbs/bootstrap": "^5.1"
   }
 }
