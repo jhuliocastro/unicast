@@ -31,6 +31,9 @@ $this->data["empresa"] = EMPRESA;
         html, body{
             margin: 0;
             padding: 0;
+            background-image: url("/assets/images/background.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
         }
 
         .imagem-acao{
