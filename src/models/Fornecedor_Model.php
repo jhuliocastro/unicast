@@ -82,4 +82,8 @@ class Fornecedor_Model extends DataLayer{
     public function dados(string $cnpj){
         return $this->find("cnpj=:cnpj", "cnpj=$cnpj")->fetch();
     }
+
+    public function lista(){
+        return $this->find()->order("razaoSocial ASC")->fetch(true);
+    }
 }

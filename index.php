@@ -18,8 +18,7 @@ $router->get("/", "Dashboard:home");
 //BOLETOS
 $router->group("boletos");
 $router->get("/", "Boletos:home");
-$router->get("/cadastrar", "Boletos:cadastrar");
-$router->post("/cadastrar", "Boletos:cadastrarSender");
+$router->post("/cadastrar", "Boletos:cadastrar");
 
 
 //CLIENTES

@@ -67,7 +67,7 @@ class Empresas_Model extends DataLayer implements IModel {
     public function list()
     {
         // TODO: Implement list() method.
-        return $this->find()->fetch(true);
+        return $this->find()->order("razaoSocial ASC")->fetch(true);
     }
 
     /**

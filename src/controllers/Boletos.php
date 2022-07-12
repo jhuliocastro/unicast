@@ -1,11 +1,10 @@
 <?php
 namespace Controller;
 
-use Core\TButton;
-use Core\TForm;
-use Core\TInput;
-use Core\TPage;
-use Core\TTable;
+use Model\Boletos_Model;
+use Model\Empresas_Model;
+use Model\Fornecedor_Model;
+use Alertas\Alert;
 
 class Boletos extends Controller{
     public function __construct($router)
@@ -15,59 +14,51 @@ class Boletos extends Controller{
     }
 
     public function home(){
-        $page = new TPage(0, "Boletos");
+        $fornecedor = new Fornecedor_Model();
+        $fornecedores = $fornecedor->lista();
+        $fornecedoresLista = null;
+        if($fornecedores != null){
+            foreach($fornecedores as $fornecedor){
+                $fornecedoresLista .= "
+                    <option>$fornecedor->razaoSocial</option><br/>
+                ";
+            }
+        }
 
-        //BOTAO DE CADASTRO
-        $botaoCadastro = new TButton();
-        $botaoCadastro->id("botaoCadastro");
-        $botaoCadastro->title("Cadastrar Boleto");
-        $botaoCadastro->action(2);
-        $botaoCadastro->url("/boletos/cadastrar");
+        $empresas = new Empresas_Model();
+        $empresas = $empresas->list();
+        $empresasLista = null;
+        if($empresasLista != null){
+            foreach($empresas as $empresa){
+                $empresasLista .= "
+                    <option>$empresa->razaoSocial</option><br/>
+                ";
+            }
+        }
 
-        //TABELA
-        $tabela = new TTable("tabelaBoletos");
-        $tabela->addColumn("ID");
-        $tabela->addColumn("Fornecedor");
-        $tabela->addColumn("Emissão");
-        $tabela->addColumn("Vencimento");
-        $tabela->addColumn("Valor");
-        $tabela->addColumn("Valor Pago");
-        $tabela->addColumn("Pagamento");
-        $tabela->addColumn("");
-
-        $page->addTable($tabela->close());
-
-        $page->addButton($botaoCadastro->show());
-
-        $page->close();
+        parent::render("boletos", [
+            "fornecedores" => $fornecedoresLista,
+            "empresas" => $empresasLista
+        ]);
     }
 
     public function cadastrar(){
-        $page = new TPage(1, "Cadastrar Boleto");
+        $dados = (object) $_POST;
 
-        $numeroDocumento = new TInput();
-        $numeroDocumento->type("number");
-        $numeroDocumento->id("numeroDocumento");
-        $numeroDocumento->label("Número Documento");
-        $numeroDocumento->required(true);
-        $numeroDocumento = $numeroDocumento->close();
+        $model = new Boletos_Model();
 
-        $codigoBarras = new TInput();
-        $codigoBarras->type("number");
-        $codigoBarras->id("codigoBarras");
-        $codigoBarras->label("Código de Barras");
-        $codigoBarras = $codigoBarras->close();
+        $verificaCodigoBarras = $model->verificaCodigoBarras($dados->codigoBarrasCadastro);
+        if($verificaCodigoBarras == 0):
+            Alert::error("Código de Barras já está cadastrado!", "Verifique os dados e tente novamente.", "/boletos");
+            exit();
+        endif;
 
-        $form = new TForm('formCadastro', 'post', '/boletos/cadastrar', false);
+        $cadastro = $model->cadastrar((array)$dados);
 
-        $form->addInput($numeroDocumento);
-        $form->addInput($codigoBarras);
-        $form->addSubmit("salvar", "Salvar");
-
-        $form = $form->show();
-
-        $page->addForm($form);
-
-        $page->close();
+        if($cadastro["status"] == false){
+            Alert::error("Erro ao processar requisição!", $cadastro["erro"], "/boletos");
+        }else{
+            Alert::success("Boleto Cadastrado!", '', '/boletos');
+        }
     }
 }

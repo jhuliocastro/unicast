@@ -3,7 +3,7 @@ namespace Model;
 
 use CoffeeCode\DataLayer\DataLayer;
 
-class CaixaDiario_Model extends DataLayer{
+class Boletos_Model extends DataLayer{
     public function __construct(){
         parent::__construct("boletos", [], "id", true);
     }
@@ -12,62 +12,29 @@ class CaixaDiario_Model extends DataLayer{
         return $this->find()->fetch(true);
     }
 
-    public function inserir($valor, $descricao, $tipo){
-        $this->valor = $valor;
-        $this->descricao = $descricao;
-        $this->tipo = $tipo;
-        return $this->save();
-    }
-
-    public function dadosDia($data){
-        return $this->find("created_at=:c", "c=$data")->fetch(true);
-    }
-
-    public function saldoDia($dia){
-        $saldo = 0;
-        $retorno = $this->find()->fetch(true);
-        foreach($retorno as $dados){
-            if(date("Y-m-d", strtotime($dados->created_at)) == $dia){
-                $dados->valor = str_replace(",", ".", $dados->valor);
-                if($dados->tipo == "Entrada"){
-                    $saldo = $saldo + $dados->valor;
-                }else{
-                    $saldo = $saldo - $dados->valor;
-                }
-            }
-        }
-        return $saldo;
-    }
-
-    public function excluir(int $id){
-        $model = ($this)->findById($id);
-        $model->destroy();
-        if($model->fail()){
+    public function cadastrar(array $dados){
+        $this->documento = $dados["documentoCadastro"];
+        $this->vencimento = $dados["dataVencimentoCadastro"];
+        $this->fornecedor = $dados["fornecedorCadastro"];
+        $this->empresa = $dados["empresaCadastro"];
+        $this->codigoBarras = $dados["codigoBarrasCadastro"];
+        $this->emissao = $dados["dataEmissaoCadastro"];
+        $this->nfe = $dados["chaveNFECadastro"];
+        $this->valor = $dados["valorCadastro"];
+        $this->save();
+        if($this->fail()):
             $retorno = [
                 "status" => false,
-                "erro" => $model->fail()->getMessage()
+                "erro" => $this->fail()->getMessage()
             ];
-        }else{
-            $retorno = ["status"=>true];
-        }
+        else:
+            $retorno["status"] = true;
+        endif;
+
         return $retorno;
     }
 
-    public function excluirPorDescricao($descricao){
-        $model = ($this)->find("descricao=:descricao", "descricao=$descricao")->fetch();
-        $model->destroy();
-        if($model->fail()){
-            $retorno = [
-                "status" => false,
-                "erro" => $model->fail()->getMessage()
-            ];
-        }else{
-            $retorno = ["status"=>true];
-        }
-        return $retorno;
-    }
-
-    public function dadosID($id){
-        return $this->findById($id);
+    public function verificaCodigoBarras(string $codigo){
+        return $this->find("codigoBarras =: codigo", "codigo=$codigo")->count();
     }
 }
