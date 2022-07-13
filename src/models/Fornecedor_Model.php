@@ -2,6 +2,7 @@
 namespace Model;
 
 use CoffeeCode\DataLayer\DataLayer;
+use mysql_xdevapi\DatabaseObject;
 
 class Fornecedor_Model extends DataLayer{
     public function __construct()
@@ -49,6 +50,19 @@ class Fornecedor_Model extends DataLayer{
         }
 
         return $retorno;
+    }
+
+    public function verificaExisteRazao(string $razaoSocial) : bool{
+            $retorno = $this->find("razaoSocial=:razao", "razao=$razaoSocial")->count();
+            if($retorno == 0){
+                return false;
+            }else{
+                return true;
+            }
+    }
+
+    public function dadosRazao(string $razaoSocial){
+            return $this->find("razaoSocial=:razao", "razao=$razaoSocial")->fetch();
     }
 
     /**

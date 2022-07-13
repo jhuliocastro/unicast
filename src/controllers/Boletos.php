@@ -28,7 +28,7 @@ class Boletos extends Controller{
         $empresas = new Empresas_Model();
         $empresas = $empresas->list();
         $empresasLista = null;
-        if($empresasLista != null){
+        if($empresas != null){
             foreach($empresas as $empresa){
                 $empresasLista .= "
                     <option>$empresa->razaoSocial</option><br/>
@@ -47,16 +47,45 @@ class Boletos extends Controller{
 
         $model = new Boletos_Model();
 
+        //VERIFICA SE CODIGO DE BARRAS JÁ ESTÁ CADASTRADO
         $verificaCodigoBarras = $model->verificaCodigoBarras($dados->codigoBarrasCadastro);
-        if($verificaCodigoBarras == 0):
+        if($verificaCodigoBarras > 0):
             Alert::error("Código de Barras já está cadastrado!", "Verifique os dados e tente novamente.", "/boletos");
             exit();
         endif;
 
+        //VERIFICA SE FORNECEDOR EXISTE
+        $modelFornecedor = new Fornecedor_Model();
+        $retornoFornecedor = $modelFornecedor->verificaExisteRazao($dados->fornecedorCadastro);
+        if($retornoFornecedor == false){
+            Alert::error("Fornecedor não encontrado na base de dados!", "Verifique os dados e tente novamente.", "/boletos");
+            exit();
+        }else{
+            $dadosFornecedor = $modelFornecedor->dadosRazao($dados->fornecedorCadastro);
+            $dados->fornecedorCadastro = $dadosFornecedor->id;
+        }
+
+        //VERIFICA SE EMPRESA EXISTE
+        $modelEmpresa = new Empresas_Model();
+        $retornoEmpresa = $modelEmpresa->verificaExisteRazao($dados->empresaCadastro);
+        if($retornoEmpresa == false){
+            Alert::error("Empresa não encontrada na base de dados!", "Verifique os dados e tente novamente.", "/boletos");
+            exit();
+        }else{
+            $dadosEmpresa = $modelEmpresa->dadosRazao($dados->empresaCadastro);
+            $dados->empresaCadastro = $dadosEmpresa->id;
+        }
+
+        $dados->valorCadastro = str_replace(".", "", $dados->valorCadastro);
+        $dados->valorCadastro = str_replace(",", ".", $dados->valorCadastro);
+        $dados->valorCadastro = (float) $dados->valorCadastro;
+
+        //CADASTRA O BOLETO NO BANCO DE DADOS
         $cadastro = $model->cadastrar((array)$dados);
 
         if($cadastro["status"] == false){
-            Alert::error("Erro ao processar requisição!", $cadastro["erro"], "/boletos");
+            $cadastro["erro"] = str_replace("'", "", $cadastro["erro"]);
+            Alert::error("Erro ao processar requisição!", $cadastro['erro'], "/boletos");
         }else{
             Alert::success("Boleto Cadastrado!", '', '/boletos');
         }

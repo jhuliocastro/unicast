@@ -81,6 +81,19 @@ class Empresas_Model extends DataLayer implements IModel {
         return $this->find(null, null, $column)->fetch(true);
     }
 
+    public function verificaExisteRazao(string $razaoSocial) : bool{
+        $retorno = $this->find("razaoSocial=:razao", "razao=$razaoSocial")->count();
+        if($retorno == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function dadosRazao(string $razaoSocial){
+        return $this->find("razaoSocial=:razao", "razao=$razaoSocial")->fetch();
+    }
+
     public function checkExist($column, $data)
     {
         $retorno = $this->find("$column=:$column", "$column=$data")->count();

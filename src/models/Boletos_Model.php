@@ -35,6 +35,6 @@ class Boletos_Model extends DataLayer{
     }
 
     public function verificaCodigoBarras(string $codigo){
-        return $this->find("codigoBarras =: codigo", "codigo=$codigo")->count();
+        return $this->find("codigoBarras=:codigo", "codigo=$codigo")->count();
     }
 }
