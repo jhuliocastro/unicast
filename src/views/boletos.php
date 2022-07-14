@@ -18,11 +18,15 @@ $this->data["empresa"] = EMPRESA;
                         <thead>
                         <tr>
                             <td>ID</td>
+                            <td>Situação</td>
                             <td>Nº NFe</td>
                             <td>Empresa</td>
                             <td>Fornecedor</td>
                             <td>Valor</td>
+                            <td>Data Vencimento</td>
                             <td>Data Emissão</td>
+                            <td>Valor Pago</td>
+                            <td>Data Pagamento</td>
                             <td>Ações</td>
                         </tr>
                         </thead>
@@ -78,7 +82,7 @@ $this->data["empresa"] = EMPRESA;
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label>Chave da NFe</label>
+                        <label>Número da NFe</label>
                         <input type="number" id="chaveNFECadastro" name="chaveNFECadastro" required class="form-control">
                     </div>
                     <div class="mb-3">
@@ -102,10 +106,10 @@ $this->data["empresa"] = EMPRESA;
 
         tabela = $('#tabela').DataTable({
             "paging": true,
-            "order": [[0, "desc"]],
+            "order": [[6, "desc"]],
             'autoFill': true,
             'responsive': true,
-            'ajax': '/nfe/tabela',
+            'ajax': '/boletos/tabela',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
             }

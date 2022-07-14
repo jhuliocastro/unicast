@@ -10,6 +10,10 @@ class Fornecedor_Model extends DataLayer{
         parent::__construct("fornecedor", [], 'id', true);
     }
 
+    public function dadosID(int $id){
+        return $this->findById($id);
+    }
+
     /**
      * @param object $dados
      * STRING - CNPJ<br/>

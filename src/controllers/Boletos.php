@@ -90,4 +90,54 @@ class Boletos extends Controller{
             Alert::success("Boleto Cadastrado!", '', '/boletos');
         }
     }
+
+    public function tabela(){
+        $boletos = new Boletos_Model();
+        $boletos = $boletos->lista();
+        if($boletos != null){
+            foreach($boletos as $boleto){
+                //PEGA OS DADOS DO FORNECEDOR
+                $fornecedor = new Fornecedor_Model();
+                $fornecedor = $fornecedor->dadosID($boleto->fornecedor);
+
+                //PEGA OS DADOS DA EMPRESA
+                $empresa = new Empresas_Model();
+                $empresa = $empresa->dadosID($boleto->empresa);
+
+                if($boleto->valorPago == null){
+                    $boleto->valorPago = 0;
+                }
+
+                if($boleto->dataPagamento == null){
+                    $boleto->dataPagamento = "";
+                    if(strtotime($boleto->vencimento) > date('Y/m/d')){
+                        $situacao = "<span style='font-weight: bold; color: black;'>À VENCER</span>";
+                    }else{
+                        $situacao = "<span style='font-weight: bold; color: red;'>VENCIDO</span>";
+                    }
+                }else{
+                    $situacao = "<span style='font-weight: bold; color: darkgreen;'>PAGO</span>";
+                    $boleto->dataPagamento = date("d/m/Y", strtotime($boleto->dataPagamento));
+                }
+
+                $tabela["data"][] = [
+                    $boleto->id,
+                    $situacao,
+                    $boleto->nfe,
+                    $empresa->razaoSocial,
+                    $fornecedor->razaoSocial,
+                    'R$ '.number_format($boleto->valor, 2, ',', '.'),
+                    date("d/m/Y", strtotime($boleto->vencimento)),
+                    date("d/m/Y", strtotime($boleto->emissao)),
+                    'R$ '.number_format($boleto->valorPago, 2, ',', '.'),
+                    $boleto->dataPagamento,
+                    ""
+                ];
+            }
+        }else{
+            $tabela["data"] = [];
+        }
+
+        echo json_encode($tabela);
+    }
 }

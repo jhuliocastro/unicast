@@ -70,6 +70,10 @@ class Empresas_Model extends DataLayer implements IModel {
         return $this->find()->order("razaoSocial ASC")->fetch(true);
     }
 
+    public function dadosID(int $id){
+        return $this->findById($id);
+    }
+
     /**
      * @param array $column
      * @return array

@@ -19,6 +19,7 @@ $router->get("/", "Dashboard:home");
 $router->group("boletos");
 $router->get("/", "Boletos:home");
 $router->post("/cadastrar", "Boletos:cadastrar");
+$router->get("/tabela", "Boletos:tabela");
 
 
 //CLIENTES
