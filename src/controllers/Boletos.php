@@ -92,6 +92,8 @@ class Boletos extends Controller{
     }
 
     public function tabela(){
+        $acoes = null;
+
         $boletos = new Boletos_Model();
         $boletos = $boletos->lista();
         if($boletos != null){
@@ -110,12 +112,14 @@ class Boletos extends Controller{
 
                 if($boleto->dataPagamento == null){
                     $boleto->dataPagamento = "";
+                    $acoes .= "<a href='javascript:void(0)' onclick='excluir($boleto->id)'><img id='excluir' src='/assets/images/excluir.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Excluir Boleto' class='imagem-acao'></a>";
                     if(strtotime($boleto->vencimento) > date('Y/m/d')){
                         $situacao = "<span style='font-weight: bold; color: black;'>À VENCER</span>";
                     }else{
                         $situacao = "<span style='font-weight: bold; color: red;'>VENCIDO</span>";
                     }
                 }else{
+                    $acoes .= "<a disabled href='javascript:void(0)' onclick='excluir($boleto->id)'><img id='excluir' style='-webkit-filter: grayscale(0);' src='/assets/images/excluir.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Excluir Boleto' class='imagem-acao'></a>";
                     $situacao = "<span style='font-weight: bold; color: darkgreen;'>PAGO</span>";
                     $boleto->dataPagamento = date("d/m/Y", strtotime($boleto->dataPagamento));
                 }
@@ -131,7 +135,7 @@ class Boletos extends Controller{
                     date("d/m/Y", strtotime($boleto->emissao)),
                     'R$ '.number_format($boleto->valorPago, 2, ',', '.'),
                     $boleto->dataPagamento,
-                    ""
+                    $acoes
                 ];
             }
         }else{
