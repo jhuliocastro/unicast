@@ -37,6 +37,10 @@ class Boletos_Model extends DataLayer{
         return $retorno;
     }
 
+    public function dadosID(int $id){
+        return $this->findById($id);
+    }
+
     public function baixar(int $id, $valor, $data){
         $boleto = ($this)->findById($id);
         $boleto->valorPago = $valor;

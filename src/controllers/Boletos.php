@@ -5,6 +5,8 @@ use Model\Boletos_Model;
 use Model\Empresas_Model;
 use Model\Fornecedor_Model;
 use Alertas\Alert;
+use Picqer\Barcode\BarcodeGeneratorHTML;
+use Picqer\Barcode\BarcodeGeneratorSVG;
 
 class Boletos extends Controller{
     public function __construct($router)
@@ -111,6 +113,15 @@ class Boletos extends Controller{
         }
     }
 
+    public function barcode(){
+        $boleto = new Boletos_Model();
+        $dadosBoleto = $boleto->dadosID($_POST["id"]);
+        unlink(__DIR__."/../../temp/barcode.svg");
+        $barcode = new BarcodeGeneratorSVG();
+        file_put_contents(__DIR__."/../../temp/barcode.svg", $barcode->getBarcode($dadosBoleto->codigoBarras, $barcode::TYPE_CODE_128, 3, 50));
+        echo $dadosBoleto->codigoBarras;
+    }
+
     public function tabela(){
         $boletos = new Boletos_Model();
         $boletos = $boletos->lista();
@@ -128,6 +139,8 @@ class Boletos extends Controller{
                 if($boleto->valorPago == null){
                     $boleto->valorPago = 0;
                 }
+
+                $acoes .= "<a href='javascript:void(0)' onclick='barcode($boleto->id)'><img id='barcode' src='/assets/images/barcode.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Código de Barras' class='imagem-acao'></a>";
 
                 if($boleto->dataPagamento == null){
                     $boleto->dataPagamento = "";

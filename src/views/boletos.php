@@ -132,6 +132,23 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
+<div class="modal fade" id="modalBarcode" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="formBaixaBoleto" method="post" action="/boletos/baixar">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Barcode Boleto :: <span id="idSpanBoletoBarcode"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: center">
+                    <img id="imagemBarcode" class="img-fluid" src="../../temp/barcode.svg">
+                    <span id="codigoBarcode"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <?= $this->start("scripts"); ?>
 <script>
     var tabela;
@@ -191,6 +208,15 @@ $this->data["empresa"] = EMPRESA;
         $("#idSpanBoletoBaixa").html(id);
         document.getElementById("idBoletosBaixa").value = id;
         $("#modalBaixa").modal('show');
+    }
+
+    function barcode(id){
+        $("#idSpanBoletoBarcode").html(id);
+        $.post('/boletos/barcode', {id: id}, function(response){
+            $('#codigoBarcode').html(response);
+            $('#imagemBarcode').attr('src', '/temp/barcode.svg');
+            $("#modalBarcode").modal('show');
+        });
     }
 
 </script>

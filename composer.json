@@ -32,6 +32,7 @@
     "nfephp-org/sped-da": "^1.1",
     "datatables/datatables": "^1.10",
     "twbs/bootstrap": "^5.1",
-    "snapappointments/bootstrap-select": "^1.13"
+    "snapappointments/bootstrap-select": "^1.13",
+    "picqer/php-barcode-generator": "^2.2"
   }
 }
