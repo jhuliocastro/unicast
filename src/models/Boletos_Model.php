@@ -37,4 +37,19 @@ class Boletos_Model extends DataLayer{
     public function verificaCodigoBarras(string $codigo){
         return $this->find("codigoBarras=:codigo", "codigo=$codigo")->count();
     }
+
+    public function excluir(int $id){
+        $excluir = $this->findById($id);
+        $excluir->destroy();
+        if($excluir->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $excluir->fail()->getMessage()
+            ];
+        }else{
+            $retorno["status"] = true;
+        }
+
+        return $retorno;
+    }
 }

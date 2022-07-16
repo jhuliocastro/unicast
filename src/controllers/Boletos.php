@@ -83,7 +83,7 @@ class Boletos extends Controller{
         //CADASTRA O BOLETO NO BANCO DE DADOS
         $cadastro = $model->cadastrar((array)$dados);
 
-        if($cadastro["status"] == false){
+        if($cadastro["status"] === false){
             $cadastro["erro"] = str_replace("'", "", $cadastro["erro"]);
             Alert::error("Erro ao processar requisição!", $cadastro['erro'], "/boletos");
         }else{
@@ -91,12 +91,17 @@ class Boletos extends Controller{
         }
     }
 
+    public function excluir(){
+        $model = new Boletos_Model();
+        echo json_encode($model->excluir($_POST["id"]));
+    }
+
     public function tabela(){
         $acoes = null;
 
         $boletos = new Boletos_Model();
         $boletos = $boletos->lista();
-        if($boletos != null){
+        if($boletos !== null){
             foreach($boletos as $boleto){
                 //PEGA OS DADOS DO FORNECEDOR
                 $fornecedor = new Fornecedor_Model();
@@ -144,4 +149,6 @@ class Boletos extends Controller{
 
         echo json_encode($tabela);
     }
+
+
 }

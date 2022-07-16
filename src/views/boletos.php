@@ -114,7 +114,46 @@ $this->data["empresa"] = EMPRESA;
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
             }
         });
+
+
     });
+
+    function excluir(id){
+        Swal.fire({
+            title: 'Confirma exclusão do boleto ' + id + '?',
+            text: "Essa ação não tem volta.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post('/boletos/excluir', {id: id}, function(response){
+                    console.log(response);
+                    tabela.ajax.reload();
+                    if(response.status === true){
+                        Swal.fire(
+                            'Boleto Excluído!',
+                            'success'
+                        );
+                    }else{
+                        Swal.fire(
+                            'Erro ao excluir boleto!',
+                            response.erro,
+                            'success'
+                        );
+                    }
+                });
+
+            }
+        });
+    }
+
+    function excluirSender(id){
+
+    }
 
 </script>
 <?= $this->end("scripts"); ?>
