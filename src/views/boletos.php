@@ -99,6 +99,39 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
+<div class="modal fade" id="modalBaixa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="formBaixaBoleto" method="post" action="/boletos/baixar">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Baixar Boleto :: <span id="idSpanBoletoBaixa"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="idBoletosBaixa" name="idBoletoBaixa">
+                    <div class="mb-3 row">
+                        <div class="col-12">
+                            <label>Data Recebimento</label>
+                            <input type="date" id="dataRecebimentoBaixa" name="dataRecebimentoBaixa" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Valor</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" id="valorBaixa" name="valorBaixa" required class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <button type="submit" class="btn btn-primary">Baixar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <?= $this->start("scripts"); ?>
 <script>
     var tabela;

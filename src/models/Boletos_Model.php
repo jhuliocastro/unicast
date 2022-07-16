@@ -34,6 +34,24 @@ class Boletos_Model extends DataLayer{
         return $retorno;
     }
 
+    public function baixar(int $id, $valor, $data){
+        $boleto = ($this)->findById($id);
+        $boleto->valorPago = $valor;
+        $boleto->dataPagamento = $data;
+        $boleto->save();
+        if($boleto->fail()){
+            $retorno = [
+                "status" => false,
+                "erro" => $this->fail()->getMessage()
+            ];
+        }else{
+            $retorno = [
+                "status" => true
+            ];
+        }
+        return $retorno;
+    }
+
     public function verificaCodigoBarras(string $codigo){
         return $this->find("codigoBarras=:codigo", "codigo=$codigo")->count();
     }

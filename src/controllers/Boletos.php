@@ -96,6 +96,20 @@ class Boletos extends Controller{
         echo json_encode($model->excluir($_POST["id"]));
     }
 
+    public function baixar(){
+        $boletos = new Boletos_Model();
+        $_POST["valorBaixa"] = str_replace(".", "", $_POST["valorBaixa"]);
+        $_POST["valorBaixa"] = str_replace(",", ".", $_POST["valorBaixa"]);
+        $retorno = $boletos->baixar($_POST["idBoletoBaixa"], $_POST["valorBaixa"], $_POST["dataRecebimentoBaixa"]);
+        if($retorno["status"] === false){
+            $this->log("FALHOU AO BAIXAR BOLETO | ID: ".$_POST["idBoletoBaixa"]);
+            Alert::error("Erro ao baixar boleto!", $retorno["erro"], "/boletos");
+        }else{
+            $this->log('BOLETO BAIXADO | ID: '.$_POST["idBoletoBaixa"]);
+            Alert::success("Boleto Baixado!", '', '/boletos');
+        }
+    }
+
     public function tabela(){
         $acoes = null;
 
@@ -103,6 +117,7 @@ class Boletos extends Controller{
         $boletos = $boletos->lista();
         if($boletos !== null){
             foreach($boletos as $boleto){
+                $acoes = null;
                 //PEGA OS DADOS DO FORNECEDOR
                 $fornecedor = new Fornecedor_Model();
                 $fornecedor = $fornecedor->dadosID($boleto->fornecedor);
@@ -117,6 +132,7 @@ class Boletos extends Controller{
 
                 if($boleto->dataPagamento == null){
                     $boleto->dataPagamento = "";
+                    $acoes .= "<a href='javascript:void(0)' onclick='baixa($boleto->id)'><img id='receber' src='/assets/images/receber.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Dar Baixa' class='imagem-acao'></a>";
                     $acoes .= "<a href='javascript:void(0)' onclick='excluir($boleto->id)'><img id='excluir' src='/assets/images/excluir.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Excluir Boleto' class='imagem-acao'></a>";
                     if(strtotime($boleto->vencimento) > date('Y/m/d')){
                         $situacao = "<span style='font-weight: bold; color: black;'>À VENCER</span>";
@@ -124,7 +140,8 @@ class Boletos extends Controller{
                         $situacao = "<span style='font-weight: bold; color: red;'>VENCIDO</span>";
                     }
                 }else{
-                    $acoes .= "<a disabled href='javascript:void(0)' onclick='excluir($boleto->id)'><img id='excluir' style='-webkit-filter: grayscale(0);' src='/assets/images/excluir.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Excluir Boleto' class='imagem-acao'></a>";
+                    $acoes .= "<img id='receber' style='-webkit-filter: grayscale(100%);' src='/assets/images/receber.png' title='Dar Baixa' class='imagem-acao'>";
+                    $acoes .= "<img id='excluir' style='-webkit-filter: grayscale(100%);' src='/assets/images/excluir.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Excluir Boleto' class='imagem-acao'>";
                     $situacao = "<span style='font-weight: bold; color: darkgreen;'>PAGO</span>";
                     $boleto->dataPagamento = date("d/m/Y", strtotime($boleto->dataPagamento));
                 }
