@@ -36,7 +36,7 @@ class Boletos extends Controller{
             }
         }
 
-        parent::render("boletos", [
+        $this->render("boletos", [
             "fornecedores" => $fornecedoresLista,
             "empresas" => $empresasLista
         ]);
@@ -87,6 +87,7 @@ class Boletos extends Controller{
             $cadastro["erro"] = str_replace("'", "", $cadastro["erro"]);
             Alert::error("Erro ao processar requisição!", $cadastro['erro'], "/boletos");
         }else{
+            parent::log("BOLETO CADASTRADO | ID: ".$cadastro["id"]);
             Alert::success("Boleto Cadastrado!", '', '/boletos');
         }
     }
@@ -111,8 +112,6 @@ class Boletos extends Controller{
     }
 
     public function tabela(){
-        $acoes = null;
-
         $boletos = new Boletos_Model();
         $boletos = $boletos->lista();
         if($boletos !== null){

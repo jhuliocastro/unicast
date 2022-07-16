@@ -137,6 +137,9 @@ $this->data["empresa"] = EMPRESA;
     var tabela;
     $(document).ready(function () {
 
+        $("#valorBaixa").mask('#.##0,00', {reverse: true});
+        $("#valorCadastro").mask('#.##0,00', {reverse: true});
+
         tabela = $('#tabela').DataTable({
             "paging": true,
             "order": [[6, "desc"]],
@@ -184,8 +187,10 @@ $this->data["empresa"] = EMPRESA;
         });
     }
 
-    function excluirSender(id){
-
+    function baixa(id){
+        $("#idSpanBoletoBaixa").html(id);
+        document.getElementById("idBoletosBaixa").value = id;
+        $("#modalBaixa").modal('show');
     }
 
 </script>

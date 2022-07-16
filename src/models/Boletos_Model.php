@@ -28,7 +28,10 @@ class Boletos_Model extends DataLayer{
                 "erro" => $this->fail()->getMessage()
             ];
         else:
-            $retorno["status"] = true;
+            $retorno = [
+                "status" => true,
+                "id" => $this->data->id
+            ];
         endif;
 
         return $retorno;
