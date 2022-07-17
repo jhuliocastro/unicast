@@ -16,6 +16,8 @@ class Boletos extends Controller{
     }
 
     public function home(){
+        $this->permissoes("boletos");
+
         $fornecedor = new Fornecedor_Model();
         $fornecedores = $fornecedor->lista();
         $fornecedoresLista = null;

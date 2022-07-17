@@ -17,6 +17,26 @@ class Controller{
         }
     }
 
+    public function permissoes($pagina){
+        if(!isset($_SESSION))
+        {
+            session_start();
+        }
+        $retorno = false;
+        $permissoes = file_get_contents(__DIR__."/../../permissoes.json");
+        $permissoes = json_decode($permissoes);
+        $permissoes = (array)$permissoes;
+        foreach ($permissoes["$pagina"] as $permissoes){
+            if($permissoes == $_SESSION["usuario"]){
+                $retorno = true;
+            }
+        }
+
+        if($retorno === false){
+           $this->router->redirect("/erro/403");
+        }
+    }
+
     public function render($view, array $dados = []){
         if(isset($_SESSION["usuario"])){
             $usuarios = new Login_Model();

@@ -133,6 +133,9 @@ $router->group("consultaPreco");
 $router->get("/", "ConsultaPreco:home");
 $router->get("/tabela", "ConsultaPreco:tabela");
 
+$router->group("/erro");
+$router->get("/403", "Erro:e403");
+
 $router->dispatch();
 
 if($router->error()){
