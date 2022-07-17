@@ -10,6 +10,7 @@ class Produtos extends Controller{
     {
         $this->router = $router;
         parent::__construct();
+        $this->permissoes("produtos");
     }
 
     private function verificaProdutoExiste($produto){
