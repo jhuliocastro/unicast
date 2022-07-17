@@ -12,7 +12,7 @@ $this->data["empresa"] = EMPRESA;
         <div class="card-body p-2">
             <div class="card-block">
                 <div class="container-fluid">
-                    <button id='importarXML'>Importar XML</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalImportar">Importar XML</button>
                     <hr>
                     <table id="tabela" class="display compact" style="width: 100%;">
                         <thead>
@@ -34,20 +34,30 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
-<div id="janelaXML" title="Importar XML">
-    <form method="post" id="formXML" action="/nfe/importar/xml" enctype="multipart/form-data">
-        <fieldset>
-                <div class="mb-3">
-                    <label for="xml" class="form-label">Selecione o XML</label>
-                    <input class="form-control" type="file" id="xml" name="xml" accept=".xml">
+<div class="modal fade" id="modalImportar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" id="formXML" action="/nfe/importar/xml" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Importar XML</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="xml" class="form-label">Selecione o XML</label>
+                        <input class="form-control" type="file" id="xml" name="xml" accept=".xml">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <button type="submit" class="btn btn-primary">Importar</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
-<?= $this->start("scripts"); ?>
+<?= $this->start("scripts") ?>
 <script>
     var tabela;
     $(document).ready(function () {
@@ -60,11 +70,6 @@ $this->data["empresa"] = EMPRESA;
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
             }
-        });
-
-        $("#importarXML").button();
-        $("#importarXML").click(function(){
-            dialog.dialog('open');
         });
     });
 
@@ -127,4 +132,4 @@ function excluir(chave){
     }
 
 </script>
-<?= $this->end("scripts"); ?>
+<?= $this->end("scripts") ?>

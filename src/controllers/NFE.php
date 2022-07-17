@@ -1,11 +1,6 @@
 <?php
 namespace Controller;
 
-use CoffeeCode\Uploader\Send;
-use Core\TButton;
-use Core\TForm;
-use Core\TPage;
-use Core\TTable;
 use InvalidArgumentException;
 use Model\Clientes_Model;
 use Model\Empresas_Model;
@@ -23,10 +18,11 @@ class NFE extends Controller{
     {
         $this->router = $router;
         parent::__construct();
+        $this->permissoes('nfe');
     }
 
     public function home(){
-        parent::render("nfe");
+        $this->render("nfe");
     }
 
     public function tabela(){
@@ -238,6 +234,9 @@ class NFE extends Controller{
             }else{
                 //UPLOAD DO XML
                 $arquivo = __DIR__."/../../files/nfe/xml/".$nfe["chave"].".xml";
+                if(!file_exists("../../files/nfe/xml/")){
+                    mkdir("../../files/nfe/xml/", 0777, true);
+                }
                 $retorno = move_uploaded_file($files["xml"]["tmp_name"], $arquivo);
                 if($retorno == false){
                     Alert::warning("Nota foi cadastrada mas o upload do xml falhou!", "Contato o suporte.", "/nfe");
