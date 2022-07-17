@@ -52,13 +52,16 @@ $router->post("/entrada", "Estoque:entrada");
 $router->post("/saida", "Estoque:saida");
 $router->get("/atualizar", "Estoque:atualizar");
 
+//ORCAMENTO
+$router->group("orcamento");
+$router->get("/", "Orcamento:home");
+$router->post("/novo", "Orcamento:novo");
+
 //PDV ORCAMENTO E CAIXA
 $router->group("pdv");
 $router->get("/caixa", "Caixa:home");
 $router->post("/caixa/importar", "Caixa:importar");
 $router->post("/caixa/valorTotal", "Caixa:valorTotal");
-$router->get("/orcamento", "Orcamento:home");
-$router->get("/orcamento/novo", "Orcamento:novo");
 $router->post("/orcamento/andamento", "Orcamento:orcamento");
 $router->get("/orcamento/aberto/{id}", "Orcamento:aberto");
 $router->get("/orcamento/aberto/relacao/{id}", "Orcamento:abertoTabela");

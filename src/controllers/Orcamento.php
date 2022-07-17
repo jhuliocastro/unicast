@@ -16,29 +16,39 @@ class Orcamento extends Controller{
     }
 
     public function home(){
-        parent::render("orcamento");
+        $clientes = new Clientes_Model();
+        $clientes = $clientes->find()->fetch(true);
+        $listaClientes = null;
+        if($clientes != null){
+            foreach($clientes as $cliente){
+                $listaClientes .= "
+                    <option>$cliente->nome</option>
+                ";
+            }
+        }
+        $this->render("orcamento", [
+            "clientes" => $listaClientes
+        ]);
     }
 
     public function novo(){
-        if(isset($_SESSION["orcamento"])){
-            unset($_SESSION["orcamento"]);
-            unset($_SESSION["valorTotalOrcamento"]);
+        $cliente = $_POST["cliente"];
+
+        $clientes = new Clientes_Model();
+        $dadosCliente = $clientes->find("nome=:nome", "nome=$cliente")->fetch();
+
+        $orcamento = new Orcamentos_Model();
+        $orcamento->cliente = $dadosCliente->id;
+        $orcamento->aberto = true;
+        $orcamento->valor = 0.00;
+        $orcamento->save();
+        if($orcamento->fail()){
+            Alert::error('Falha ao abrir orçamento!', $orcamento->fail()->getMessage(), '/orcamento');
+            exit();
         }
 
-        $orcamentoModel = new Orcamentos_Model();
-        $statusOrcamento = $orcamentoModel->pesquisaStatus();
-
-        $tabela = null;
-        $clientesModel = new Clientes_Model();
-        $clientes = $clientesModel->listaClientes();
-        foreach ($clientes as $cliente){
-            $tabela .= "
-                <option>$cliente->nome</option>
-            ";
-        }
-        parent::render("orcamentoNovo", [
-            "clientes" => $tabela
-        ]);
+        $this->log('ABRIU ORCAMENTO | ID: '.$orcamento->data->id);
+        $this->render("orcamentoPDV");
     }
 
     public function orcamento($data){

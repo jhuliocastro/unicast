@@ -21,13 +21,6 @@ class Orcamentos_Model extends DataLayer{
         return $this->find("faturado=:faturado", "faturado=0")->order("id DESC")->fetch(true);
     }
 
-    public function novo(int $cliente){
-        $this->cliente = $cliente;
-        $this->aberto = true;
-        $this->valor = 0.00;
-        return $this->save();
-    }
-
     public function atualizarValor(int $orcamento, $valor){
         $retorno = $this->findById($orcamento);
         $retorno->valor = $valor;

@@ -34,8 +34,11 @@ $this->data["empresa"] = EMPRESA;
     }
 </style>
 
-<div class="pcoded-content">
+<div class="pcoded-content container-fluid">
     <div class="card">
+        <div class="card-header">
+            Novo Orçamento :: <?= $this->data["empresa"] ?>
+        </div>
         <div class="card-body p-2">
             <div class="card-block">
                 <div class="container-fluid">
@@ -55,30 +58,17 @@ $this->data["empresa"] = EMPRESA;
                             <br/>
                             <div class="row mb-3">
                                 <div class="col-sm-12">
-                                    <select class="form-control" id="cliente" name="cliente">
-                                        <?= $this->data["clientes"] ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-12">
                                     <form id="formProdutoCodigo" method="post">
                                         <input type="text" class="form-control" onkeypress="return somenteNumeros(event)" id="produto" name="produto" placeholder="Procute o produto pelo código, nome ou código de barras">
                                     </form>
                                 </div>
                             </div>
                             <div class="row" style="background-color: lightblue;">
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     Total de Itens
                                 </div>
-                                <div class="col-md-3" style="text-align: right; border-right: 1px solid white;">
+                                <div class="col-md-6" style="text-align: right; border-right: 1px solid white;">
                                     <span id="totalItens">0</span>
-                                </div>
-                                <div class="col-md-3">
-                                    Desconto
-                                </div>
-                                <div class="col-md-3" style="text-align: right;">
-                                    <span id="desconto">R$ 0,00</span>
                                 </div>
                             </div>
                             <div class="row" style="background-color: lightgreen;">
@@ -132,148 +122,92 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
-<!-- START DIALOG PROCURAR PRODUTO -->
-<div id="procurarProduto" title="Procurar Produto">
-    <form>
-        <fieldset>
-            <div class="form-group">
-                <label>Informe o nome do produto:</label>
-                <input type="text" onkeyup="procurarProdutoLimpo()" list="listaProdutos" name="procurarProdutosLista" id="procurarProdutosLista" class="form-control form-control-sm">
-                <datalist id="listaProdutos"><?= $this->data["listaProdutos"]  ?></datalist>
+<div class="modal fade" id="modalQuantidade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="formQuantidadeProduto" method="post" action="#">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Alterar Quantidade</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Informe a quantidade do produto:</label>
+                        <input type="number" name="quantidadeProxProduto" id="quantidadeProxProduto" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <button type="submit" class="btn btn-primary">Ok</button>
+                </div>
             </div>
-            <hr>
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
+        </form>
+    </div>
 </div>
-<!--INICIO DIALOG QUANTIDADE PRODUTO -->
-<div id="quantidadeProduto" title="Quantidade Produto">
-    <form>
-        <fieldset>
-            <div class="form-group">
-                <label>Informe a quantidade do produto:</label>
-                <input type="number" name="quantidadeProxProduto" id="quantidadeProxProduto" class="form-control form-control-sm">
+
+<div class="modal fade" id="modalCancelar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cancelar Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Informe o ID do produto:</label>
+                        <input type="number" name="idCancelarProduto" id="idCancelarProduto" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <button type="submit" class="btn btn-primary">Ok</button>
+                </div>
             </div>
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
+        </form>
+    </div>
 </div>
-<!--INICIO DIALOG CANCELAR PRODUTO -->
-<div id="cancelarProduto" title="Cancelar Produto">
-    <form>
-        <fieldset>
-            <div class="form-group">
-                <label>Informe o ID do produto:</label>
-                <input type="number" name="idCancelarProduto" id="idCancelarProduto" class="form-control form-control-sm">
+
+<div class="modal fade" id="modalPesquisarProduto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pesquisar Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Informe o nome do produto:</label>
+                        <input type="text" onkeyup="procurarProdutoLimpo()" list="listaProdutos" name="procurarProdutosLista" id="procurarProdutosLista" class="form-control form-control-sm">
+                        <datalist id="listaProdutos"><?= $this->data["listaProdutos"]  ?></datalist>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <button type="submit" class="btn btn-primary">Ok</button>
+                </div>
             </div>
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
+        </form>
+    </div>
 </div>
 
 <script>
     var quantidade = 1;
-    var valorTotalCompra = 0;
-    var valorAposDesconto = 0;
-    var desconto = 0;
-    var quantidadeGeral = 0;
-    var lista = {};
-    var troco = 0;
-    var valorRestante = 0;
-    var valorContagemPagamento = 0;
-    var orcamento = null;
-    var md5 = '<?= $this->data["md5"] ?>';
-
     var audio = new Audio("/assets/sons/beep.mp3");
 
     var tabela = $('#tabela').DataTable({
         "paging": false,
-        'ajax': '/temp/' + md5 + '.json',
+        'ajax': '',
         "order": [],
         'searching': false,
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
         }
     });
-
-    var dialogProcurarProduto = $("#procurarProduto").dialog({
-        autoOpen: false,
-        width: 800,
-        modal: true,
-        buttons: {
-            "Confirmar": procurarProduto
-        }
-    });
-
-    var formProcurarProduto = dialogProcurarProduto.find( "form" ).on( "submit", function( event ) {
-        event.preventDefault();
-        procurarProduto();
-    });
-
-    var dialogQuantidadeProduto = $("#quantidadeProduto").dialog({
-        autoOpen: false,
-        width: 300,
-        modal: true,
-        buttons: {
-            "Confirmar": quantidadeProduto
-        }
-    });
-
-    var formQuantidadeProduto = dialogQuantidadeProduto.find( "form" ).on( "submit", function( event ) {
-        event.preventDefault();
-        quantidadeProduto();
-    });
-
-    var dialogCancelarProduto = $("#cancelarProduto").dialog({
-        autoOpen: false,
-        width: 300,
-        modal: true,
-        buttons: {
-            "Confirmar": cancelarProduto
-        }
-    });
-
-    var formCancelarProduto = dialogCancelarProduto.find( "form" ).on( "submit", function( event ) {
-        event.preventDefault();
-        cancelarProduto();
-    });
-
-
+/*
     function cancelarProduto(){
-        let id = $("#idCancelarProduto").val();
 
-        $.ajax({
-                        url: "/pdv/caixa/cancelar/item",
-                        type: 'post',
-                        dataType: 'json',
-                        data: {
-                            idProduto: id,
-                            md5: md5
-                        }
-                    })
-                        .done(function (retorno) {
-                            console.log(retorno);
-                            dialogCancelarProduto.dialog('close');
-                            $("#idCancelarProduto").val("");
-                            
-                            var notify = Metro.notify;
-                            notify.create("Produto " + id + " excluído!", "", {
-                                cls: "success"
-                            });
-
-                            retorno.valorTotal = retorno.valorTotal.replace('R$ ', '');
-                            valorTotalCompra = valorTotalCompra - retorno.valorTotal;
-                            $("#valorTotal").html("R$ " + Number(valorTotalCompra).toFixed(2));
-
-                            quantidadeGeral = quantidadeGeral - retorno.quantidade;
-                            $("#totalItens").html(quantidadeGeral);
-                        })
-                        .fail(function (jqXHR, textStatus, msg) {
-                            console.log(msg);
-                        });
     }
 
     function quantidadeProduto(){
@@ -281,10 +215,10 @@ $this->data["empresa"] = EMPRESA;
         dialogQuantidadeProduto.dialog('close');
         $("#quantidadeProxProduto").val("");
         $("#produto").focus();
-    }
+    }*/
 
 
-    $("#formProdutoCodigo").submit(function(){
+    /*$("#formProdutoCodigo").submit(function(){
         let codigoBarras = $("#produto").val();
 
         if(codigoBarras !== ""){
@@ -379,16 +313,9 @@ $this->data["empresa"] = EMPRESA;
         }
 
         return false;
-    });
+    });*/
 
-    $("#formQuantidade").submit(function(event){
-        event.preventDefault();
-        quantidade = $("#quantidadeProxProduto").val();
-        $("#quantidadeProxProduto").val("");
-        $("#produto").focus();
-    });
-
-    function procurarProduto(){
+    /*function procurarProduto(){
         let produto = $("#procurarProdutosLista").val();
         $.ajax({
             url: "/pdv/caixa/pesquisar/produto",
@@ -420,7 +347,7 @@ $this->data["empresa"] = EMPRESA;
                     cls: "alert"
                 });
             });
-    }
+    }*/
 
     function somenteNumeros(e) {
         var charCode = e.charCode ? e.charCode : e.keyCode;
@@ -450,15 +377,28 @@ $this->data["empresa"] = EMPRESA;
     //ATALHOS
    //INICIO ATALHO INFORMA QUANTIDADE PRODUTO
     $('#produto').on('keydown', null, 'f4', function () {
-        dialogQuantidadeProduto.dialog('open');
-        $("#quantidadeProxProduto").focus();
+        $("#modalQuantidade").modal('show');
         return false;
     });
 
     $(document).on('keydown', null, 'f4', function () {
-        dialogQuantidadeProduto.dialog('open');
-        $("#quantidadeProxProduto").focus();
+        $("#modalQuantidade").modal('show');
         return false;
+    });
+
+    $("#modalQuantidade").on('shown.bs.modal', function(event){
+        $("#quantidadeProxProduto").focus();
+    });
+
+    $("#modalQuantidade").on('hidden.bs.modal', function(event){
+        $("#produto").focus();
+    });
+
+    $("#formQuantidadeProduto").submit(function(event){
+       event.preventDefault();
+       quantidade = $("#quantidadeProxProduto").val();
+       $("#quantidadeProxProduto").val("");
+       $("#modalQuantidade").modal('hide');
     });
     //FIM ATALHO INFORMA QUANTIDADE PRODUTO
 
@@ -483,9 +423,5 @@ $this->data["empresa"] = EMPRESA;
 
         $("#totalItens").html(quantidade);
         $("#produto").focus();
-
-        setInterval( function () {
-            tabela.ajax.reload();
-        }, 300 );
     });
 </script>
