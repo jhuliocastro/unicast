@@ -122,6 +122,19 @@ class Boletos extends Controller{
         echo $dadosBoleto->codigoBarras;
     }
 
+    public function estornar($data){
+        $boleto = (new Boletos_Model())->findById($data["id"]);
+        $boleto->valorPago = null;
+        $boleto->dataPagamento = null;
+        $boleto->save();
+        if($boleto->fail()){
+            Alert::error("Erro ao estornar!", $boleto->fail()->getMessage(), "/boletos");
+        }else{
+            $this->log("BAIXA ESTORNADA | ID: $data[id]");
+            Alert::success("Baixa Estornada!", "", "/boletos");
+        }
+    }
+
     public function tabela(){
         $boletos = new Boletos_Model();
         $boletos = $boletos->lista();
@@ -145,6 +158,7 @@ class Boletos extends Controller{
                 if($boleto->dataPagamento == null){
                     $boleto->dataPagamento = "";
                     $acoes .= "<a href='javascript:void(0)' onclick='baixa($boleto->id)'><img id='receber' src='/assets/images/receber.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Dar Baixa' class='imagem-acao'></a>";
+                    $acoes .= "<img id='estornar' style='-webkit-filter: grayscale(100%);' src='/assets/images/estornar.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Estornar Baixa' class='imagem-acao'>";
                     $acoes .= "<a href='javascript:void(0)' onclick='excluir($boleto->id)'><img id='excluir' src='/assets/images/excluir.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Excluir Boleto' class='imagem-acao'></a>";
                     if(strtotime($boleto->vencimento) > date('Y/m/d')){
                         $situacao = "<span style='font-weight: bold; color: black;'>À VENCER</span>";
@@ -153,6 +167,7 @@ class Boletos extends Controller{
                     }
                 }else{
                     $acoes .= "<img id='receber' style='-webkit-filter: grayscale(100%);' src='/assets/images/receber.png' title='Dar Baixa' class='imagem-acao'>";
+                    $acoes .= "<a href='javascript:void(0)' onclick='estornar($boleto->id)'><img id='estornar' src='/assets/images/estornar.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Estornar Baixa' class='imagem-acao'></a>";
                     $acoes .= "<img id='excluir' style='-webkit-filter: grayscale(100%);' src='/assets/images/excluir.png' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-custom-class='custom-tooltip' title='Excluir Boleto' class='imagem-acao'>";
                     $situacao = "<span style='font-weight: bold; color: darkgreen;'>PAGO</span>";
                     $boleto->dataPagamento = date("d/m/Y", strtotime($boleto->dataPagamento));

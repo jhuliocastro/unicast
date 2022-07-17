@@ -23,6 +23,7 @@ $router->get("/tabela", "Boletos:tabela");
 $router->post("/excluir", "Boletos:excluir");
 $router->post("/baixar", "Boletos:baixar");
 $router->post("/barcode", "Boletos:barcode");
+$router->get("/estornar/{id}", "Boletos:estornar");
 
 
 //CLIENTES

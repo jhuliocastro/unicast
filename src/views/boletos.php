@@ -219,5 +219,22 @@ $this->data["empresa"] = EMPRESA;
         });
     }
 
+    function estornar(id){
+        Swal.fire({
+            title: 'Confirma estorno do boleto ' + id + '?',
+            text: "Essa ação não tem volta.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/boletos/estornar/" + id;
+            }
+        });
+    }
+
 </script>
 <?= $this->end("scripts"); ?>
