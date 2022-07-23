@@ -1,12 +1,12 @@
 <?php
-const URL = "http://localhost";
+const URL = "http://unicast";
 const EMPRESA = "MRE ARMAZÉM";
 
 const DATA_LAYER_CONFIG = [
     "driver" => "mysql",
     "host" => "localhost",
     "port" => "3306",
-    "dbname" => "unicast",
+    "dbname" => "erp",
     "username" => "root",
     "passwd" => "",
     "options" => [

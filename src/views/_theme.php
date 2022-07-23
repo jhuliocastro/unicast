@@ -169,7 +169,7 @@ $this->data["empresa"] = EMPRESA;
                 { type: 'menu', id: 'pdv', text: 'PDV',
                     items: [
                         { id: 'caixa', text: 'Caixa', icon: 'fa-solid fa-cash-register' },
-                        { id: 'orcamento', text: 'Orcamento', icon: 'fa-solid fa-chart-line', disabled: true }
+                        { id: 'orcamento', text: 'Orcamento', icon: 'fa-solid fa-chart-line' }
                     ]
                 },
                 { type: 'break' },
@@ -211,7 +211,7 @@ $this->data["empresa"] = EMPRESA;
                             window.location.href = "/pdv/caixa";
                             break;
                         case 'orcamento':
-                            window.location.href = "/pdv/orcamento";
+                            window.location.href = "/orcamento";
                             break;
                         case 'vendas':
                             window.location.href = "/vendas";

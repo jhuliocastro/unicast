@@ -19,7 +19,7 @@ class Orcamento extends Controller{
         $clientes = new Clientes_Model();
         $clientes = $clientes->find()->fetch(true);
         $listaClientes = null;
-        if($clientes != null){
+        if($clientes !== null){
             foreach($clientes as $cliente){
                 $listaClientes .= "
                     <option>$cliente->nome</option>
@@ -32,6 +32,10 @@ class Orcamento extends Controller{
     }
 
     public function novo(){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $cliente = $_POST["cliente"];
 
         $clientes = new Clientes_Model();
@@ -48,258 +52,99 @@ class Orcamento extends Controller{
         }
 
         $this->log('ABRIU ORCAMENTO | ID: '.$orcamento->data->id);
-        $this->render("orcamentoPDV");
+        $_SESSION["orcamento"] = $orcamento->data->id;
+        $this->router->redirect("/orcamento/".$orcamento->data->id);
     }
 
     public function orcamento($data){
-        //PESQUISA ID DO CLIENTE INFORMADO
-        $clientes = new Clientes_Model();
-        $dadosCliente = $clientes->dadosClienteNome($_POST["cliente"]);
+        $orcamento = (new Orcamentos_Model())->findById($data["id"]);
 
-        //ABRE O ORÇAMENTO
-        $orcamentos = new Orcamentos_Model();
-        $retorno = $orcamentos->novo($dadosCliente->id);
+        $this->render("orcamentoPDV", [
+            "orcamento" => $data["id"],
+            "valorTotal" => "R$ ".$orcamento->valor
+        ]);
+    }
 
-        if($retorno == true){
-            $this->router->redirect("/pdv/orcamento");
-        }else{
-            Alert::error("Erro ao abrir orçamento!", "Verifique o log para mais informaçãoes.", "/pdv/orcamento");
+    public function valorTotal(){
+        $dadosOrcamento = (new Orcamentos_Model())->findById($_POST["orcamento"]);
+        echo number_format((float)$dadosOrcamento->valor, 2, ',', '.');
+    }
+
+    public function pesquisarProduto(){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
-    }
-
-    public function cancelar(){
-        $orcamentos = new Orcamentos_Model();
-        $retorno = $orcamentos->cancelarAbertos();
-        if($retorno == true){
-            $this->router->redirect("/pdv/orcamento/aberto");
-        }else{
-            Alert::error("Erro ao cancelar orçamento!", "Verifique o log para mais informaçãoes.", "/dashboard");
-        }
-    }
-
-    public function finalizar(){
-        $orcamento = $_SESSION["orcamento"];
-        Alert::question("Deseja finalizar o orçamento?", "", "/pdv/orcamento/finalizarSender", "/pdv/orcamento/aberto/$orcamento");
-    }
-
-    public function finalizarSender(){
-        $valorTotal = 0;
-
-        $orc = new OrcamentosPedido_Model();
-        $produtos = $orc->retornoProdutos($_SESSION["orcamento"]);
-
-        foreach($produtos as $produto){
-            $prod = new Produtos_Model();
-            $dadosProduto = $prod->retornoPorID($produto->produto);
-            $valor = $dadosProduto->precoVenda * $produto->quantidade;
-            $valorTotal = $valorTotal + $valor;
-        }
-
-        $orcamentos = new Orcamentos_Model();
-        $orcamentos->atualizarValor($_SESSION["orcamento"], $valorTotal);
-        $retorno = $orcamentos->finalizar($_SESSION["orcamento"]);
-        unset($_SESSION["orcamento"]);
-        if($retorno == true){
-            Alert::success("Orçamento finalizado!", "Dirija-se ao caixa.", "/pdv/orcamento");
-        }else{
-            Alert::error("Erro ao finalizar orçamento!", "Consulte o log para mais informações.", "/pdv/orcamento");
-        }
-    }
-
-    public function dados(){
-        $model = new Orcamentos_Model();
-        $retorno = $model->dadosID($_POST["orcamento"]);
-        $cliente = $retorno->cliente;
-
-        $model = new Clientes_Model();
-        $retorno = $model->dadosClienteID($cliente);
-
-        $_SESSION["clienteCaixa"] = $retorno->id;
-
-        echo $retorno->nome;
-    }
-
-    public function abertoTabela($data){
-        $valorTotalOrcamento = 0;
-        $tabela = null;
-
-        $orcamentoAberto = new OrcamentosPedido_Model();
-        $produtos = $orcamentoAberto->retornoProdutos($data["id"]);
-        
-        if($produtos == null){
-           
-        }else{
-            foreach ($produtos as $produto){
-                $model = new Produtos_Model();
-                $dadosProduto = $model->retornoPorID($produto->produto);
-    
-                $valorUN = number_format($dadosProduto->precoVenda, 2, ",", ".");
-                $valorUN = "R$ ".$valorUN;
-    
-                $valorTotal = $dadosProduto->precoVenda * $produto->quantidade;
-                $valorTotalOrcamento = (float)$valorTotalOrcamento + (float)$valorTotal;
-                $valorTotal = number_format($valorTotal, 2, ",", ".");
-                $valorTotal = "R$ ".$valorTotal;
-    
-                $valorTotalOrcamentoJS = $valorTotalOrcamento;
-                //(float)$valorTotalOrcamento = str_replace(".", ",", (float)$valorTotalOrcamento);
-    
-                //$valorTotalOrcamento = number_format($valorTotalOrcamento, 2, ",", ".");
-    
-                $tabela["data"][] = [
-                    $dadosProduto->id,
-                    $dadosProduto->nome,
-                    $produto->quantidade,
-                    $valorUN,
-                    $valorTotal
-                ];            
-            }
-        }        
-
-        echo json_encode($tabela);
-    }
-
-    public function aberto($data){
-        $selectClientes = null;
-
-        $clientesModel = new Clientes_Model();
-        $clientes = $clientesModel->listaClientes();
-        foreach($clientes as $cliente){
-            if($cliente->nome == "Consumidor"){
-                $selectClientes .= "
-                <option selected id='$cliente->id'>$cliente->nome</option>
-            ";
+        $codigo = $_POST["codigo"];
+        $orcamento = new OrcamentosPedido_Model();
+        $orcamento->orcamento = $_SESSION["orcamento"];
+        $orcamento->quantidade = $_POST["quantidade"];
+        $produtos = new Produtos_Model();
+        $pesquisaCodigoBarras = $produtos->find('codigoBarras=:codigoBarras', "codigoBarras=$codigo")->fetch();
+        if($pesquisaCodigoBarras === null){
+            $pesquisaID = $produtos->findById($codigo);
+            if($pesquisaID === null){
+                $retorno = [
+                    "status" => false,
+                    "erro" => "Produto não encontrado!"
+                ];
             }else{
-                $selectClientes .= "
-                <option id='$cliente->id'>$cliente->nome</option>
-            ";
+                $orcamento->produto = $pesquisaID->id;
+                $produtoRetorno = $pesquisaID->nome;
+                $unidadeMedida = $pesquisaID->unidadeMedida;
+                $valorProduto = $pesquisaID->precoVenda * $_POST["quantidade"];
+                $orcamento->save();
+
+                //ATUALIZA VALOR DO ORCAMENTO
+                $dadosOrcamento = (new Orcamentos_Model())->findById($_SESSION["orcamento"]);
+                $valorOrcamento = $dadosOrcamento->valor + $valorProduto;
+                $dadosOrcamento->valor = $valorOrcamento;
+                $dadosOrcamento->save();
+
+                $valorTotal = number_format((float)$valorProduto, 2, ',', '.');
+                if($orcamento->fail()){
+                    $retorno = [
+                        "status" => false,
+                        "erro" => $orcamento->fail()->getMessage()
+                    ];
+                }else{
+                    $retorno = [
+                        "status" => true,
+                        "produto" => $produtoRetorno,
+                        "unidadeMedida" => $unidadeMedida,
+                        "valorTotal" => $valorProduto
+                    ];
+                }
             }
-        }
-
-        $model = new Produtos_Model();
-        $produtos = $model->lista();
-        $produtosLista = null;
-        foreach($produtos as $produto){
-            $produtosLista .= "
-                <option>$produto->nome</option>
-            ";
-        }
-
-        if(!file_exists(__DIR__."/../../temp/".$data["id"].".json")){
-            $this->criaJSON($data["id"]);
-        }
-
-        parent::render("orcamentoPDV", [
-            "clientes" => $selectClientes,
-            "listaProdutos" => $produtosLista,
-            "md5" => $data["id"]
-        ]);
-    }
-
-    public function json(){
-        $nomeArquivo = __DIR__."/../../temp/".$_POST["md5"].".json";
-        if(!file_exists($nomeArquivo)){
-            $arquivo = fopen($nomeArquivo, 'w+');
-        }
-
-        $arquivo = file_get_contents($nomeArquivo);
-
-        $arquivo = json_decode($arquivo, true);
-        $arquivo["data"][] = [
-            $_POST["idProduto"],
-            $_POST["nomeProduto"],
-            $_POST["quantidade"],
-            "R$ ".$_POST["valorUN"],
-            "R$ ".$_POST["valorTotal"]
-        ];
-
-        $arquivo["dados"] = [
-            "valorTotal" => $_POST["valorTotalCompra"]
-        ];
-
-        var_dump($arquivo);
-
-        $arquivo = json_encode($arquivo);
-
-        $arquivo = file_put_contents($nomeArquivo, $arquivo);
-    }
-
-    private function criaJSON($md5){
-        $nomeArquivo = __DIR__."/../../temp/".$md5.".json";
-        if(!file_exists($nomeArquivo)){
-            $arquivo = fopen($nomeArquivo, 'w+');
-        }
-
-        $data["data"] = [];
-
-        file_put_contents($nomeArquivo, json_encode($data));
-    }
-
-    public function fechado($data){
-        $valorTotalOrcamento = 0;
-
-        $orcamentos = new Orcamentos_Model();
-        $retorno = $orcamentos->dadosID($data["id"]);
-
-        $_SESSION["orcamento"] = $retorno->id;
-
-        $orcamentoAberto = new OrcamentosPedido_Model();
-        $produtos = $orcamentoAberto->retornoProdutos($retorno->id);
-        $tabela = null;
-
-        if($produtos == null){
-            $valorTotalOrcamentoJS = 0;
         }else{
-            foreach ($produtos as $produto){
-                $model = new Produtos_Model();
-                $dadosProduto = $model->retornoPorID($produto->produto);
+            $orcamento->produto = $pesquisaCodigoBarras->id;
+            $produtoRetorno = $pesquisaCodigoBarras->nome;
+            $unidadeMedida = $pesquisaCodigoBarras->unidadeMedida;
+            $valorProduto = $pesquisaCodigoBarras->precoVenda * $_POST["quantidade"];
+            $orcamento->save();
 
-                $valorUN = number_format($dadosProduto->precoVenda, 2, ",", ".");
-                $valorUN = "R$ ".$valorUN;
+            //ATUALIZA VALOR DO ORCAMENTO
+            $dadosOrcamento = (new Orcamentos_Model())->findById($_SESSION["orcamento"]);
+            $valorOrcamento = $dadosOrcamento->valor + $valorProduto;
+            $dadosOrcamento->valor = $valorOrcamento;
+            $dadosOrcamento->save();
 
-                $valorTotal = $dadosProduto->precoVenda * $produto->quantidade;
-                $valorTotalOrcamento = (float)$valorTotalOrcamento + (float)$valorTotal;
-                $valorTotal = number_format($valorTotal, 2, ",", ".");
-                $valorTotal = "R$ ".$valorTotal;
-
-                $valorTotalOrcamentoJS = $valorTotalOrcamento;
-                //(float)$valorTotalOrcamento = str_replace(".", ",", (float)$valorTotalOrcamento);
-
-                //$valorTotalOrcamento = number_format($valorTotalOrcamento, 2, ",", ".");
-
-                $tabela .= "
-            <tr>
-                <td>$dadosProduto->id</td>
-                <td>$dadosProduto->nome</td>
-                <td>$produto->quantidade</td>
-                <td>$valorUN</td>
-                <td>$valorTotal</td>
-            </tr>
-            ";
+            $valorTotal = number_format((float)$valorProduto, 2, ',', '.');
+            if($orcamento->fail()){
+                $retorno = [
+                    "status" => false,
+                    "erro" => $orcamento->fail()->getMessage()
+                ];
+            }else{
+                $retorno = [
+                    "status" => true,
+                    "produto" => $produtoRetorno,
+                    "unidadeMedida" => $unidadeMedida,
+                    "valorTotal" => $valorProduto
+                ];
             }
         }
 
-        //CONSULTA O NOME DO CLIENTE
-        $clientes = new Clientes_Model();
-        $cliente = $clientes->dadosClienteID($retorno->cliente);
-
-        //LISTA DE PRODUTOS
-        $modelProdutos = new Produtos_Model();
-        $produtos = $modelProdutos->lista();
-        $listaProdutos = null;
-        foreach($produtos as $produto){
-            $listaProdutos .= "
-                <option>$produto->nome</option>
-            ";
-        }
-
-        parent::render("orcamentoFechado", [
-            "cliente" => $cliente->nome,
-            "tabela" => $tabela,
-            "valorTotal" => $valorTotalOrcamento,
-            "valorTotalJS" => $valorTotalOrcamentoJS,
-            "produtos" => $listaProdutos
-        ]);
+        echo json_encode($retorno);
     }
 
     public function exportarPDF($data){
@@ -392,12 +237,48 @@ class Orcamento extends Controller{
         $pdf->stream($nomeArquivo);
     }
 
+    public function tabelaProdutos($data){
+        $id = $data["id"];
+
+        $dadosOrcamento = new Orcamentos_Model();
+        $dadosOrcamento = $dadosOrcamento->findById($id);
+
+        $orcamentos = new OrcamentosPedido_Model();
+        $orcamentos = $orcamentos->find("orcamento=:orcamento", "orcamento=$id")->order("id desc")->fetch(true);
+        if($orcamentos !== null){
+            foreach ($orcamentos as $orcamento){
+                $clientes = new Clientes_Model();
+                $cliente = $clientes->findById($dadosOrcamento->cliente);
+
+                $produto = new Produtos_Model();
+                $produto = $produto->findById($orcamento->produto);
+
+                $valorTotal = $orcamento->quantidade * $produto->precoVenda;
+                $precoVenda = number_format((float)$produto->precoVenda, 2, ",", ".");
+                $valorTotal = number_format((float)$valorTotal, 2, ",", ".");
+
+
+                $tabela["data"][] = [
+                    $produto->id,
+                    $produto->nome,
+                    $orcamento->quantidade,
+                    "R$ ".$precoVenda,
+                    "R$ ".$valorTotal
+                ];
+            }
+        }else{
+            $tabela = [];
+        }
+
+        echo json_encode($tabela);
+    }
+
     public function tabela(){
         $orcamentos = new Orcamentos_Model();
-        $orcamentos = $orcamentos->lista();
+        $orcamentos = $orcamentos->find()->fetch(true);
         foreach ($orcamentos as $orcamento){
             $clientes = new Clientes_Model();
-            $cliente = $clientes->dadosClienteID($orcamento->cliente);
+            $cliente = $clientes->findById($orcamento->cliente);
 
             $valor = number_format($orcamento->valor, 2, ",", ".");
 
@@ -442,42 +323,5 @@ class Orcamento extends Controller{
         echo json_encode($tabela);
     }
 
-    public function excluir($data){
-        Alert::question("Confirma exclusão do orçamento $data[id]?", "Essa ação não tem volta.", "/pdv/orcamento/excluirSender/$data[id]", "/pdv/orcamento");
-    }
 
-    public function excluirSender($data){
-        //$model = new OrcamentosPedido_Model();
-        //$model->excluir($data["id"]);
-
-        $model = new Orcamentos_Model();
-        $retorno = $model->excluir($data["id"]);
-
-        if($retorno["retorno"] == true){
-            Alert::success("Orçamento excluído!", "", "/pdv/orcamento");
-        }else{
-            Alert::error("Erro ao excluir orçamento!", $retorno["erro"], "/pdv/orcamento");
-        }
-    }
-
-    public function excluirProduto(){
-        $dados = (object)$_POST;
-        $model = new OrcamentosPedido_Model();
-        $retorno = $model->verificaExisteExcluirProduto($dados->produto, $_SESSION["orcamento"]);
-        if($retorno == 0){
-            $json = ["status"=> 0];
-        }else{
-            $retorno = $model->excluirProduto($dados->produto, $_SESSION["orcamento"]);
-            if($retorno["status"] == true){
-                $json = ["status" => true];
-            }else{
-                $json = [
-                    "status" => false,
-                    "erro" => $retorno["erro"]
-                ];
-            }
-        }
-
-        echo json_encode($json);
-    }
 }

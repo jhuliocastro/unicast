@@ -63,17 +63,11 @@ $this->data["empresa"] = EMPRESA;
         $('#tabela').DataTable({
             "paging": true,
             "aaSorting": [[0, "desc"]],
-            'ajax': '/pdv/orcamento/tabela',
+            'ajax': '/orcamento/tabela',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
             }
-        });
-
-        $(document).on('keydown', null, 'f1', function () {
-            window.location.href = "/pdv/orcamento/novo";
-            return false;
-        });         
-        
+        })
     });
 
     function exportarPDF(id){

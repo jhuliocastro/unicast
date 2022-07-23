@@ -44,7 +44,7 @@ $this->data["empresa"] = EMPRESA;
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-7 cs" id="produtoAtual">
-                            INICIANDO NOVO ORÇAMENTO
+                            -
                         </div>
                         <div class="col-md-2 cs" id="quantidadeProdutoAtual">
                             0 UN
@@ -63,20 +63,12 @@ $this->data["empresa"] = EMPRESA;
                                     </form>
                                 </div>
                             </div>
-                            <div class="row" style="background-color: lightblue;">
-                                <div class="col-md-6">
-                                    Total de Itens
-                                </div>
-                                <div class="col-md-6" style="text-align: right; border-right: 1px solid white;">
-                                    <span id="totalItens">0</span>
-                                </div>
-                            </div>
                             <div class="row" style="background-color: lightgreen;">
                                 <div class="col-md-6">
                                     Valor Total
                                 </div>
                                 <div class="col-md-6" style="text-align: right;">
-                                    <span style="font-weight: bold; font-size: 20px;" id="valorTotal">R$ 0,00</span>
+                                    <span style="font-weight: bold; font-size: 20px;" id="valorTotal"><?= $this->data["valorTotal"] ?></span>
                                 </div>
                             </div>
                             <br/>
@@ -192,19 +184,57 @@ $this->data["empresa"] = EMPRESA;
     </div>
 </div>
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="alertaErroProduto" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="..." class="rounded me-2" alt="...">
+            <strong class="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+</div>
+
 <script>
     var quantidade = 1;
     var audio = new Audio("/assets/sons/beep.mp3");
+    var orcamento = '<?= $this->data["orcamento"] ?>';
 
     var tabela = $('#tabela').DataTable({
         "paging": false,
-        'ajax': '',
+        'ajax': '/orcamento/tabela/produtos/<?= $this->data["orcamento"] ?>',
         "order": [],
         'searching': false,
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json"
         }
     });
+
+    $("#formProdutoCodigo").submit(function(event){
+        event.preventDefault();
+        let codigo = $("#produto").val();
+        $.post("/orcamento/pesquisar/produto", {codigo: codigo, quantidade: quantidade}, function(data){
+           tabela.ajax.reload();
+           $("#produtoAtual").text(data.produto);
+           $("#quantidadeProdutoAtual").text(quantidade + " " + data.unidadeMedida);
+           $("#valorProdutoAtual").text("R$ " + data.valorTotal);
+           valorTotal('<?= $this->data["orcamento"] ?>');
+           $("#produto").val("");
+           $("#produto").focus();
+           quantidade = 1;
+        }, 'json');
+    });
+
+    function valorTotal(orcamento){
+        $.post('/orcamento/valorTotal', {orcamento: orcamento}, function(data){
+            $("#valorTotal").text('R$ ' + data);
+            console.log(data);
+        });
+
+    }
 /*
     function cancelarProduto(){
 

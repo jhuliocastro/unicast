@@ -55,7 +55,12 @@ $router->get("/atualizar", "Estoque:atualizar");
 //ORCAMENTO
 $router->group("orcamento");
 $router->get("/", "Orcamento:home");
+$router->get("/{id}", "Orcamento:orcamento");
 $router->post("/novo", "Orcamento:novo");
+$router->post("/pesquisar/produto", "Orcamento:pesquisarProduto");
+$router->get("/tabela/produtos/{id}", "Orcamento:tabelaProdutos");
+$router->get("/tabela", "Orcamento:tabela");
+$router->post("/valorTotal", "Orcamento:valorTotal");
 
 //PDV ORCAMENTO E CAIXA
 $router->group("pdv");
@@ -66,9 +71,7 @@ $router->post("/orcamento/andamento", "Orcamento:orcamento");
 $router->get("/orcamento/aberto/{id}", "Orcamento:aberto");
 $router->get("/orcamento/aberto/relacao/{id}", "Orcamento:abertoTabela");
 $router->get("/orcamento/reabrir/cancelar", "Orcamento:cancelar");
-$router->get("/orcamento/finalizar", "Orcamento:finalizar");
-$router->get("/orcamento/finalizarSender", "Orcamento:finalizarSender");
-$router->get("/orcamento/tabela", "Orcamento:tabela");
+
 $router->post("/orcamento/dados", "Orcamento:dados");
 $router->get("/orcamento/fechado/{id}", "Orcamento:fechado");
 $router->get("/orcamento/excluir/{id}", "Orcamento:excluir");
